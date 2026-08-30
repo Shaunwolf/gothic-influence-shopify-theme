@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gothic Influence - Theme Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css">
+    <style>
+        :root {
+          --color-dark-black: #0d0d0d;
+          --color-dark-gray-1: #1a1a1a;
+          --color-dark-gray-2: #2a2a2a;
+          --color-dark-gray-3: #3a3a3a;
+          --color-dark-gray-4: #4a4a4a;
+          --color-gothic-green-dark: #1a472a;
+          --color-gothic-green: #2d6a40;
+          --color-gothic-green-light: #3d8a50;
+          --color-copper-gold-dark: #8b6f47;
+          --color-copper-gold: #c9a961;
+          --color-copper-gold-light: #dab969;
+          --color-text-primary: #f5f5f5;
+          --color-text-secondary: #d0d0d0;
+          --color-text-muted: #999999;
+          --color-border: #2a2a2a;
+          --color-accent: #c9a961;
+          --color-success: #2d6a40;
+          --spacing-xs: 0.5rem;
+          --spacing-sm: 1rem;
+          --spacing-md: 1.5rem;
+          --spacing-lg: 2rem;
+          --spacing-xl: 3rem;
+          --font-primary: 'Playfair Display', 'Georgia', serif;
+          --font-secondary: 'Poppins', 'Segoe UI', sans-serif;
+          --font-size-base: 16px;
+          --line-height-base: 1.6;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html {
+          font-size: var(--font-size-base);
+          scroll-behavior: smooth;
+        }
+
+        body {
+          background-color: var(--color-dark-black);
+          color: var(--color-text-primary);
+          font-family: var(--font-secondary);
+          line-height: var(--line-height-base);
+          font-weight: 400;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+          font-family: var(--font-primary);
+          font-weight: 700;
+          color: var(--color-text-primary);
+          letter-spacing: 0.5px;
+          margin-bottom: var(--spacing-md);
+        }
+
+        h1 { font-size: 3.5rem; line-height: 1.1; }
+        h2 { font-size: 2.5rem; line-height: 1.2; }
+        h3 { font-size: 1.875rem; }
+
+        p {
+          margin-bottom: var(--spacing-md);
+          color: var(--color-text-secondary);
+          font-weight: 300;
+        }
+
+        a {
+          color: var(--color-copper-gold);
+          text-decoration: none;
+          transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        a:hover {
+          color: var(--color-copper-gold-light);
+          text-shadow: 0 0 8px rgba(201, 169, 97, 0.3);
+        }
+
+        /* Header */
+        header {
+          background-color: var(--color-dark-gray-1);
+          border-bottom: 2px solid var(--color-gothic-green);
+          padding: var(--spacing-lg) 0;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 var(--spacing-lg);
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+
+        .logo {
+          font-family: var(--font-primary);
+          font-size: 2rem;
+          font-weight: 700;
+          color: var(--color-copper-gold);
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+          color: var(--color-copper-gold-light);
+          text-shadow: 0 0 10px rgba(201, 169, 97, 0.4);
+        }
+
+        nav {
+          display: flex;
+          gap: var(--spacing-lg);
+        }
+
+        nav a {
+          font-size: 0.95rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: var(--color-text-primary);
+          font-weight: 500;
+          position: relative;
+          padding-bottom: 4px;
+        }
+
+        nav a::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, var(--color-gothic-green), var(--color-copper-gold));
+          transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+          width: 100%;
+        }
+
+        /* Hero */
+        .hero {
+          background: linear-gradient(135deg, var(--color-dark-black) 0%, var(--color-dark-gray-1) 50%, var(--color-gothic-green-dark) 100%);
+          padding: var(--spacing-xl) var(--spacing-lg);
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+          min-height: 400px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .hero::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.1) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          max-width: 900px;
+        }
+
+        .hero h1 {
+          margin-bottom: var(--spacing-md);
+          color: var(--color-copper-gold);
+          text-shadow: 0 4px 20px rgba(26, 71, 42, 0.4);
+        }
+
+        .hero p {
+          font-size: 1.25rem;
+          color: var(--color-text-secondary);
+          margin-bottom: var(--spacing-lg);
+        }
+
+        /* Buttons */
+        .btn {
+          display: inline-block;
+          padding: var(--spacing-sm) var(--spacing-lg);
+          background: linear-gradient(135deg, var(--color-gothic-green) 0%, var(--color-gothic-green-light) 100%);
+          color: var(--color-text-primary);
+          border: 2px solid var(--color-copper-gold);
+          font-family: var(--font-secondary);
+          font-size: 0.95rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-radius: 2px;
+          font-weight: 600;
+        }
+
+        .btn:hover {
+          background: linear-gradient(135deg, var(--color-gothic-green-light) 0%, var(--color-gothic-green) 100%);
+          box-shadow: 0 0 20px rgba(201, 169, 97, 0.4), inset 0 0 10px rgba(201, 169, 97, 0.2);
+          border-color: var(--color-copper-gold-light);
+        }
+
+        /* Products Grid */
+        .products-section {
+          padding: var(--spacing-xl) var(--spacing-lg);
+          background-color: var(--color-dark-gray-1);
+        }
+
+        .section-title {
+          text-align: center;
+          margin-bottom: var(--spacing-xl);
+          position: relative;
+          padding-bottom: var(--spacing-lg);
+        }
+
+        .section-title::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 3px;
+          background: linear-gradient(90deg, var(--color-gothic-green), var(--color-copper-gold));
+          border-radius: 2px;
+        }
+
+        .products-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: var(--spacing-lg);
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+
+        .product-card {
+          background: var(--color-dark-gray-2);
+          border: 1px solid var(--color-border);
+          border-radius: 4px;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .product-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 40px rgba(45, 106, 64, 0.3), 0 0 30px rgba(201, 169, 97, 0.15);
+          border-color: var(--color-copper-gold);
+        }
+
+        .product-image {
+          width: 100%;
+          height: 300px;
+          background: linear-gradient(135deg, var(--color-dark-gray-3), var(--color-gothic-green-dark));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--color-copper-gold);
+          font-size: 4rem;
+        }
+
+        .product-info {
+          padding: var(--spacing-md);
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .product-title {
+          font-family: var(--font-primary);
+          font-size: 1.25rem;
+          color: var(--color-text-primary);
+          margin-bottom: var(--spacing-sm);
+          line-height: 1.3;
+        }
+
+        .product-price {
+          font-size: 1.5rem;
+          color: var(--color-copper-gold);
+          font-weight: 700;
+          margin-bottom: var(--spacing-md);
+        }
+
+        .product-description {
+          color: var(--color-text-secondary);
+          font-size: 0.95rem;
+          margin-bottom: var(--spacing-md);
+          flex-grow: 1;
+        }
+
+        .product-button {
+          width: 100%;
+        }
+
+        /* Footer */
+        footer {
+          background: var(--color-dark-gray-1);
+          border-top: 2px solid var(--color-gothic-green);
+          padding: var(--spacing-xl) var(--spacing-lg);
+          margin-top: var(--spacing-xl);
+        }
+
+        .footer-content {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: var(--spacing-lg);
+          max-width: 1400px;
+          margin: 0 auto;
+          margin-bottom: var(--spacing-xl);
+        }
+
+        .footer-section h4 {
+          color: var(--color-copper-gold);
+          margin-bottom: var(--spacing-md);
+        }
+
+        .footer-section ul {
+          list-style: none;
+        }
+
+        .footer-section li {
+          margin-bottom: var(--spacing-sm);
+        }
+
+        .footer-section a {
+          color: var(--color-text-secondary);
+          font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+          text-align: center;
+          padding-top: var(--spacing-lg);
+          border-top: 1px solid var(--color-border);
+          color: var(--color-text-muted);
+          font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+          nav { flex-direction: column; gap: var(--spacing-sm); }
+          .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+          h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-wrapper">
+            <div class="logo">🎭 Gothic Influence</div>
+            <nav>
+                <a href="#products">Shop</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Elegance Reimagined</h1>
+            <p>Dark, sophisticated, and unmistakably gothic</p>
+            <button class="btn">Shop Now</button>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <h2 class="section-title">Featured Collection</h2>
+        <div class="products-grid" id="products">
+            <div class="product-card">
+                <div class="product-image">🖼️</div>
+                <div class="product-info">
+                    <h3 class="product-title">Gothic Velvet Blanket</h3>
+                    <div class="product-price">$45.99</div>
+                    <p class="product-description">Luxurious plush blanket with dark floral patterns</p>
+                    <button class="btn product-button">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">📚</div>
+                <div class="product-info">
+                    <h3 class="product-title">Dark Literature Print</h3>
+                    <div class="product-price">$32.99</div>
+                    <p class="product-description">Vintage-inspired dark academia art print</p>
+                    <button class="btn product-button">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">🕷️</div>
+                <div class="product-info">
+                    <h3 class="product-title">Spiderweb Wall Art</h3>
+                    <div class="product-price">$28.99</div>
+                    <p class="product-description">Intricate gothic wall decoration with copper accents</p>
+                    <button class="btn product-button">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">🕯️</div>
+                <div class="product-info">
+                    <h3 class="product-title">Candle Collection</h3>
+                    <div class="product-price">$36.99</div>
+                    <p class="product-description">Scented candles in dark gothic packaging</p>
+                    <button class="btn product-button">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a href="#">All Products</a></li>
+                    <li><a href="#">New Arrivals</a></li>
+                    <li><a href="#">Collections</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Gothic Influence. All rights reserved. | Dark. Elegant. Timeless.</p>
+        </div>
+    </footer>
+</body>
+</html>

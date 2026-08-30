@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="{{ shop.locale }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#0d0d0d">
+    
+    <title>{{ page_title }}</title>
+    <meta name="description" content="{{ page_description | escape }}">
+    
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Gothic Theme CSS -->
+    <link rel="stylesheet" href="{{ 'custom-gothic.css' | asset_url }}">
+    
+    {{ content_for_header }}
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="header-wrapper">
+        <div class="logo">
+          {% if shop.logo %}
+            <img src="{{ shop.logo | img_url: '200x' }}" alt="{{ shop.name }}" height="50">
+          {% else %}
+            🎭 {{ shop.name }}
+          {% endif %}
+        </div>
+        <nav>
+          {% for link in linklists.main-menu.links %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      {{ content_for_layout }}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/collections/all">All Products</a></li>
+            <li><a href="/collections">Collections</a></li>
+            <li><a href="/search">Search</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/pages/about">About Us</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+            <li><a href="/pages/returns">Returns</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+            <li><a href="/policies/terms-of-service">Terms of Service</a></li>
+            <li><a href="/policies/refund-policy">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; {{ "now" | date: "%Y" }} {{ shop.name }}. Dark. Elegant. Timeless.</p>
+      </div>
+    </footer>
+  </body>
+</html>

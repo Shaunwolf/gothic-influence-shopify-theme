@@ -1,0 +1,22 @@
+{% section 'hero' %}
+
+<section class="products-section">
+  <h2 class="section-title">Featured Products</h2>
+  <div class="products-grid">
+    {% for product in collection.products limit: 8 %}
+      <div class="product-card">
+        <div class="product-image">
+          {% if product.featured_image %}
+            <img src="{{ product.featured_image | img_url: '500x500' }}" alt="{{ product.title }}">
+          {% endif %}
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">{{ product.title }}</h3>
+          <div class="product-price">{{ product.price | money }}</div>
+          <p class="product-description">{{ product.description | strip_html | truncatewords: 10 }}</p>
+          <a href="{{ product.url }}" class="btn product-button">View Product</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
