@@ -256,7 +256,41 @@ The one thing to watch: the product card's full-card click target uses a stretch
 
 ---
 
-## 9. Liquid house rules
+## 9. CSS custom property traps
+
+**A rule cannot read the pre-override value of a property it redefines.**
+Custom properties resolve against the element's *computed* value, including
+declarations in the same rule. Declaration order does not help.
+
+```css
+/* BROKEN — background, color and muted all collapse to --color-bg */
+.scheme-inverse {
+  background: var(--color-text);
+  --color-text: var(--color-bg);
+  --color-text-muted: color-mix(in srgb, var(--color-bg) 78%, var(--color-text));
+  color: var(--color-text);
+}
+```
+
+`background` resolves `--color-text` to its new value, so ground and text
+become the same colour and the section renders invisible. The muted mix
+collapses the same way.
+
+The fix is aliases the schemes never re-point. `snippets/design-tokens.liquid`
+emits `--fixed-bg` and `--fixed-text` alongside the semantic tokens, and any
+scheme that flips foreground and ground reads those instead.
+
+**Every scheme also publishes `--scheme-bg`,** naming its own actual ground.
+A scrim or gradient inside a section cannot assume the page background — under
+`scheme-surface` or `scheme-inverse` it would blend against the wrong colour.
+Write overlays as `var(--scheme-bg, var(--color-bg))`.
+
+This is the same failure shape as the both-photos rule in section 3: the
+default case looks correct, and only a non-default combination exposes it.
+
+---
+
+## 10. Liquid house rules
 
 Three separate passes over this theme hit the same four traps. They all pass a
 casual read and fail `shopify theme check`, so they are worth memorising.
@@ -300,7 +334,7 @@ Refer to a `liquid` tag or a `form` tag in prose instead of `{% ... %}`.
 
 ---
 
-## 10. Extending it
+## 11. Extending it
 
 When you add a section:
 

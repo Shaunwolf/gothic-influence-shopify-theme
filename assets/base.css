@@ -1198,28 +1198,32 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 
 /* Colour schemes. Each re-points the semantic tokens, so every component
    inside inherits without needing to know which scheme it sits in. */
-.scheme-default  { background: var(--color-bg); }
-.scheme-surface  { background: var(--color-surface); }
-.scheme-raised   { background: var(--color-surface-raised); }
+.scheme-default  { background: var(--color-bg);             --scheme-bg: var(--color-bg); }
+.scheme-surface  { background: var(--color-surface);        --scheme-bg: var(--color-surface); }
+.scheme-raised   { background: var(--color-surface-raised); --scheme-bg: var(--color-surface-raised); }
 .scheme-brand {
   background: var(--green-800);
+  --scheme-bg: var(--green-800);
   --color-line: color-mix(in srgb, var(--color-text) 14%, transparent);
   --color-surface: color-mix(in srgb, var(--color-text) 6%, transparent);
 }
 .scheme-accent {
   background: color-mix(in srgb, var(--color-accent) 14%, var(--color-bg));
+  --scheme-bg: color-mix(in srgb, var(--color-accent) 14%, var(--color-bg));
   --color-line: color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
-/* Inverse flips foreground and ground — the one scheme that has to restate
-   its text colours rather than inheriting them. */
+/* Inverse flips foreground and ground. Every value here comes from --fixed-*,
+   because --color-text is redefined in this same rule and would otherwise
+   resolve to its NEW value — collapsing ground, text and muted to one colour. */
 .scheme-inverse {
-  background: var(--color-text);
-  --color-text: var(--color-bg);
-  --color-text-muted: color-mix(in srgb, var(--color-bg) 72%, var(--color-text));
-  --color-text-subtle: color-mix(in srgb, var(--color-bg) 55%, var(--color-text));
-  --color-line: color-mix(in srgb, var(--color-bg) 20%, transparent);
-  --color-surface: color-mix(in srgb, var(--color-bg) 8%, transparent);
-  color: var(--color-text);
+  background: var(--fixed-text);
+  --scheme-bg: var(--fixed-text);
+  --color-text: var(--fixed-bg);
+  --color-text-muted: color-mix(in srgb, var(--fixed-bg) 78%, var(--fixed-text));
+  --color-text-subtle: color-mix(in srgb, var(--fixed-bg) 60%, var(--fixed-text));
+  --color-line: color-mix(in srgb, var(--fixed-bg) 20%, transparent);
+  --color-surface: color-mix(in srgb, var(--fixed-bg) 8%, transparent);
+  color: var(--fixed-bg);
 }
 .scheme-inverse h1, .scheme-inverse h2, .scheme-inverse h3, .scheme-inverse h4 { color: var(--color-text); }
 
