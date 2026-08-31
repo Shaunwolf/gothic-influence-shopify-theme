@@ -131,6 +131,13 @@ just against its own preset's ground. Each preset fails when the merchant's
 photo runs opposite to its scrim — Gothic with a bright airy hero shot is the
 common real-world case, and it is the default preset.
 
+Two corollaries: when the scrim is a gradient rather than a flat fill, check
+contrast at the WEAKEST stop the text can actually reach — a long headline
+extends well past the centre, and the centre is the case that always looks
+fine. And when a merchant-facing setting controls scrim strength, its range
+must exclude values that fail at any photo tone — the hero overlay's minimum
+is 20% for exactly this reason, not 0%.
+
 ### Contrast
 
 Every preset is verified to WCAG AA — text, secondary text, prices, links and
