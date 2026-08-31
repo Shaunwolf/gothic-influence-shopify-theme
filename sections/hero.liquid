@@ -42,7 +42,7 @@
     background: radial-gradient(
       ellipse 70% 85% at var(--scrim-x, 50%) 50%,
       rgb(var(--bg-rgb) / 0.8),
-      rgb(var(--bg-rgb) / 0.4) 55%,
+      rgb(var(--bg-rgb) / 0.6) 55%,
       transparent 78%
     );
   }
@@ -81,11 +81,12 @@
   }
 
   .hero__subheading {
-    /* Primary text at reduced opacity, not the muted token: the muted
-       colour lands borderline against a worst-case photo even behind
-       the text scrim. */
+    /* Full-opacity primary text: this is 16px normal text over a photo,
+       so it needs the full 4.5:1 — dimming it via opacity or the muted
+       token caps the achievable contrast. Hierarchy comes from the size
+       gap to the title and the light weight, which cost nothing. */
     color: var(--color-text);
-    opacity: 0.85;
+    font-weight: var(--fw-light, 300);
     max-width: 46ch;
     margin-bottom: var(--sp-6, 2rem);
   }

@@ -138,6 +138,19 @@ fine. And when a merchant-facing setting controls scrim strength, its range
 must exclude values that fail at any photo tone — the hero overlay's minimum
 is 20% for exactly this reason, not 0%.
 
+**Use the right threshold.** 3:1 for text at 24px+ (or 18.66px+ bold),
+4.5:1 for everything else. Checking a 60px headline against 4.5 wastes
+design headroom; checking a 16px subheading against 3.0 ships a defect.
+When one element passes and its neighbour fails, it is usually because
+they sit on different sides of this line.
+
+**Opacity on text is a contrast multiplier, not a style choice.** Any
+element that sets both a colour token and an opacity must be measured at
+the composited value, and no scrim behind it can compensate past the cap
+the opacity imposes. Reducing opacity to signal hierarchy is exactly the
+pattern that quietly breaks AA — size and weight express hierarchy
+without touching contrast, so use those instead.
+
 ### Contrast
 
 Every preset is verified to WCAG AA — text, secondary text, prices, links and
