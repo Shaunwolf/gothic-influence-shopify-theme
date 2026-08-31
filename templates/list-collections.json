@@ -1,11 +1,13 @@
 {
   "sections": {
     "main": {
-      "type": "collection-list",
+      "type": "main-list-collections",
       "settings": {
         "eyebrow": "Browse",
         "heading": "All collections",
-        "columns": "3"
+        "columns": "3",
+        "show_count": true,
+        "per_page": 24
       }
     }
   },

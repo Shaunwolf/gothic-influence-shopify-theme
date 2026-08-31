@@ -15,7 +15,7 @@
                     loading: 'lazy',
                     widths: '180,270,360',
                     sizes: '180px',
-                    alt: shop.name | escape,
+                    alt: shop.name,
                     style: 'max-height:44px;width:auto;margin-bottom:var(--sp-4);'
                 }}
               {%- else -%}
@@ -79,11 +79,14 @@
                        autocomplete="email"
                        required>
                 <button type="submit" class="btn btn--gold">{{ 'general.newsletter.submit' | t }}</button>
-              {%- endform -%}
 
-              {%- if form.posted_successfully? -%}
-                <p class="form-success">{{ 'general.newsletter.success' | t }}</p>
-              {%- endif -%}
+                {%- if form.posted_successfully? -%}
+                  <p class="form-success">{{ 'general.newsletter.success' | t }}</p>
+                {%- endif -%}
+                {%- if form.errors -%}
+                  <p class="field__error">{{ form.errors | default_errors }}</p>
+                {%- endif -%}
+              {%- endform -%}
 
           {%- endcase -%}
         </div>

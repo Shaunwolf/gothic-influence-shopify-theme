@@ -66,11 +66,12 @@
       {%- endfor -%}
     {%- endif -%}
 
+    {%- comment -%}
+      Inside a liquid tag each line is its own statement, so the whole
+      filter chain has to stay on one line.
+    {%- endcomment -%}
     {%- liquid
-      assign total = predictive_search.resources.products.size
-        | plus: predictive_search.resources.collections.size
-        | plus: predictive_search.resources.pages.size
-        | plus: predictive_search.resources.articles.size
+      assign total = predictive_search.resources.products.size | plus: predictive_search.resources.collections.size | plus: predictive_search.resources.pages.size | plus: predictive_search.resources.articles.size
     -%}
 
     {%- if total == 0 -%}

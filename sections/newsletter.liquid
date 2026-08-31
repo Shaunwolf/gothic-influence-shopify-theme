@@ -18,11 +18,14 @@
                autocomplete="email"
                required>
         <button type="submit" class="btn btn--gold">{{ 'general.newsletter.submit' | t }}</button>
-      {%- endform -%}
 
-      {%- if form.posted_successfully? -%}
-        <p class="form-success">{{ 'general.newsletter.success' | t }}</p>
-      {%- endif -%}
+        {%- if form.posted_successfully? -%}
+          <p class="form-success">{{ 'general.newsletter.success' | t }}</p>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <p class="field__error">{{ form.errors | default_errors }}</p>
+        {%- endif -%}
+      {%- endform -%}
     </div>
   </div>
 </div>

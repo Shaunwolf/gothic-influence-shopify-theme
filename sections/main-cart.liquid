@@ -28,7 +28,7 @@
                     {%- if item.image -%}
                       {{ item.image | image_url: width: 200 | image_tag:
                          loading: 'lazy', widths: '84,168,252', sizes: '84px',
-                         alt: item.title | escape, class: 'cart-item__img' }}
+                         alt: item.title, class: 'cart-item__img' }}
                     {%- endif -%}
                   </a>
 

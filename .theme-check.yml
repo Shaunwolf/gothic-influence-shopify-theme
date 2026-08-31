@@ -1,5 +1,6 @@
-extends: :theme_app_extension
-require: []
+# Storefront theme, not a theme app extension. Using :theme_app_extension here
+# wrongly fires AppBlockValidTags on {% section %} / {% sections %} in layouts.
+extends: :default
 
 ImgLazyLoading:
   enabled: true
@@ -12,6 +13,4 @@ AssetSizeJavaScript:
 UndefinedObject:
   enabled: true
 DeprecatedFilter:
-  enabled: true
-ValidHTMLTranslation:
   enabled: true

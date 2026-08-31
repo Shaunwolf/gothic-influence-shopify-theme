@@ -45,7 +45,7 @@
             loading: 'lazy',
             widths: '200,300,400,500,600,700,800',
             sizes: '(min-width: 990px) 25vw, (min-width: 600px) 45vw, 90vw',
-            alt: p.featured_media.alt | default: p.title | escape,
+            alt: p.featured_media.alt | default: p.title,
             class: 'card__img card__img--main'
         }}
         {%- if has_alt -%}

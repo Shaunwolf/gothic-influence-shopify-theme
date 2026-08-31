@@ -39,7 +39,6 @@
       "home": "Back to home"
     }
   },
-
   "accessibility": {
     "skip_to_content": "Skip to content",
     "close": "Close",
@@ -47,7 +46,6 @@
       "new_window": "Opens in a new window."
     }
   },
-
   "sections": {
     "announcement": {
       "label": "Announcement"
@@ -94,10 +92,10 @@
       "product_count": {
         "one": "{{ count }} product",
         "other": "{{ count }} products"
-      }
+      },
+      "no_collections": "No collections yet"
     }
   },
-
   "products": {
     "product": {
       "add_to_cart": "Add to cart",
@@ -111,7 +109,6 @@
       "save_percent": "Save {{ percent }}%"
     }
   },
-
   "blogs": {
     "article": {
       "journal": "Journal",
@@ -130,13 +127,11 @@
       "error": "Please check the fields above and try again."
     }
   },
-
   "customer": {
     "account": {
       "title": "Account"
     }
   },
-
   "onboarding": {
     "product_title": "Example product"
   }

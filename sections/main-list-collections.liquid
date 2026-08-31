@@ -1,0 +1,110 @@
+{%- comment -%}
+  The /collections page.
+
+  Distinct from the block-based `collection-list` section used on the
+  homepage: there a merchant hand-picks a few collections, here every
+  collection in the store is listed automatically, so the page stays correct
+  as the catalogue grows without anyone editing the template.
+{%- endcomment -%}
+
+{%- paginate collections by section.settings.per_page -%}
+
+<div class="section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+
+    <div class="text-center" style="margin-bottom: var(--sp-8);">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 style="margin-top: var(--sp-3);">
+        {{ section.settings.heading | default: 'Collections' }}
+      </h1>
+    </div>
+
+    {%- if collections.size > 0 -%}
+      <div class="grid grid--{{ section.settings.columns }} grid--keep-2">
+        {%- for collection in collections -%}
+          <a href="{{ collection.url }}" class="tile reveal">
+            {%- if collection.featured_image -%}
+              {{
+                collection.featured_image
+                | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '300,450,600,900',
+                  sizes: '(min-width: 990px) 30vw, 45vw',
+                  alt: collection.title | escape
+              }}
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag }}
+            {%- endif -%}
+
+            <div class="tile__caption">
+              <p class="tile__name">{{ collection.title }}</p>
+              {%- if section.settings.show_count -%}
+                <p class="tile__count">
+                  {{ 'sections.collection.item_count' | t: count: collection.all_products_count }}
+                </p>
+              {%- endif -%}
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination' | t }}">
+          {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}">&larr;</a>{%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}">{{ part.title }}</a>
+            {%- else -%}
+              <span {% if part.title == paginate.current_page %}aria-current="page"{% endif %}>{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}<a href="{{ paginate.next.url }}">&rarr;</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+
+    {%- else -%}
+      <div class="empty-state">
+        <p class="h3">{{ 'sections.collection.no_collections' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--ghost">
+          {{ 'general.continue_shopping' | t }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Browse" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "All collections" },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    { "type": "checkbox", "id": "show_count", "label": "Show product count", "default": true },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Collections per page",
+      "min": 6,
+      "max": 48,
+      "step": 3,
+      "default": 24
+    }
+  ]
+}
+{% endschema %}
