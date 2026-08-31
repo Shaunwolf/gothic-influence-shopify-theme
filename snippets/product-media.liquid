@@ -5,9 +5,14 @@
   <media-gallery> contract in assets/theme.js (.gallery__slide and
   .gallery__thumb carry data-media-id so variant changes can switch slides).
   @param {object} product - The product whose media to render
+  @param {string} thumbs - Optional thumbnail layout: 'below' (default), 'left', or 'none'
   @example
-  {% render 'product-media', product: product %}
+  {% render 'product-media', product: product, thumbs: section.settings.media_layout %}
 {% enddoc %}
+
+{%- liquid
+  assign thumbs_mode = thumbs | default: 'below'
+-%}
 
 <style>
   .gallery__slide model-viewer,
@@ -19,13 +24,51 @@
     display: block;
     background: var(--color-surface);
   }
+
+  .gallery--thumbs-left {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: var(--sp-3, 0.75rem);
+    align-items: start;
+  }
+
+  .gallery--thumbs-left .gallery__thumbs {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 70vh;
+  }
+
+  .gallery--thumbs-left .gallery__main {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .gallery--thumbs-none .gallery__thumbs {
+    display: none;
+  }
+
+  @media (max-width: 749px) {
+    .gallery--thumbs-left {
+      display: block;
+    }
+
+    .gallery--thumbs-left .gallery__thumbs {
+      flex-direction: row;
+      overflow-y: visible;
+      overflow-x: auto;
+      max-height: none;
+    }
+  }
 </style>
 
 {%- liquid
   assign models = product.media | where: 'media_type', 'model'
 -%}
 
-<media-gallery class="gallery">
+<media-gallery class="gallery gallery--thumbs-{{ thumbs_mode }}">
   <div class="gallery__main">
     {% for media in product.media %}
       <div
@@ -48,7 +91,7 @@
     {% endfor %}
   </div>
 
-  {% if product.media.size > 1 %}
+  {% if product.media.size > 1 and thumbs_mode != 'none' %}
     <div class="gallery__thumbs">
       {% for media in product.media %}
         <button

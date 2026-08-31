@@ -110,7 +110,7 @@
 
 <section class="product" data-section-id="{{ section.id }}">
   <div class="product__gallery">
-    {% render 'product-media', product: product %}
+    {% render 'product-media', product: product, thumbs: section.settings.media_layout %}
   </div>
 
   <div class="product__info{% if section.settings.sticky_info %} product__info--sticky{% endif %}">
@@ -354,6 +354,17 @@
       "label": "Sticky product details",
       "info": "Keeps the buy column in view while the gallery scrolls.",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "media_layout",
+      "label": "Gallery thumbnails",
+      "options": [
+        { "value": "below", "label": "Below the media" },
+        { "value": "left", "label": "Left column" },
+        { "value": "none", "label": "Hidden" }
+      ],
+      "default": "below"
     }
   ],
   "blocks": [
