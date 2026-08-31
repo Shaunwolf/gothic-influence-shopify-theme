@@ -1,16 +1,107 @@
-<section class="product-main">
-  <h1>{{ product.title }}</h1>
-  
-  {% if product.featured_image %}
-    <img src="{{ product.featured_image | img_url: '600x600' }}" alt="{{ product.title }}">
-  {% endif %}
-  
-  <div class="product-price">{{ product.price | money }}</div>
-  <p>{{ product.description }}</p>
-  
-  <form method="post" action="/cart/add">
-    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-    <input type="number" name="quantity" value="1" min="1">
-    <button type="submit" class="btn">Add to Cart</button>
-  </form>
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<section class="product" data-section-id="{{ section.id }}">
+  <div class="product__gallery">
+    {% render 'product-media', product: product %}
+  </div>
+
+  <div class="product__info">
+    <h1 class="product__title">{{ product.title }}</h1>
+
+    <div class="product__price">
+      {% render 'price', target: current_variant %}
+    </div>
+
+    <div class="product__inventory" data-inventory-block>
+      {%- if current_variant.available -%}
+        {%- if current_variant.inventory_management != blank and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= 10 -%}
+          <span class="eyebrow">Only {{ current_variant.inventory_quantity }} left</span>
+        {%- endif -%}
+      {%- else -%}
+        <span class="eyebrow eyebrow--muted">{{ 'products.product.sold_out' | t }}</span>
+      {%- endif -%}
+    </div>
+
+    {% if section.settings.show_description %}
+      <div class="product__description rte">{{ product.description }}</div>
+    {% endif %}
+
+    {% unless product.has_only_default_variant %}
+      <variant-picker data-url="{{ product.url }}">
+        <script type="application/json" data-variant-json>
+          {{ product.variants | json }}
+        </script>
+        {% for option in product.options_with_values %}
+          <fieldset class="option">
+            <legend class="option__head">
+              <span class="option__name">{{ option.name }}</span>
+              <span class="option__value" data-option-selected>{{ option.selected_value }}</span>
+            </legend>
+            <div class="option__list">
+              {% for value in option.values %}
+                <label class="option__label">
+                  <input
+                    type="radio"
+                    class="option__input"
+                    name="options[{{ option.name | escape }}]"
+                    value="{{ value | escape }}"
+                    {% if option.selected_value == value %}checked{% endif %}
+                  >
+                  <span>{{ value }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% endfor %}
+      </variant-picker>
+    {% endunless %}
+
+    <product-form>
+      {% form 'product', product %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+        <div class="product__buy-row" data-atc-anchor>
+          <quantity-input class="qty">
+            <button type="button" class="qty__btn" data-qty-step="-1" aria-label="Decrease quantity">&minus;</button>
+            <input
+              type="number"
+              class="qty__input"
+              name="quantity"
+              value="1"
+              min="1"
+              aria-label="{{ 'products.product.quantity' | t }}"
+            >
+            <button type="button" class="qty__btn" data-qty-step="1" aria-label="Increase quantity">+</button>
+          </quantity-input>
+          <button
+            type="submit"
+            class="btn btn--primary btn--full"
+            data-add-button
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            <span data-add-label>
+              {%- if current_variant.available -%}
+                {{ 'products.product.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- endif -%}
+            </span>
+          </button>
+        </div>
+      {% endform %}
+    </product-form>
+  </div>
 </section>
+
+{% schema %}
+{
+  "name": "Product main",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

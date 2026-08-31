@@ -1,0 +1,89 @@
+{%- liquid
+  assign coll = collections[section.settings.collection]
+  assign limit = section.settings.products_to_show
+-%}
+
+<div class="section {% if section.settings.surface %}color-surface{% endif %}" data-section-id="{{ section.id }}">
+  <div class="page-width">
+
+    <div class="section-head">
+      <div class="section-head__text">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2>{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="lede">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_view_all and coll != blank -%}
+        <a href="{{ coll.url }}" class="link-quiet">{{ 'sections.collection.view_all' | t }}</a>
+      {%- endif -%}
+    </div>
+
+    <div class="grid grid--{{ section.settings.columns }} grid--keep-2">
+      {%- if coll.products.size > 0 -%}
+        {%- for product in coll.products limit: limit -%}
+          {% render 'product-card',
+            card_product: product,
+            reveal: settings.enable_reveal,
+            index: forloop.index
+          %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%}
+          Placeholders so the section is designable in the theme editor before
+          a collection is chosen — otherwise merchants see an empty box and
+          assume the section is broken.
+        {%- endcomment -%}
+        {%- for i in (1..limit) -%}
+          {% render 'product-card' %}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all and coll != blank -%}
+      <div class="text-center hide-desktop" style="margin-top: var(--sp-6);">
+        <a href="{{ coll.url }}" class="btn btn--ghost">{{ 'sections.collection.view_all' | t }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Collection" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New this season" },
+    { "type": "text", "id": "subheading", "label": "Subheading" },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show 'view all' link", "default": true },
+    { "type": "checkbox", "id": "surface", "label": "Raised background", "default": false }
+  ],
+  "presets": [{ "name": "Featured collection" }]
+}
+{% endschema %}

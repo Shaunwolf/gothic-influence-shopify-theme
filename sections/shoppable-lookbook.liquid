@@ -1,0 +1,158 @@
+<style>
+  .lookbook-section {
+    padding: var(--sp-8, 3rem) var(--sp-6, 2rem);
+  }
+
+  .lookbook-section .section-title {
+    text-align: center;
+    margin-bottom: var(--sp-6, 2rem);
+  }
+
+  .lookbook-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .lookbook-image {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid var(--color-line, #262b27);
+  }
+
+  .hotspot {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: var(--color-accent, #c6a15b);
+    border: 2px solid var(--color-brand, #2d6a40);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hotspot:hover,
+  .hotspot:focus-visible {
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0 0 15px var(--color-accent, #c6a15b);
+  }
+
+  .hotspot .hotspot-label {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background: var(--color-surface, #121513);
+    color: var(--color-text, #e8ebe9);
+    border: 1px solid var(--color-brand, #2d6a40);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: var(--font-body, 'Poppins', sans-serif);
+    font-size: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+  }
+
+  .hotspot:hover .hotspot-label,
+  .hotspot:focus-visible .hotspot-label {
+    opacity: 1;
+    visibility: visible;
+  }
+</style>
+
+<section class="lookbook-section">
+  {% if section.settings.heading != blank %}
+    <h2 class="section-title">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="lookbook-container">
+    {% if section.settings.room_image != blank %}
+      {%- assign lookbook_alt = section.settings.heading | default: 'Shoppable room' -%}
+      {{ section.settings.room_image | image_url: width: 1600 | image_tag: class: 'lookbook-image', loading: 'lazy', alt: lookbook_alt }}
+    {% else %}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'lookbook-image' }}
+    {% endif %}
+
+    {% for block in section.blocks %}
+      {% if block.settings.product != blank %}
+        <a
+          href="{{ block.settings.product.url }}"
+          class="hotspot"
+          style="top: {{ block.settings.top_position }}%; left: {{ block.settings.left_position }}%;"
+          aria-label="Shop {{ block.settings.product.title }}"
+          {{ block.shopify_attributes }}
+        >
+          <span class="hotspot-label">{{ block.settings.product.title }} &middot; {{ block.settings.product.price | money }}</span>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shoppable lookbook",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop the Look"
+    },
+    {
+      "type": "image_picker",
+      "id": "room_image",
+      "label": "Room lifestyle image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hotspot",
+      "name": "Product hotspot",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "top_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Top position",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "left_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Left position",
+          "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shoppable lookbook",
+      "blocks": [
+        {
+          "type": "hotspot"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,190 @@
+{%- comment -%}
+  Cart drawer.
+  theme.js re-fetches this section with ?section_id=cart-drawer after every
+  cart mutation and swaps [data-cart-contents]. Keeping the render in Liquid
+  means money formatting, discounts and translations stay correct in every
+  locale instead of being rebuilt in JS.
+{%- endcomment -%}
+
+<cart-drawer id="CartDrawer" class="drawer" aria-hidden="true">
+  <div class="drawer__scrim" data-drawer-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.cart.title' | t }}">
+
+    <div class="drawer__head">
+      <span class="drawer__title">{{ 'sections.cart.title' | t }}</span>
+      <button type="button" class="icon-btn" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon', name: 'close', size: 20 %}
+      </button>
+    </div>
+
+    <div data-cart-contents style="display: contents;">
+      {%- if cart.item_count == 0 -%}
+
+        <div class="drawer__body">
+          <div class="empty-state">
+            <p class="h3">{{ 'sections.cart.empty' | t }}</p>
+            <p class="text-muted">{{ 'sections.cart.empty_hint' | t }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn--gold">
+              {{ 'general.continue_shopping' | t }}
+            </a>
+          </div>
+        </div>
+
+      {%- else -%}
+
+        <div class="drawer__body">
+          {%- if settings.cart_free_shipping_bar and settings.cart_free_shipping_threshold > 0 -%}
+            {%- liquid
+              assign threshold = settings.cart_free_shipping_threshold | times: 100
+              assign remaining = threshold | minus: cart.total_price
+              assign pct = cart.total_price | times: 100.0 | divided_by: threshold
+              if pct > 100
+                assign pct = 100
+              endif
+            -%}
+            <div class="ship-meter">
+              <p class="ship-meter__text">
+                {%- if remaining > 0 -%}
+                  {{ 'sections.cart.free_shipping_progress' | t: amount: remaining | money }}
+                {%- else -%}
+                  {{ 'sections.cart.free_shipping_reached' | t }}
+                {%- endif -%}
+              </p>
+              <div class="ship-meter__track"
+                   role="progressbar"
+                   aria-valuenow="{{ pct | round }}"
+                   aria-valuemin="0"
+                   aria-valuemax="100">
+                <div class="ship-meter__fill" style="width: {{ pct }}%;"></div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div role="list">
+            {%- for item in cart.items -%}
+              <div class="cart-item" role="listitem">
+                <a href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+                  {%- if item.image -%}
+                    {{
+                      item.image
+                      | image_url: width: 200
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '84,168,252',
+                        sizes: '84px',
+                        alt: item.title | escape,
+                        class: 'cart-item__img'
+                    }}
+                  {%- endif -%}
+                </a>
+
+                <div>
+                  <h3 class="cart-item__title"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>
+
+                  {%- unless item.product.has_only_default_variant -%}
+                    <p class="cart-item__variant">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+
+                  {%- if item.selling_plan_allocation -%}
+                    <p class="cart-item__variant">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                  {%- endif -%}
+
+                  {%- for property in item.properties -%}
+                    {%- unless property.last == blank or property.first startswith '_' -%}
+                      <p class="cart-item__variant">{{ property.first }}: {{ property.last }}</p>
+                    {%- endunless -%}
+                  {%- endfor -%}
+
+                  {%- if item.line_level_discount_allocations.size > 0 -%}
+                    {%- for discount in item.line_level_discount_allocations -%}
+                      <p class="cart-item__variant" style="color: var(--color-accent-text);">
+                        {{ discount.discount_application.title }} (&minus;{{ discount.amount | money }})
+                      </p>
+                    {%- endfor -%}
+                  {%- endif -%}
+
+                  <div class="cart-item__row">
+                    <div class="qty">
+                      <button type="button" class="qty__btn" data-cart-step="-1"
+                              aria-label="{{ 'sections.cart.decrease' | t }}">
+                        {% render 'icon', name: 'minus', size: 14 %}
+                      </button>
+                      <input type="number"
+                             class="qty__input"
+                             value="{{ item.quantity }}"
+                             min="0"
+                             data-line="{{ forloop.index }}"
+                             aria-label="{{ 'sections.cart.quantity' | t }}">
+                      <button type="button" class="qty__btn" data-cart-step="1"
+                              aria-label="{{ 'sections.cart.increase' | t }}">
+                        {% render 'icon', name: 'plus', size: 14 %}
+                      </button>
+                    </div>
+
+                    <div>
+                      {%- if item.original_line_price != item.final_line_price -%}
+                        <s class="price__compare">{{ item.original_line_price | money }}</s>
+                      {%- endif -%}
+                      <span class="price__regular">{{ item.final_line_price | money }}</span>
+                    </div>
+                  </div>
+
+                  <div class="cart-item__row">
+                    <button type="button" class="cart-item__remove" data-cart-remove="{{ forloop.index }}">
+                      {{ 'sections.cart.remove' | t }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if settings.cart_show_note -%}
+            <details class="accordion__item" style="margin-top: var(--sp-5);">
+              <summary class="accordion__summary">
+                {{ 'sections.cart.note' | t }}
+                {% render 'icon', name: 'plus', size: 16 %}
+              </summary>
+              <div class="accordion__content">
+                <textarea name="note" form="CartDrawerForm" class="textarea"
+                          placeholder="{{ 'sections.cart.note_placeholder' | t }}">{{ cart.note }}</textarea>
+              </div>
+            </details>
+          {%- endif -%}
+        </div>
+
+        <div class="drawer__foot">
+          {%- if cart.cart_level_discount_applications.size > 0 -%}
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <div class="cart-total">
+                <span class="cart-total__label">{{ discount.title }}</span>
+                <span class="price__regular">&minus;{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+
+          <div class="cart-total">
+            <span class="cart-total__label">{{ 'sections.cart.subtotal' | t }}</span>
+            <span class="cart-total__value">{{ cart.total_price | money_with_currency }}</span>
+          </div>
+
+          <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm">
+            <button type="submit" name="checkout" class="btn btn--primary btn--full btn--lg">
+              {{ 'sections.cart.checkout' | t }}
+            </button>
+          </form>
+
+          <p class="cart-note">{{ 'sections.cart.taxes_note' | t }}</p>
+        </div>
+
+      {%- endif -%}
+    </div>
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,54 @@
+<div class="section section--tight color-surface" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <div class="trust">
+      {%- for block in section.blocks -%}
+        <div class="trust__item reveal" {{ block.shopify_attributes }}>
+          <span class="trust__icon">{% render 'icon', name: block.settings.icon, size: 26 %}</span>
+          <p class="trust__title">{{ block.settings.title }}</p>
+          <p class="trust__text">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust row",
+  "max_blocks": 4,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Shipping" },
+            { "value": "shield", "label": "Guarantee" },
+            { "value": "leaf", "label": "Sustainable" },
+            { "value": "gift", "label": "Gifting" },
+            { "value": "star", "label": "Rated" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free shipping" },
+        { "type": "text", "id": "text", "label": "Text", "default": "On every order over $150." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust row",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "truck", "title": "Free shipping", "text": "On every order over $150." } },
+        { "type": "item", "settings": { "icon": "shield", "title": "30-day returns", "text": "Unused, in original packaging." } },
+        { "type": "item", "settings": { "icon": "leaf", "title": "Made to last", "text": "Solid materials, no veneer." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

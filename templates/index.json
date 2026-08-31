@@ -1,0 +1,167 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "heading": "Dark. Elegant. Enduring.",
+        "subheading": "Considered pieces for rooms with a darker disposition.",
+        "button_label": "Shop the collection",
+        "button_link": "/collections/all"
+      }
+    },
+    "trust": {
+      "type": "trust-row",
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free shipping",
+            "text": "On every order over $150."
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "title": "30-day returns",
+            "text": "Unused, in original packaging."
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "leaf",
+            "title": "Made to last",
+            "text": "Solid materials, no veneer."
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3"
+      ]
+    },
+    "lantern": {
+      "type": "lantern-grid",
+      "settings": {
+        "heading": "New this season"
+      }
+    },
+    "rooms": {
+      "type": "collection-list",
+      "blocks": {
+        "c1": {
+          "type": "item",
+          "settings": {
+            "show_count": true
+          }
+        },
+        "c2": {
+          "type": "item",
+          "settings": {
+            "show_count": true
+          }
+        },
+        "c3": {
+          "type": "item",
+          "settings": {
+            "show_count": true
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {
+        "eyebrow": "Browse",
+        "heading": "Shop by room",
+        "columns": "3"
+      }
+    },
+    "lookbook": {
+      "type": "shoppable-lookbook",
+      "blocks": {
+        "h1": {
+          "type": "hotspot",
+          "settings": {
+            "top_position": 45,
+            "left_position": 50
+          }
+        }
+      },
+      "block_order": [
+        "h1"
+      ]
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "The Collection",
+        "heading": "Quiet statements",
+        "products_to_show": 8,
+        "columns": "4",
+        "show_view_all": true
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "Our craft",
+        "heading": "Made slowly, on purpose",
+        "text": "<p>Every piece is finished by hand in small batches, so no two are quite identical.</p>",
+        "button_label": "Our story"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "q1": {
+          "type": "quote",
+          "settings": {
+            "rating": 5,
+            "quote": "It anchors the whole room. Better in person than in the photographs.",
+            "author": "Verified buyer"
+          }
+        },
+        "q2": {
+          "type": "quote",
+          "settings": {
+            "rating": 5,
+            "quote": "The weight of it tells you everything. Nothing about this feels mass produced.",
+            "author": "Verified buyer"
+          }
+        },
+        "q3": {
+          "type": "quote",
+          "settings": {
+            "rating": 5,
+            "quote": "Arrived boxed like something precious. It was.",
+            "author": "Verified buyer"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ],
+      "settings": {
+        "surface": true
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "trust",
+    "lantern",
+    "rooms",
+    "lookbook",
+    "featured",
+    "story",
+    "testimonials"
+  ]
+}

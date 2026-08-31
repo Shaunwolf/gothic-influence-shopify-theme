@@ -1,0 +1,48 @@
+{%- comment -%}
+  Price block.
+  Accepts: product (or variant), show_unit (bool)
+  Handles ranges, sale compare-at, and unit pricing for volume-based decor
+  (candles, fabric by the metre) which Shopify requires be shown where set.
+{%- endcomment -%}
+
+{%- liquid
+  if target == null
+    assign target = product
+  endif
+
+  assign on_sale = false
+  if target.compare_at_price > target.price
+    assign on_sale = true
+  endif
+
+  assign is_range = false
+  if target.price_varies
+    assign is_range = true
+  endif
+-%}
+
+<div class="price {% if on_sale %}price--on-sale{% endif %}" data-price-block>
+  {%- if target == blank -%}
+    <span class="price__regular">{{ 1999 | money }}</span>
+  {%- else -%}
+    <span class="price__regular">
+      {%- if is_range -%}
+        {{ 'products.product.from_price' | t: price: target.price_min | money }}
+      {%- else -%}
+        {{ target.price | money }}
+      {%- endif -%}
+    </span>
+
+    {%- if on_sale -%}
+      <s class="price__compare">{{ target.compare_at_price | money }}</s>
+      <span class="visually-hidden">{{ 'products.product.on_sale' | t }}</span>
+    {%- endif -%}
+
+    {%- if show_unit and target.selected_or_first_available_variant.unit_price_measurement -%}
+      {%- assign uv = target.selected_or_first_available_variant -%}
+      <span class="price__unit">
+        {{ uv.unit_price | money }}/{% if uv.unit_price_measurement.reference_value != 1 %}{{ uv.unit_price_measurement.reference_value }}{% endif %}{{ uv.unit_price_measurement.reference_unit }}
+      </span>
+    {%- endif -%}
+  {%- endif -%}
+</div>

@@ -1,9 +1,319 @@
 [
   {
     "name": "theme_info",
-    "theme": {
-      "name": "Gothic Influence",
-      "id": 164561191160
-    }
+    "theme_name": "Gothic Influence",
+    "theme_version": "2.0.0",
+    "theme_author": "Gothic Influence",
+    "theme_documentation_url": "https://github.com/Shaunwolf/gothic-influence-shopify-theme",
+    "theme_support_url": "https://github.com/Shaunwolf/gothic-influence-shopify-theme/issues"
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Foundation"
+      },
+      {
+        "type": "paragraph",
+        "content": "The theme is built dark-first. Keep the background near-black and let gold do the accent work — used sparingly, it reads as luxury; used widely, it reads as costume."
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Page background",
+        "default": "#0b0c0b"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Raised surface",
+        "info": "Footer, drawers, menus, inputs.",
+        "default": "#121513"
+      },
+      {
+        "type": "color",
+        "id": "color_line",
+        "label": "Hairline / border",
+        "default": "#262b27"
+      },
+      {
+        "type": "header",
+        "content": "Text"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Primary text",
+        "default": "#e8ebe9"
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "label": "Secondary text",
+        "info": "Keep this at 4.5:1 or better against the page background.",
+        "default": "#949c96"
+      },
+      {
+        "type": "header",
+        "content": "Brand green"
+      },
+      {
+        "type": "color",
+        "id": "color_brand",
+        "label": "Brand green",
+        "info": "Buttons and fills. Too dark for body text — the theme never uses it that way.",
+        "default": "#2d6a40"
+      },
+      {
+        "type": "color",
+        "id": "color_brand_text",
+        "label": "Green text tint",
+        "info": "The readable green, used when green needs to appear as text.",
+        "default": "#7fb392"
+      },
+      {
+        "type": "header",
+        "content": "Gold accent"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Gold",
+        "info": "Hairlines, focus rings, badges, active states.",
+        "default": "#c6a15b"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_text",
+        "label": "Gold text tint",
+        "info": "Prices, eyebrow labels, link hovers.",
+        "default": "#d9bc7e"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Serve fonts from Shopify's font library rather than a third-party CDN — they load from the same domain as the rest of the store, which removes a render-blocking request."
+      },
+      {
+        "type": "font_picker",
+        "id": "font_display",
+        "label": "Display font",
+        "info": "Headings, product titles, prices.",
+        "default": "playfair_display_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body font",
+        "default": "poppins_n4"
+      },
+      {
+        "type": "range",
+        "id": "font_body_scale",
+        "label": "Body size",
+        "min": 90,
+        "max": 115,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "font_heading_scale",
+        "label": "Heading size",
+        "min": 80,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "track_caps",
+        "label": "Small-caps letter spacing",
+        "info": "The open tracking on uppercase labels is a large part of the luxury feel.",
+        "min": 0,
+        "max": 30,
+        "step": 2,
+        "unit": "/100em",
+        "default": 18
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 x 32px PNG."
+      },
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Maximum page width",
+        "min": 1200,
+        "max": 1800,
+        "step": 40,
+        "unit": "px",
+        "default": 1440
+      },
+      {
+        "type": "select",
+        "id": "corner_radius",
+        "label": "Corner style",
+        "info": "Sharp corners read expensive. Soft corners read friendly.",
+        "options": [
+          { "value": "0px", "label": "Square" },
+          { "value": "2px", "label": "Near-sharp (recommended)" },
+          { "value": "6px", "label": "Soft" }
+        ],
+        "default": "2px"
+      },
+      {
+        "type": "select",
+        "id": "card_ratio",
+        "label": "Product image shape",
+        "options": [
+          { "value": "1 / 1", "label": "Square" },
+          { "value": "3 / 4", "label": "Portrait (recommended for decor)" },
+          { "value": "4 / 5", "label": "Tall portrait" },
+          { "value": "4 / 3", "label": "Landscape" }
+        ],
+        "default": "3 / 4"
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "card_hover_image",
+        "label": "Reveal second image on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_quick_add",
+        "label": "Show quick add",
+        "info": "Single-variant products add straight to the cart. Products with options open the product page instead.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_swatches",
+        "label": "Show colour swatches",
+        "info": "Reads the option named below and renders each value as a swatch.",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "swatch_option_name",
+        "label": "Colour option name",
+        "default": "Color"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_sale_badge",
+        "label": "Show sale badge",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart behaviour",
+        "options": [
+          { "value": "drawer", "label": "Slide-out drawer (recommended)" },
+          { "value": "page", "label": "Go to cart page" }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_free_shipping_bar",
+        "label": "Show free-shipping progress",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free shipping over",
+        "info": "In your store currency, whole units. Set to 0 to hide.",
+        "default": 150
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_note",
+        "label": "Allow order notes",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Social",
+    "settings": [
+      { "type": "text", "id": "social_instagram", "label": "Instagram" },
+      { "type": "text", "id": "social_facebook", "label": "Facebook" },
+      { "type": "text", "id": "social_pinterest", "label": "Pinterest" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok" },
+      { "type": "text", "id": "social_youtube", "label": "YouTube" }
+    ]
+  },
+  {
+    "name": "Search engines & sharing",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Default sharing image",
+        "info": "1200 x 630px. Used when a page has no image of its own."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_structured_data",
+        "label": "Output product structured data",
+        "info": "Lets Google show price, availability and ratings in results.",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Motion",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Every animation here is automatically disabled for visitors who ask their system to reduce motion."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_reveal",
+        "label": "Fade sections in on scroll",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_image_zoom",
+        "label": "Zoom product images on hover",
+        "default": true
+      }
+    ]
   }
 ]

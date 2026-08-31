@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-main",
+      "settings": {}
+    },
+    "sticky_atc": {
+      "type": "sticky-atc",
+      "settings": {
+        "enabled": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "sticky_atc"
+  ]
+}

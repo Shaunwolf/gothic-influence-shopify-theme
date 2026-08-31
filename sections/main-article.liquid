@@ -1,0 +1,67 @@
+<article class="section" data-section-id="{{ section.id }}">
+  <div class="page-width page-width--narrow">
+    <div class="text-center" style="margin-bottom: var(--sp-7);">
+      <span class="eyebrow">{{ article.published_at | date: format: 'date' }}</span>
+      <h1 style="margin-top: var(--sp-3);">{{ article.title }}</h1>
+      {%- if article.author != blank -%}
+        <p class="quote__by" style="margin-top: var(--sp-4);">
+          {{ 'blogs.article.by' | t: author: article.author }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- if article.image -%}
+      {{
+        article.image
+        | image_url: width: 1600
+        | image_tag:
+          loading: 'eager',
+          widths: '600,900,1200,1600',
+          sizes: '(min-width: 990px) 860px, 92vw',
+          alt: article.title | escape,
+          style: 'border-radius: var(--radius-sm); margin-bottom: var(--sp-7);'
+      }}
+    {%- endif -%}
+
+    <div class="rte">{{ article.content }}</div>
+
+    {%- if blog.comments_enabled? -%}
+      <hr class="rule" style="margin-block: var(--sp-8);">
+      <h2 class="h3">{{ 'blogs.comments.title' | t: count: article.comments_count }}</h2>
+
+      {%- for comment in article.comments -%}
+        <div style="padding-block: var(--sp-5); border-bottom: 1px solid var(--color-line);">
+          <p class="card__vendor">
+            {{ comment.author }} &middot; {{ comment.created_at | date: format: 'date' }}
+          </p>
+          <div class="rte" style="margin-top: var(--sp-2);">{{ comment.content }}</div>
+        </div>
+      {%- endfor -%}
+
+      {%- form 'new_comment', article, style: 'margin-top: var(--sp-7); display: grid; gap: var(--sp-4);' -%}
+        {%- if form.errors -%}
+          <p class="field__error">{{ 'blogs.comments.error' | t }}</p>
+        {%- elsif form.posted_successfully? -%}
+          <p class="form-success">{{ 'blogs.comments.success' | t }}</p>
+        {%- endif -%}
+        <label class="field">
+          <span class="field__label">{{ 'blogs.comments.name' | t }}</span>
+          <input type="text" name="comment[author]" class="input" required>
+        </label>
+        <label class="field">
+          <span class="field__label">{{ 'blogs.comments.email' | t }}</span>
+          <input type="email" name="comment[email]" class="input" autocomplete="email" required>
+        </label>
+        <label class="field">
+          <span class="field__label">{{ 'blogs.comments.message' | t }}</span>
+          <textarea name="comment[body]" class="textarea" required></textarea>
+        </label>
+        <div><button type="submit" class="btn btn--gold">{{ 'blogs.comments.submit' | t }}</button></div>
+      {%- endform -%}
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{ "name": "Article", "settings": [] }
+{% endschema %}

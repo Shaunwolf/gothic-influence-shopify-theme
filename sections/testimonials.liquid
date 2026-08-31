@@ -1,0 +1,49 @@
+<div class="section {% if section.settings.surface %}color-surface{% endif %}" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="text-center" style="margin-bottom: var(--sp-7);">
+        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+        <h2 style="margin-top: var(--sp-3);">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="grid grid--{{ section.blocks.size | at_most: 3 }}">
+      {%- for block in section.blocks -%}
+        <blockquote class="quote reveal" {{ block.shopify_attributes }}>
+          {%- if block.settings.rating > 0 -%}
+            <div class="stars" role="img" aria-label="{{ block.settings.rating }} out of 5">
+              {%- for i in (1..block.settings.rating) -%}{% render 'icon', name: 'star', size: 14 %}{%- endfor -%}
+            </div>
+          {%- endif -%}
+          <p class="quote__text">{{ block.settings.quote }}</p>
+          <footer class="quote__by">{{ block.settings.author }}</footer>
+        </blockquote>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "In their words" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved in real rooms" },
+    { "type": "checkbox", "id": "surface", "label": "Raised background", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "quote", "name": "Quote",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Stars", "min": 0, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "It anchors the whole room. Better in person than in the photographs." },
+        { "type": "text", "id": "author", "label": "Author", "default": "Verified buyer" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Testimonials", "blocks": [{ "type": "quote" }, { "type": "quote" }, { "type": "quote" }] }
+  ]
+}
+{% endschema %}

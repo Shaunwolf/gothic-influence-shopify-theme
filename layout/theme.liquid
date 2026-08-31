@@ -1,0 +1,150 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_bg }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+
+    {%- comment -%}
+      Fonts are served from Shopify's own CDN via font_face, which is already
+      preconnected above. That removes the render-blocking round trip to
+      fonts.googleapis.com that a <link> stylesheet would add.
+    {%- endcomment -%}
+    {%- liquid
+      assign body_font = settings.font_body
+      assign body_bold = body_font | font_modify: 'weight', '600'
+      assign body_italic = body_font | font_modify: 'style', 'italic'
+      assign body_light = body_font | font_modify: 'weight', '300'
+      assign display_font = settings.font_display
+      assign display_italic = display_font | font_modify: 'style', 'italic'
+      assign display_bold = display_font | font_modify: 'weight', '600'
+    -%}
+    <style>
+      {{ body_font | font_face: font_display: 'swap' }}
+      {{ body_bold | font_face: font_display: 'swap' }}
+      {{ body_italic | font_face: font_display: 'swap' }}
+      {{ body_light | font_face: font_display: 'swap' }}
+      {{ display_font | font_face: font_display: 'swap' }}
+      {{ display_italic | font_face: font_display: 'swap' }}
+      {{ display_bold | font_face: font_display: 'swap' }}
+
+      :root {
+        --color-bg: {{ settings.color_bg }};
+        --color-surface: {{ settings.color_surface }};
+        --color-surface-raised: {{ settings.color_surface | color_lighten: 3 }};
+        --color-line: {{ settings.color_line }};
+        --color-line-strong: {{ settings.color_line | color_lighten: 8 }};
+        --color-text: {{ settings.color_text }};
+        --color-text-muted: {{ settings.color_text_muted }};
+        --color-text-subtle: {{ settings.color_text_muted | color_darken: 12 }};
+        --color-brand: {{ settings.color_brand }};
+        --color-brand-text: {{ settings.color_brand_text }};
+        --color-accent: {{ settings.color_accent }};
+        --color-accent-text: {{ settings.color_accent_text }};
+
+        --gold-200: {{ settings.color_accent | color_lighten: 22 }};
+        --gold-300: {{ settings.color_accent_text }};
+        --gold-400: {{ settings.color_accent }};
+        --gold-500: {{ settings.color_accent | color_darken: 8 }};
+        --gold-600: {{ settings.color_accent | color_darken: 16 }};
+
+        --green-200: {{ settings.color_brand_text }};
+        --green-400: {{ settings.color_brand }};
+        --green-500: {{ settings.color_brand | color_darken: 8 }};
+        --green-700: {{ settings.color_brand | color_darken: 20 }};
+        --green-800: {{ settings.color_brand | color_darken: 26 }};
+
+        --ink-700: {{ settings.color_surface | color_lighten: 3 }};
+        --ink-800: {{ settings.color_surface }};
+        --ink-900: {{ settings.color_bg }};
+
+        --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+        --font-display: {{ display_font.family }}, {{ display_font.fallback_families }};
+        --fw-light: {% if body_font.weight == 300 %}300{% else %}{{ body_font.weight }}{% endif %};
+        --fw-normal: {{ body_font.weight }};
+
+        --fs-base: {{ settings.font_body_scale | times: 0.01 | times: 16 | round: 2 }}px;
+        --heading-scale: {{ settings.font_heading_scale | times: 0.01 }};
+        --track-caps: {{ settings.track_caps | times: 0.01 }}em;
+
+        --page-max: {{ settings.page_width }}px;
+        --radius-sm: {{ settings.corner_radius }};
+        --card-ratio: {{ settings.card_ratio }};
+      }
+
+      h1, h2, h3, h4, .h1, .h2, .h3, .h4, .display, .hero__title {
+        font-size: calc(var(--_fs, 1em) * var(--heading-scale));
+      }
+      .h1, h1 { --_fs: var(--fs-3xl); }
+      .h2, h2 { --_fs: var(--fs-2xl); }
+      .h3, h3 { --_fs: var(--fs-xl); }
+      .h4, h4 { --_fs: var(--fs-lg); }
+      .display, .hero__title { --_fs: var(--fs-4xl); }
+
+      {%- unless settings.enable_image_zoom -%}
+        .card:hover .card__img { transform: none; }
+      {%- endunless -%}
+      {%- unless settings.enable_reveal -%}
+        .reveal { opacity: 1; transform: none; animation: none; }
+      {%- endunless -%}
+    </style>
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      window.Shopify = window.Shopify || {};
+      window.Shopify.routes = window.Shopify.routes || {};
+      window.Shopify.routes.root = {{ routes.root_url | append: '/' | replace: '//', '/' | json }};
+      window.themeStrings = {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        cartError: {{ 'sections.cart.error' | t | json }},
+        moneyFormat: {{ shop.money_format | json }}
+      };
+    </script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name | handle }}">
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {%- if settings.cart_type == 'drawer' -%}
+      {% section 'cart-drawer' %}
+    {%- endif -%}
+
+    <ul hidden>
+      <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+    </ul>
+  </body>
+</html>

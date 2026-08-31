@@ -1,0 +1,17 @@
+extends: :theme_app_extension
+require: []
+
+ImgLazyLoading:
+  enabled: true
+AssetSizeCSS:
+  enabled: true
+  threshold_in_bytes: 100000
+AssetSizeJavaScript:
+  enabled: true
+  threshold_in_bytes: 40000
+UndefinedObject:
+  enabled: true
+DeprecatedFilter:
+  enabled: true
+ValidHTMLTranslation:
+  enabled: true

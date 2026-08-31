@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "collection-list",
+      "settings": {
+        "eyebrow": "Browse",
+        "heading": "All collections",
+        "columns": "3"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

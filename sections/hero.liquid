@@ -1,17 +1,60 @@
-<section class="hero">
-  <div class="hero-content">
-    <h1>Elegance Reimagined</h1>
-    <p>Dark, sophisticated, and unmistakably gothic</p>
-    <a href="/collections/all" class="btn">Shop Now</a>
-  </div>
-</section>
-
 <style>
   .hero {
-    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #1a472a 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-bg, #0b0c0b) 0%,
+      var(--ink-700, #1a1e1b) 50%,
+      var(--green-800, #12241a) 100%
+    );
     padding: 100px 20px;
     text-align: center;
     position: relative;
     overflow: hidden;
   }
 </style>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>{{ section.settings.heading }}</h1>
+    <p>{{ section.settings.subheading }}</p>
+    {% if section.settings.button_label != blank %}
+      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="btn btn--primary">{{ section.settings.button_label }}</a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Elegance Reimagined"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Dark, sophisticated, and unmistakably gothic"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

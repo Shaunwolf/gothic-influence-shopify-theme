@@ -1,0 +1,187 @@
+{%- paginate collection.products by section.settings.per_page -%}
+
+<div data-section-id="{{ section.id }}">
+
+  {%- if section.settings.show_hero -%}
+    <div class="collection-hero">
+      <div class="page-width">
+        {%- if section.settings.show_breadcrumb -%}
+          <nav class="breadcrumb" aria-label="{{ 'general.breadcrumb' | t }}">
+            <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a>
+            <span aria-hidden="true"> / </span>
+            <span>{{ collection.title }}</span>
+          </nav>
+        {%- endif -%}
+
+        <h1>{{ collection.title }}</h1>
+
+        {%- if collection.description != blank and section.settings.show_description -%}
+          <div class="rte text-muted measure" style="margin: var(--sp-4) auto 0;">
+            {{ collection.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="page-width">
+
+    {%- comment -%}
+      Filtering and sorting. Shopify's native filters come from the Search &
+      Discovery app; the form degrades to a normal GET submit if JS fails,
+      which is why every control lives inside a real <form>.
+    {%- endcomment -%}
+    <facet-filters>
+      <form>
+        <div class="toolbar">
+          <div class="facets">
+            {%- for filter in collection.filters -%}
+              {%- case filter.type -%}
+
+                {%- when 'list', 'boolean' -%}
+                  <details class="facet">
+                    <summary class="btn btn--ghost btn--sm">
+                      {{ filter.label }}
+                      {%- if filter.active_values.size > 0 %} ({{ filter.active_values.size }}){% endif -%}
+                      {% render 'icon', name: 'chevron-down', size: 14 %}
+                    </summary>
+                    <div class="facet__panel">
+                      {%- for value in filter.values -%}
+                        <label class="facet__option">
+                          <input type="checkbox"
+                                 name="{{ value.param_name }}"
+                                 value="{{ value.value }}"
+                                 {% if value.active %}checked{% endif %}
+                                 {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                          <span>{{ value.label }} <span class="text-subtle">({{ value.count }})</span></span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </details>
+
+                {%- when 'price_range' -%}
+                  <details class="facet">
+                    <summary class="btn btn--ghost btn--sm">
+                      {{ filter.label }}
+                      {% render 'icon', name: 'chevron-down', size: 14 %}
+                    </summary>
+                    <div class="facet__panel">
+                      <div style="display: flex; gap: var(--sp-3); align-items: center;">
+                        <label class="field" style="flex:1;">
+                          <span class="field__label">{{ 'sections.collection.from' | t }}</span>
+                          <input type="number" class="input" inputmode="decimal"
+                                 name="{{ filter.min_value.param_name }}"
+                                 value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                                 min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                        </label>
+                        <label class="field" style="flex:1;">
+                          <span class="field__label">{{ 'sections.collection.to' | t }}</span>
+                          <input type="number" class="input" inputmode="decimal"
+                                 name="{{ filter.max_value.param_name }}"
+                                 value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                                 min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}">
+                        </label>
+                      </div>
+                    </div>
+                  </details>
+
+              {%- endcase -%}
+            {%- endfor -%}
+
+            {%- if collection.sort_options.size > 0 -%}
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <label class="visually-hidden" for="SortBy">{{ 'sections.collection.sort_by' | t }}</label>
+              <select name="sort_by" id="SortBy" class="select" style="min-height:40px;width:auto;">
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>
+                    {{ option.name }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+          </div>
+
+          <p class="toolbar__count" data-result-count>
+            {{ 'sections.collection.product_count' | t: count: collection.products_count }}
+          </p>
+        </div>
+
+        <div class="facet-pills" data-facet-pills>
+          {%- for filter in collection.filters -%}
+            {%- for value in filter.active_values -%}
+              <a href="{{ value.url_to_remove }}" class="facet-pill">
+                {{ filter.label }}: {{ value.label }}
+                {% render 'icon', name: 'close', size: 12 %}
+              </a>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+      </form>
+    </facet-filters>
+
+    <div data-product-grid>
+      {%- if collection.products.size > 0 -%}
+        <div class="grid grid--{{ section.settings.columns }} grid--keep-2">
+          {%- for product in collection.products -%}
+            {% render 'product-card',
+              card_product: product,
+              reveal: settings.enable_reveal,
+              index: forloop.index
+            %}
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination' | t }}">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.previous' | t }}">&larr;</a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}">{{ part.title }}</a>
+              {%- else -%}
+                <span {% if part.title == paginate.current_page %}aria-current="page"{% endif %}>{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" aria-label="{{ 'general.next' | t }}">&rarr;</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+
+      {%- else -%}
+        <div class="empty-state">
+          <p class="h3">{{ 'sections.collection.empty' | t }}</p>
+          <p class="text-muted">{{ 'sections.collection.empty_hint' | t }}</p>
+          <a href="{{ collection.url }}" class="btn btn--ghost">{{ 'sections.collection.clear_filters' | t }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "checkbox", "id": "show_hero", "label": "Show collection title", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+    {
+      "type": "select", "id": "columns", "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range", "id": "per_page", "label": "Products per page",
+      "min": 8, "max": 48, "step": 4, "default": 24
+    }
+  ]
+}
+{% endschema %}

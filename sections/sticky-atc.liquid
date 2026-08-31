@@ -1,0 +1,88 @@
+{%- comment -%}
+  Sticky add-to-cart bar.
+
+  Kept as its own section rather than living inside main-product so the
+  merchant can switch it off in the theme editor, and so it renders after the
+  product form in the DOM — the bar is fixed, so source order only matters for
+  screen-reader and tab order, and it belongs last.
+
+  theme.js reveals it once [data-atc-anchor] (the real buy row) scrolls out of
+  view upward. It reuses <product-form>, so the ajax add and drawer open are
+  the same code path as the main form — no duplicated logic.
+{%- endcomment -%}
+
+{%- if section.settings.enabled and product != blank -%}
+  {%- assign v = product.selected_or_first_available_variant -%}
+
+  <sticky-atc class="sticky-atc">
+    <div class="page-width sticky-atc__inner">
+      {%- if product.featured_media -%}
+        {{
+          product.featured_media
+          | image_url: width: 96
+          | image_tag:
+            loading: 'lazy',
+            widths: '48,96',
+            sizes: '48px',
+            alt: product.title | escape,
+            class: 'sticky-atc__media'
+        }}
+      {%- endif -%}
+
+      <div class="sticky-atc__text">
+        <p class="sticky-atc__title">{{ product.title }}</p>
+        <p class="sticky-atc__price">
+          {%- if product.price_varies -%}
+            {{ 'products.product.from_price' | t: price: product.price_min | money }}
+          {%- else -%}
+            {{ v.price | money }}
+          {%- endif -%}
+        </p>
+      </div>
+
+      {%- if product.variants.size > 1 -%}
+        {%- comment -%}
+          With options present the honest move is to send the shopper to the
+          picker rather than silently adding a variant they did not choose.
+        {%- endcomment -%}
+        <a href="#MainContent" class="btn btn--primary">
+          {{ 'products.product.choose_options' | t }}
+        </a>
+      {%- else -%}
+        <product-form>
+          {%- form 'product', product, id: 'StickyAtcForm', novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ v.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit"
+                    class="btn btn--primary"
+                    {% unless v.available %}disabled{% endunless %}>
+              <span>
+                {%- if v.available -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- else -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- endif -%}
+              </span>
+            </button>
+          {%- endform -%}
+        </product-form>
+      {%- endif -%}
+    </div>
+  </sticky-atc>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Show sticky add-to-cart bar",
+      "info": "Appears on the product page once the main buy button scrolls past. One of the highest-impact conversion patterns on mobile.",
+      "default": true
+    }
+  ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

@@ -1,0 +1,143 @@
+{
+  "general": {
+    "home": "Home",
+    "continue_shopping": "Continue shopping",
+    "breadcrumb": "Breadcrumb",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "meta": {
+      "tags": "Tagged {{ tags }}",
+      "page": "Page {{ page }}"
+    },
+    "search": {
+      "title": "Search",
+      "search": "Search",
+      "placeholder": "What are you looking for?",
+      "products": "Products",
+      "collections": "Collections",
+      "pages": "Pages",
+      "articles": "Journal",
+      "view_all": "View all results",
+      "no_results": "No results for “{{ terms }}”",
+      "no_results_hint": "Try a different word, or browse the full collection.",
+      "results_count": {
+        "one": "{{ count }} result for “{{ terms }}”",
+        "other": "{{ count }} results for “{{ terms }}”"
+      }
+    },
+    "newsletter": {
+      "email": "Email address",
+      "placeholder": "Your email address",
+      "submit": "Subscribe",
+      "success": "Thank you. Check your inbox to confirm."
+    },
+    "404": {
+      "code": "Error 404",
+      "title": "This page has gone dark",
+      "subtext": "The page you were looking for no longer exists, or never did.",
+      "home": "Back to home"
+    }
+  },
+
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "close": "Close",
+    "link_messages": {
+      "new_window": "Opens in a new window."
+    }
+  },
+
+  "sections": {
+    "announcement": {
+      "label": "Announcement"
+    },
+    "header": {
+      "menu": "Menu",
+      "primary_navigation": "Primary navigation",
+      "view_all": "View all",
+      "cart": "Cart"
+    },
+    "footer": {
+      "payment_methods": "Payment methods"
+    },
+    "cart": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "empty_hint": "Nothing here yet. Have a look around.",
+      "subtotal": "Subtotal",
+      "checkout": "Checkout",
+      "update": "Update cart",
+      "remove": "Remove",
+      "quantity": "Quantity",
+      "increase": "Increase quantity",
+      "decrease": "Decrease quantity",
+      "note": "Order note",
+      "note_placeholder": "Gift wrapping, delivery instructions, anything else.",
+      "taxes_note": "Taxes and shipping calculated at checkout.",
+      "error": "Something went wrong. Please try again.",
+      "free_shipping_progress": "You are {{ amount }} away from free shipping.",
+      "free_shipping_reached": "Your order ships free."
+    },
+    "collection": {
+      "view_all": "View all",
+      "sort_by": "Sort by",
+      "from": "From",
+      "to": "To",
+      "clear_filters": "Clear filters",
+      "empty": "Nothing matches those filters",
+      "empty_hint": "Try widening your search.",
+      "item_count": {
+        "one": "{{ count }} piece",
+        "other": "{{ count }} pieces"
+      },
+      "product_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      }
+    }
+  },
+
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "quick_add": "Quick add",
+      "choose_options": "Choose options",
+      "on_sale": "On sale",
+      "from_price": "From {{ price }}",
+      "save_percent": "Save {{ percent }}%"
+    }
+  },
+
+  "blogs": {
+    "article": {
+      "journal": "Journal",
+      "by": "By {{ author }}"
+    },
+    "comments": {
+      "title": {
+        "one": "{{ count }} comment",
+        "other": "{{ count }} comments"
+      },
+      "name": "Name",
+      "email": "Email",
+      "message": "Comment",
+      "submit": "Post comment",
+      "success": "Thank you. Your comment has been posted.",
+      "error": "Please check the fields above and try again."
+    }
+  },
+
+  "customer": {
+    "account": {
+      "title": "Account"
+    }
+  },
+
+  "onboarding": {
+    "product_title": "Example product"
+  }
+}

@@ -1,0 +1,96 @@
+{%- comment -%}
+  Predictive search results.
+  theme.js fetches /search/suggest?…&section_id=predictive-search and swaps
+  [data-search-results]. This must be a section, not a snippet — only sections
+  can answer a section_id request.
+{%- endcomment -%}
+
+<div data-search-results>
+  {%- if predictive_search.performed -%}
+
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <p class="search-group__label">{{ 'general.search.products' | t }}</p>
+      {%- for product in predictive_search.resources.products -%}
+        <a href="{{ product.url }}" class="search-result">
+          {%- if product.featured_media -%}
+            {{
+              product.featured_media
+              | image_url: width: 112
+              | image_tag:
+                loading: 'lazy',
+                widths: '56,112',
+                sizes: '56px',
+                alt: product.title | escape
+            }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {%- endif -%}
+          <div>
+            <p class="search-result__title">{{ product.title }}</p>
+            <p class="search-result__price">
+              {%- if product.price_varies -%}
+                {{ 'products.product.from_price' | t: price: product.price_min | money }}
+              {%- else -%}
+                {{ product.price | money }}
+              {%- endif -%}
+            </p>
+          </div>
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if predictive_search.resources.collections.size > 0 -%}
+      <p class="search-group__label">{{ 'general.search.collections' | t }}</p>
+      {%- for collection in predictive_search.resources.collections -%}
+        <a href="{{ collection.url }}" class="search-result" style="grid-template-columns: 1fr;">
+          <p class="search-result__title">{{ collection.title }}</p>
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if predictive_search.resources.pages.size > 0 -%}
+      <p class="search-group__label">{{ 'general.search.pages' | t }}</p>
+      {%- for page in predictive_search.resources.pages -%}
+        <a href="{{ page.url }}" class="search-result" style="grid-template-columns: 1fr;">
+          <p class="search-result__title">{{ page.title }}</p>
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if predictive_search.resources.articles.size > 0 -%}
+      <p class="search-group__label">{{ 'general.search.articles' | t }}</p>
+      {%- for article in predictive_search.resources.articles -%}
+        <a href="{{ article.url }}" class="search-result" style="grid-template-columns: 1fr;">
+          <p class="search-result__title">{{ article.title }}</p>
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- liquid
+      assign total = predictive_search.resources.products.size
+        | plus: predictive_search.resources.collections.size
+        | plus: predictive_search.resources.pages.size
+        | plus: predictive_search.resources.articles.size
+    -%}
+
+    {%- if total == 0 -%}
+      <p class="search-group__label">{{ 'general.search.no_results' | t: terms: predictive_search.terms }}</p>
+    {%- else -%}
+      <a href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}"
+         class="search-result"
+         style="grid-template-columns: 1fr; border-top: 1px solid var(--color-line); margin-top: var(--sp-2);">
+        <p class="search-result__title" style="color: var(--color-accent-text);">
+          {{ 'general.search.view_all' | t }}
+        </p>
+      </a>
+    {%- endif -%}
+
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "settings": []
+}
+{% endschema %}

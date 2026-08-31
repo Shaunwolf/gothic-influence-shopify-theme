@@ -1,6 +1,75 @@
 {
-  "current": "Default",
+  "current": {
+    "color_bg": "#0b0c0b",
+    "color_surface": "#121513",
+    "color_line": "#262b27",
+    "color_text": "#e8ebe9",
+    "color_text_muted": "#949c96",
+    "color_brand": "#2d6a40",
+    "color_brand_text": "#7fb392",
+    "color_accent": "#c6a15b",
+    "color_accent_text": "#d9bc7e",
+    "font_display": "playfair_display_n4",
+    "font_body": "poppins_n4",
+    "font_body_scale": 100,
+    "font_heading_scale": 100,
+    "track_caps": 18,
+    "page_width": 1440,
+    "corner_radius": "2px",
+    "card_ratio": "3 / 4",
+    "card_show_vendor": false,
+    "card_hover_image": true,
+    "card_quick_add": true,
+    "card_show_swatches": true,
+    "swatch_option_name": "Color",
+    "card_show_sale_badge": true,
+    "cart_type": "drawer",
+    "cart_free_shipping_bar": true,
+    "cart_free_shipping_threshold": 150,
+    "cart_show_note": true,
+    "enable_structured_data": true,
+    "enable_reveal": true,
+    "enable_image_zoom": true
+  },
   "presets": {
-    "Default": {}
+    "Gothic Influence": {
+      "color_bg": "#0b0c0b",
+      "color_surface": "#121513",
+      "color_line": "#262b27",
+      "color_text": "#e8ebe9",
+      "color_text_muted": "#949c96",
+      "color_brand": "#2d6a40",
+      "color_brand_text": "#7fb392",
+      "color_accent": "#c6a15b",
+      "color_accent_text": "#d9bc7e",
+      "font_display": "playfair_display_n4",
+      "font_body": "poppins_n4"
+    },
+    "Onyx & Brass": {
+      "color_bg": "#0a0a0a",
+      "color_surface": "#141414",
+      "color_line": "#282828",
+      "color_text": "#ededed",
+      "color_text_muted": "#9a9a9a",
+      "color_brand": "#3a3a3a",
+      "color_brand_text": "#c0c0c0",
+      "color_accent": "#b08d57",
+      "color_accent_text": "#d4b483",
+      "font_display": "playfair_display_n4",
+      "font_body": "poppins_n4"
+    },
+    "Conservatory": {
+      "color_bg": "#0a120d",
+      "color_surface": "#101c14",
+      "color_line": "#1f3327",
+      "color_text": "#e6ece8",
+      "color_text_muted": "#8fa697",
+      "color_brand": "#356b47",
+      "color_brand_text": "#8cc4a1",
+      "color_accent": "#c9a961",
+      "color_accent_text": "#dcc38a",
+      "font_display": "playfair_display_n4",
+      "font_body": "poppins_n4"
+    }
   }
 }

@@ -1,0 +1,71 @@
+{% doc %}
+  Rich media product gallery for the product page. Renders every entry in
+  product.media as a gallery slide: images, native video, external video
+  (YouTube or Vimeo), and interactive 3D models. Markup follows the
+  <media-gallery> contract in assets/theme.js (.gallery__slide and
+  .gallery__thumb carry data-media-id so variant changes can switch slides).
+  @param {object} product - The product whose media to render
+  @example
+  {% render 'product-media', product: product %}
+{% enddoc %}
+
+<style>
+  .gallery__slide model-viewer,
+  .gallery__slide video,
+  .gallery__slide iframe {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: none;
+    display: block;
+    background: var(--color-surface, #121513);
+  }
+</style>
+
+{%- liquid
+  assign models = product.media | where: 'media_type', 'model'
+-%}
+
+<media-gallery class="gallery">
+  <div class="gallery__main">
+    {% for media in product.media %}
+      <div
+        class="gallery__slide{% if forloop.first %} is-active{% endif %}"
+        data-media-id="{{ media.id }}"
+      >
+        {% case media.media_type %}
+          {% when 'image' %}
+            {{ media | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '400, 800, 1200, 1600', alt: media.alt }}
+          {% when 'external_video' %}
+            {{ media | external_video_tag }}
+          {% when 'video' %}
+            {{ media | video_tag: controls: true }}
+          {% when 'model' %}
+            {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+          {% else %}
+            {{ media | media_tag }}
+        {% endcase %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if product.media.size > 1 %}
+    <div class="gallery__thumbs">
+      {% for media in product.media %}
+        <button
+          type="button"
+          class="gallery__thumb"
+          data-media-id="{{ media.id }}"
+          aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-label="View media {{ forloop.index }} of {{ product.media.size }}"
+        >
+          {{ media.preview_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: media.alt }}
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</media-gallery>
+
+{% if models.size > 0 %}
+  <script type="module" src="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css">
+{% endif %}
