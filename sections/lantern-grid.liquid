@@ -1,10 +1,4 @@
 <style>
-  .lantern-section {
-    background-color: var(--color-bg);
-    padding-top: var(--pt);
-    padding-bottom: var(--pb);
-  }
-
   .lantern-section .section-title {
     text-align: center;
     margin-bottom: var(--sp-2, 0.5rem);
@@ -22,9 +16,6 @@
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: var(--row-height);
     gap: 16px;
-    padding: 0 40px;
-    max-width: var(--page-max, 1400px);
-    margin: 0 auto;
     position: relative;
   }
 
@@ -146,7 +137,6 @@
   @media (max-width: 600px) {
     .lantern-grid-container {
       grid-template-columns: 1fr;
-      padding: 0 16px;
     }
 
     .lantern-grid-container--asymmetric .lantern-card:nth-child(n) {
@@ -172,10 +162,8 @@
     assign glow_2 = section.settings.glow_color_2
   endif
 -%}
-<section
-  class="lantern-section"
-  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --row-height: {{ section.settings.row_height }}px; --glow-1: {{ glow_1 }}; --glow-2: {{ glow_2 }}; --glow-strength: {{ section.settings.glow_strength }}%; --card-img-opacity: {{ section.settings.image_opacity | times: 0.01 }};"
->
+<section {% render 'section-attrs', s: section.settings, id: section.id, extra: 'lantern-section' %}>
+  <div class="section__inner">
   {% if section.settings.heading != blank %}
     <h2 class="section-title">{{ section.settings.heading }}</h2>
   {% endif %}
@@ -186,6 +174,7 @@
   <div
     class="lantern-grid-container lantern-grid-container--{{ section.settings.layout }}{% if section.settings.enable_glow %} lantern-grid-container--glow{% endif %}"
     id="LanternGrid-{{ section.id }}"
+    style="--row-height: {{ section.settings.row_height }}px; --glow-1: {{ glow_1 }}; --glow-2: {{ glow_2 }}; --glow-strength: {{ section.settings.glow_strength }}%; --card-img-opacity: {{ section.settings.image_opacity | times: 0.01 }};"
   >
     {% for product in grid_collection.products limit: section.settings.product_limit %}
       <a href="{{ product.url }}" class="lantern-card">
@@ -221,6 +210,7 @@
       <a href="{{ grid_collection.url }}" class="btn btn--ghost">{{ 'sections.collection.view_all' | t }}</a>
     </div>
   {% endif %}
+  </div>
 </section>
 
 <script>
@@ -367,30 +357,28 @@
       "unit": "%",
       "default": 13
     },
-    {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Top padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 48
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Bottom padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 48
-    }
+    { "type": "header", "content": "Section layout" },
+    { "type": "select", "id": "color_scheme", "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        { "value": "default", "label": "Page background" },
+        { "value": "surface", "label": "Raised surface" },
+        { "value": "raised", "label": "Raised (higher)" },
+        { "value": "brand", "label": "Brand" },
+        { "value": "accent", "label": "Accent tint" },
+        { "value": "inverse", "label": "Inverse" }
+      ], "default": "default" },
+    { "type": "select", "id": "section_width", "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "page", "label": "Page" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full bleed" }
+      ], "default": "page" },
+    { "type": "range", "id": "padding_top", "label": "Top padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 }
   ],
   "presets": [
     {

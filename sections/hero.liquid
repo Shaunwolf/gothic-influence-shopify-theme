@@ -1,6 +1,5 @@
 <style>
   .hero {
-    position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -25,24 +24,26 @@
     object-fit: cover;
   }
 
+  /* Scrims track the active colour scheme's ground via --scheme-bg (falls
+     back to the page background), so scrim and text always flip together. */
   .hero__overlay {
     position: absolute;
     inset: 0;
-    background: var(--color-bg);
-    opacity: var(--hero-overlay, 0.5);
+    background: var(--scheme-bg, var(--color-bg));
   }
 
   /* Second scrim concentrated behind the text block, so the photography
      stays open at the edges while the title always clears WCAG AA — even
      when the photo's tone runs opposite to the preset's scrim. Checked
-     against both a black and a white photo (DESIGN-SYSTEM section 3). */
+     against both a black and a white photo at the weakest reachable stop
+     (DESIGN-SYSTEM section 3). */
   .hero__text-scrim {
     position: absolute;
     inset: 0;
     background: radial-gradient(
       ellipse 70% 85% at var(--scrim-x, 50%) 50%,
-      rgb(var(--bg-rgb) / 0.8),
-      rgb(var(--bg-rgb) / 0.6) 55%,
+      color-mix(in srgb, var(--scheme-bg, var(--color-bg)) 80%, transparent),
+      color-mix(in srgb, var(--scheme-bg, var(--color-bg)) 60%, transparent) 55%,
       transparent 78%
     );
   }
@@ -51,18 +52,15 @@
   .hero--align-center .hero__text-scrim { --scrim-x: 50%; }
   .hero--align-right .hero__text-scrim { --scrim-x: 78%; }
 
-  .hero-content {
+  .hero > .section__inner {
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: var(--page-max, 1440px);
-    margin: 0 auto;
-    padding: var(--sp-9, 4rem) var(--sp-6, 2rem);
   }
 
-  .hero--align-left .hero-content { text-align: left; }
-  .hero--align-center .hero-content { text-align: center; }
-  .hero--align-right .hero-content { text-align: right; }
+  .hero--align-left > .section__inner { text-align: left; }
+  .hero--align-center > .section__inner { text-align: center; }
+  .hero--align-right > .section__inner { text-align: right; }
 
   .hero__eyebrow {
     display: block;
@@ -109,19 +107,17 @@
   if section.settings.button_label != blank or section.settings.button_2_label != blank
     assign has_ctas = true
   endif
+  assign hero_classes = 'hero hero--' | append: section.settings.height | append: ' hero--align-' | append: section.settings.alignment
 -%}
 
-<section
-  class="hero hero--{{ section.settings.height }} hero--align-{{ section.settings.alignment }}"
-  style="--hero-overlay: {{ section.settings.overlay_opacity | times: 0.01 }};"
->
+<section {% render 'section-attrs', s: section.settings, id: section.id, extra: hero_classes %}>
   {% if section.settings.background_image != blank %}
     {{ section.settings.background_image | image_url: width: 2400 | image_tag: class: 'hero__media', loading: 'eager', fetchpriority: 'high', alt: section.settings.heading }}
-    <div class="hero__overlay"></div>
+    <div class="hero__overlay" style="opacity: {{ section.settings.overlay_opacity | times: 0.01 }};"></div>
     <div class="hero__text-scrim" aria-hidden="true"></div>
   {% endif %}
 
-  <div class="hero-content">
+  <div class="section__inner">
     {% if section.settings.eyebrow != blank %}
       <span class="hero__eyebrow">{{ section.settings.eyebrow }}</span>
     {% endif %}
@@ -265,7 +261,29 @@
         { "value": "gold", "label": "Gold" }
       ],
       "default": "ghost"
-    }
+    },
+    { "type": "header", "content": "Section layout" },
+    { "type": "select", "id": "color_scheme", "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        { "value": "default", "label": "Page background" },
+        { "value": "surface", "label": "Raised surface" },
+        { "value": "raised", "label": "Raised (higher)" },
+        { "value": "brand", "label": "Brand" },
+        { "value": "accent", "label": "Accent tint" },
+        { "value": "inverse", "label": "Inverse" }
+      ], "default": "default" },
+    { "type": "select", "id": "section_width", "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "page", "label": "Page" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full bleed" }
+      ], "default": "page" },
+    { "type": "range", "id": "padding_top", "label": "Top padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 }
   ],
   "presets": [
     {

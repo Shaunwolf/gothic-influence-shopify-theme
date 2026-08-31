@@ -1,15 +1,12 @@
 <style>
-  .product {
+  .product__layout {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: var(--sp-8, 3rem);
-    max-width: var(--page-max, 1440px);
-    margin: 0 auto;
-    padding: var(--sp-8, 3rem) var(--sp-6, 2rem);
   }
 
   @media (max-width: 860px) {
-    .product {
+    .product__layout {
       grid-template-columns: 1fr;
     }
   }
@@ -108,7 +105,9 @@
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 
-<section class="product" data-section-id="{{ section.id }}">
+<section {% render 'section-attrs', s: section.settings, id: section.id, extra: 'product' %}>
+  <div class="section__inner">
+  <div class="product__layout">
   <div class="product__gallery">
     {% render 'product-media', product: product, thumbs: section.settings.media_layout %}
   </div>
@@ -297,6 +296,8 @@
       {% endcase %}
     {% endfor %}
   </div>
+  </div>
+  </div>
 </section>
 
 {%- assign variant_filter_block = section.blocks | where: 'type', 'variant_gallery' | first -%}
@@ -365,7 +366,29 @@
         { "value": "none", "label": "Hidden" }
       ],
       "default": "below"
-    }
+    },
+    { "type": "header", "content": "Section layout" },
+    { "type": "select", "id": "color_scheme", "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        { "value": "default", "label": "Page background" },
+        { "value": "surface", "label": "Raised surface" },
+        { "value": "raised", "label": "Raised (higher)" },
+        { "value": "brand", "label": "Brand" },
+        { "value": "accent", "label": "Accent tint" },
+        { "value": "inverse", "label": "Inverse" }
+      ], "default": "default" },
+    { "type": "select", "id": "section_width", "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "page", "label": "Page" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full bleed" }
+      ], "default": "page" },
+    { "type": "range", "id": "padding_top", "label": "Top padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 }
   ],
   "blocks": [
     {

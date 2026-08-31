@@ -1,9 +1,4 @@
 <style>
-  .masonry-section {
-    padding-top: var(--pt);
-    padding-bottom: var(--pb);
-  }
-
   .masonry-section .section-title {
     text-align: center;
     margin-bottom: var(--sp-2, 0.5rem);
@@ -19,9 +14,6 @@
   .masonry {
     columns: var(--masonry-cols, 3);
     column-gap: var(--masonry-gap, 16px);
-    max-width: var(--page-max, 1440px);
-    margin: 0 auto;
-    padding: 0 var(--sp-6, 2rem);
   }
 
   .masonry__item {
@@ -77,14 +69,12 @@
   }
 
   @media (max-width: 600px) {
-    .masonry { columns: 1; padding: 0 var(--sp-4, 1rem); }
+    .masonry { columns: 1; }
   }
 </style>
 
-<section
-  class="masonry-section"
-  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --masonry-cols: {{ section.settings.columns }}; --masonry-gap: {{ section.settings.gap }}px;"
->
+<section {% render 'section-attrs', s: section.settings, id: section.id, extra: 'masonry-section' %}>
+  <div class="section__inner">
   {% if section.settings.heading != blank %}
     <h2 class="section-title">{{ section.settings.heading }}</h2>
   {% endif %}
@@ -92,7 +82,10 @@
     <p class="section-subtitle">{{ section.settings.subheading }}</p>
   {% endif %}
 
-  <div class="masonry{% if section.settings.captions_always %} masonry--captions-always{% endif %}">
+  <div
+    class="masonry{% if section.settings.captions_always %} masonry--captions-always{% endif %}"
+    style="--masonry-cols: {{ section.settings.columns }}; --masonry-gap: {{ section.settings.gap }}px;"
+  >
     {% for block in section.blocks %}
       {%- liquid
         assign tag = 'div'
@@ -119,6 +112,7 @@
         <div class="masonry__item">{{ 'lifestyle-2' | placeholder_svg_tag }}</div>
       {% endfor %}
     {% endfor %}
+  </div>
   </div>
 </section>
 
@@ -171,30 +165,28 @@
       "info": "Off: captions appear on hover.",
       "default": false
     },
-    {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Top padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 48
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Bottom padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 48
-    }
+    { "type": "header", "content": "Section layout" },
+    { "type": "select", "id": "color_scheme", "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        { "value": "default", "label": "Page background" },
+        { "value": "surface", "label": "Raised surface" },
+        { "value": "raised", "label": "Raised (higher)" },
+        { "value": "brand", "label": "Brand" },
+        { "value": "accent", "label": "Accent tint" },
+        { "value": "inverse", "label": "Inverse" }
+      ], "default": "default" },
+    { "type": "select", "id": "section_width", "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "page", "label": "Page" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full bleed" }
+      ], "default": "page" },
+    { "type": "range", "id": "padding_top", "label": "Top padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 }
   ],
   "blocks": [
     {

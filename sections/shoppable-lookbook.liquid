@@ -1,9 +1,4 @@
 <style>
-  .lookbook-section {
-    padding-top: var(--pt);
-    padding-bottom: var(--pb);
-  }
-
   .lookbook-section .section-title {
     text-align: center;
     margin-bottom: var(--sp-2, 0.5rem);
@@ -18,9 +13,6 @@
 
   .lookbook-container {
     position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--sp-4, 1rem);
   }
 
   .lookbook-frame {
@@ -99,10 +91,8 @@
     assign hotspot_ring = section.settings.hotspot_ring_color
   endif
 -%}
-<section
-  class="lookbook-section"
-  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --hotspot-size: {{ section.settings.hotspot_size }}px; --hotspot-fill: {{ hotspot_fill }}; --hotspot-ring: {{ hotspot_ring }};"
->
+<section {% render 'section-attrs', s: section.settings, id: section.id, extra: 'lookbook-section' %}>
+  <div class="section__inner">
   {% if section.settings.heading != blank %}
     <h2 class="section-title">{{ section.settings.heading }}</h2>
   {% endif %}
@@ -110,7 +100,10 @@
     <p class="section-subtitle">{{ section.settings.subheading }}</p>
   {% endif %}
 
-  <div class="lookbook-container">
+  <div
+    class="lookbook-container"
+    style="--hotspot-size: {{ section.settings.hotspot_size }}px; --hotspot-fill: {{ hotspot_fill }}; --hotspot-ring: {{ hotspot_ring }};"
+  >
     <div class="lookbook-frame{% if section.settings.pulse %} lookbook-frame--pulse{% endif %}">
       {% if section.settings.room_image != blank %}
         {%- assign lookbook_alt = section.settings.heading | default: 'Shoppable room' -%}
@@ -142,6 +135,7 @@
         {% endif %}
       {% endfor %}
     </div>
+  </div>
   </div>
 </section>
 
@@ -220,30 +214,28 @@
       "label": "Show price in label",
       "default": true
     },
-    {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Top padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 48
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Bottom padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 48
-    }
+    { "type": "header", "content": "Section layout" },
+    { "type": "select", "id": "color_scheme", "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        { "value": "default", "label": "Page background" },
+        { "value": "surface", "label": "Raised surface" },
+        { "value": "raised", "label": "Raised (higher)" },
+        { "value": "brand", "label": "Brand" },
+        { "value": "accent", "label": "Accent tint" },
+        { "value": "inverse", "label": "Inverse" }
+      ], "default": "default" },
+    { "type": "select", "id": "section_width", "label": "Content width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "page", "label": "Page" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full bleed" }
+      ], "default": "page" },
+    { "type": "range", "id": "padding_top", "label": "Top padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding",
+      "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 }
   ],
   "blocks": [
     {
