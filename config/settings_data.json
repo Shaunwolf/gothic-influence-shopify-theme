@@ -90,15 +90,15 @@
       "font_body": "poppins_n4"
     },
     "Porcelain": {
-      "color_bg": "#f5f2ec",
-      "color_surface": "#ffffff",
-      "color_line": "#e2ddd2",
-      "color_text": "#1a1a1a",
-      "color_text_muted": "#6b6b66",
-      "color_brand": "#2d6a40",
-      "color_brand_text": "#235233",
+      "color_bg": "#f3efe7",
+      "color_surface": "#fbf9f4",
+      "color_line": "#d8d0c2",
+      "color_text": "#17141a",
+      "color_text_muted": "#5d5561",
+      "color_brand": "#4a2b3d",
+      "color_brand_text": "#6d3f55",
       "color_accent": "#8f7130",
-      "color_accent_text": "#7a6229",
+      "color_accent_text": "#7a5f26",
       "design_preset": "porcelain",
       "font_display": "playfair_display_n4",
       "font_body": "poppins_n4"

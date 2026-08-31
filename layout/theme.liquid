@@ -58,6 +58,27 @@
       .h4, h4 { --_fs: var(--fs-lg); }
       .display, .hero__title { --_fs: var(--fs-4xl); }
 
+      :root {
+        --z-header: {{ settings.z_header }};
+        --z-drawer: {{ settings.z_drawer }};
+        --z-modal: {{ settings.z_modal }};
+      }
+      .btn {
+        border-radius: {{ settings.button_radius }};
+        min-height: {{ settings.button_height }}px;
+        letter-spacing: {{ settings.button_tracking | times: 0.01 }}em;
+        text-transform: {% if settings.button_uppercase %}uppercase{% else %}none{% endif %};
+      }
+      {%- unless settings.button_wipe -%}
+        .btn::after { display: none; }
+        .btn:hover { background: var(--btn-hover-bg, var(--color-brand)); }
+      {%- endunless -%}
+      .swatch {
+        width: {{ settings.swatch_size }}px;
+        height: {{ settings.swatch_size }}px;
+        border-radius: {% if settings.swatch_shape == 'square' %}var(--radius-sm){% else %}50%{% endif %};
+      }
+
       {%- unless settings.enable_image_zoom -%}
         .card:hover .card__img { transform: none; }
       {%- endunless -%}
@@ -84,9 +105,12 @@
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
 
     {{ content_for_header }}
+
+    {{ settings.custom_head }}
   </head>
 
-  <body class="template-{{ template.name | handle }}">
+  <body class="template-{{ template.name | handle }}"
+        {%- if template.name == "product" %} data-product-handle="{{ product.handle }}"{% endif -%}>
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
 
     {% sections 'header-group' %}
@@ -101,8 +125,12 @@
       {% section 'cart-drawer' %}
     {%- endif -%}
 
+    {% render 'popups' %}
+
     <ul hidden>
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
+
+    {{ settings.custom_body }}
   </body>
 </html>

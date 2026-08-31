@@ -47,15 +47,21 @@
       assign c_accent = '#b8bcc8'
       assign c_accent_text = '#d3d6de'
     when 'porcelain'
-      assign c_bg = '#f5f2ec'
-      assign c_surface = '#ffffff'
-      assign c_line = '#e2ddd2'
-      assign c_text = '#1a1a1a'
-      assign c_muted = '#6b6b66'
-      assign c_brand = '#2d6a40'
-      assign c_brand_text = '#235233'
+      comment
+        Vintage goth, not a neutral light theme. Aged bone rather than white,
+        ink with a violet cast rather than black, and mulberry in the brand
+        slot where the dark presets use forest. That hue is what keeps it
+        gothic once the ground goes light.
+      endcomment
+      assign c_bg = '#f3efe7'
+      assign c_surface = '#fbf9f4'
+      assign c_line = '#d8d0c2'
+      assign c_text = '#17141a'
+      assign c_muted = '#5d5561'
+      assign c_brand = '#4a2b3d'
+      assign c_brand_text = '#6d3f55'
       assign c_accent = '#8f7130'
-      assign c_accent_text = '#7a6229'
+      assign c_accent_text = '#7a5f26'
     when 'custom'
       assign c_bg = settings.color_bg
       assign c_surface = settings.color_surface

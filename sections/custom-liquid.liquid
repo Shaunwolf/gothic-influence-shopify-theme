@@ -1,0 +1,106 @@
+<section {% render 'section-attrs', s: section.settings, id: section.id %}>
+  <div class="section__inner">
+
+  {{ section.settings.custom_liquid }}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Liquid",
+      "info": "Add app snippets or custom Liquid. Errors here surface on the storefront, so test on an unpublished theme first."
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        {
+          "value": "default",
+          "label": "Page background"
+        },
+        {
+          "value": "surface",
+          "label": "Raised surface"
+        },
+        {
+          "value": "raised",
+          "label": "Raised (higher)"
+        },
+        {
+          "value": "brand",
+          "label": "Brand"
+        },
+        {
+          "value": "accent",
+          "label": "Accent tint"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page",
+          "label": "Page"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full bleed"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Liquid"
+    }
+  ]
+}
+{% endschema %}

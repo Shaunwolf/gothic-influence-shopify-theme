@@ -1,0 +1,172 @@
+<section {% render 'section-attrs', s: section.settings, id: section.id %}>
+  <div class="section__inner">
+
+  <div class="infobar">
+    {%- for block in section.blocks -%}
+      <span class="infobar__item" {{ block.shopify_attributes }}>
+        {%- if block.settings.icon != 'none' -%}{% render 'icon', name: block.settings.icon, size: 16 %}{%- endif -%}
+        {{ block.settings.text }}
+      </span>
+    {%- endfor -%}
+  </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Information bar",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "truck",
+              "label": "Shipping"
+            },
+            {
+              "value": "shield",
+              "label": "Guarantee"
+            },
+            {
+              "value": "leaf",
+              "label": "Sustainable"
+            },
+            {
+              "value": "gift",
+              "label": "Gifting"
+            },
+            {
+              "value": "star",
+              "label": "Rated"
+            }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free shipping over $150"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Information bar",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "text": "30-day returns"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "leaf",
+            "text": "Made to last"
+          }
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        {
+          "value": "default",
+          "label": "Page background"
+        },
+        {
+          "value": "surface",
+          "label": "Raised surface"
+        },
+        {
+          "value": "raised",
+          "label": "Raised (higher)"
+        },
+        {
+          "value": "brand",
+          "label": "Brand"
+        },
+        {
+          "value": "accent",
+          "label": "Accent tint"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page",
+          "label": "Page"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full bleed"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    }
+  ]
+}
+{% endschema %}

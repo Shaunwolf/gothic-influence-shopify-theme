@@ -1,0 +1,189 @@
+<section {% render 'section-attrs', s: section.settings, id: section.id %}>
+  <div class="section__inner">
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+    <div class="section-head">
+      <div class="section-head__text">
+        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+      </div>
+      {%- if section.settings.link_label != blank -%}
+        <a href="{{ section.settings.link | default: '#' }}" class="link-quiet">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%}
+    Shopify's own recommendation engine. The section re-fetches itself with
+    the recommendations intent so the list is generated server-side.
+  {%- endcomment -%}
+  <product-recommendations
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.count }}&intent={{ section.settings.intent }}">
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      <div class="grid grid--{{ section.settings.columns }} grid--keep-2">
+        {%- for product in recommendations.products -%}
+          {% render 'product-card', card_product: product %}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </product-recommendations>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link label"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendation type",
+      "options": [
+        {
+          "value": "related",
+          "label": "Related products"
+        },
+        {
+          "value": "complementary",
+          "label": "Complementary (set in Search & Discovery)"
+        }
+      ],
+      "default": "related"
+    },
+    {
+      "type": "range",
+      "id": "count",
+      "label": "Products",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        {
+          "value": "default",
+          "label": "Page background"
+        },
+        {
+          "value": "surface",
+          "label": "Raised surface"
+        },
+        {
+          "value": "raised",
+          "label": "Raised (higher)"
+        },
+        {
+          "value": "brand",
+          "label": "Brand"
+        },
+        {
+          "value": "accent",
+          "label": "Accent tint"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page",
+          "label": "Page"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full bleed"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  }
+}
+{% endschema %}

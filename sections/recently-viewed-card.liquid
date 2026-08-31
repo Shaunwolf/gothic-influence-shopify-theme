@@ -1,0 +1,11 @@
+{%- comment -%}
+  Renders a single product card and nothing else.
+
+  theme.js fetches this per handle for the recently-viewed rail, so the card
+  markup stays in one place instead of being rebuilt in JavaScript.
+{%- endcomment -%}
+{%- render 'product-card', card_product: product -%}
+
+{% schema %}
+{ "name": "Recently viewed card", "settings": [] }
+{% endschema %}

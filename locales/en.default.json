@@ -43,6 +43,12 @@
       "subtext": "Something dark and beautiful is taking shape. Enter the password to step inside.",
       "password": "Password",
       "submit": "Enter"
+    },
+    "play_video": "Play video",
+    "no_video": "No video selected",
+    "cookies": {
+      "label": "Cookie notice",
+      "learn_more": "Learn more"
     }
   },
   "accessibility": {
@@ -112,7 +118,8 @@
       "choose_options": "Choose options",
       "on_sale": "On sale",
       "from_price": "From {{ price }}",
-      "save_percent": "Save {{ percent }}%"
+      "save_percent": "Save {{ percent }}%",
+      "view_details": "View details"
     }
   },
   "blogs": {
@@ -225,5 +232,15 @@
   },
   "onboarding": {
     "product_title": "Example product"
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send message",
+      "success": "Thank you. We'll be in touch within one business day."
+    }
   }
 }

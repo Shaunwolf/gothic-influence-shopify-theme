@@ -1,0 +1,102 @@
+{%- comment -%}
+  Global overlays: newsletter popup, age gate, cookie notice.
+
+  These are theme settings rather than sections because they are site-wide and
+  a merchant should not have to add them to every template. Rendered once from
+  layout/theme.liquid.
+
+  Each remembers its own dismissal in localStorage, so a visitor is asked once
+  rather than on every page.
+{%- endcomment -%}
+
+{%- if settings.popup_enabled -%}
+  <div class="popup" id="NewsletterPopup" role="dialog" aria-modal="true"
+       aria-labelledby="NewsletterPopupTitle" aria-hidden="true"
+       data-popup="newsletter"
+       data-delay="{{ settings.popup_delay }}"
+       data-dismiss-days="{{ settings.popup_dismiss_days }}">
+    <div class="popup__scrim" data-popup-close></div>
+    <div class="popup__panel">
+      <button type="button" class="icon-btn popup__close" data-popup-close
+              aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon', name: 'close', size: 18 %}
+      </button>
+
+      {%- if settings.popup_image -%}
+        <div class="popup__media">
+          {{
+            settings.popup_image
+            | image_url: width: 1000
+            | image_tag: loading: 'lazy', widths: '400,700,1000', sizes: '480px', alt: ''
+          }}
+        </div>
+      {%- endif -%}
+
+      <h2 class="h3" id="NewsletterPopupTitle">{{ settings.popup_heading }}</h2>
+
+      {%- if settings.popup_text != blank -%}
+        <div class="rte text-muted">{{ settings.popup_text }}</div>
+      {%- endif -%}
+
+      {%- form 'customer', class: 'newsletter__form', style: 'margin-inline: auto;' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter, popup">
+        <label class="visually-hidden" for="PopupEmail">{{ 'general.newsletter.email' | t }}</label>
+        <input type="email" id="PopupEmail" name="contact[email]" class="input"
+               placeholder="{{ 'general.newsletter.placeholder' | t }}" autocomplete="email" required>
+        <button type="submit" class="btn btn--gold">{{ settings.popup_button }}</button>
+
+        {%- if form.posted_successfully? -%}
+          <p class="form-success">{{ 'general.newsletter.success' | t }}</p>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <p class="field__error">{{ form.errors | default_errors }}</p>
+        {%- endif -%}
+      {%- endform -%}
+
+      {%- if settings.popup_dismiss != blank -%}
+        <button type="button" class="link-quiet" data-popup-close style="border:0;background:none;cursor:pointer;">
+          {{ settings.popup_dismiss }}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{%- if settings.age_enabled -%}
+  {%- comment -%}
+    No scrim close and no close button: an age gate the visitor can dismiss
+    without answering is not a gate.
+  {%- endcomment -%}
+  <div class="popup popup--age" id="AgeGate" role="dialog" aria-modal="true"
+       aria-labelledby="AgeGateTitle" aria-hidden="true" data-popup="age">
+    <div class="popup__scrim"></div>
+    <div class="popup__panel">
+      <h2 class="h3" id="AgeGateTitle">{{ settings.age_heading }}</h2>
+      {%- if settings.age_text != blank -%}
+        <div class="rte text-muted">{{ settings.age_text }}</div>
+      {%- endif -%}
+      <div class="popup__actions">
+        <button type="button" class="btn btn--primary" data-age-confirm>{{ settings.age_confirm }}</button>
+        <a href="{{ settings.age_deny_link | default: 'https://www.google.com' }}" class="btn btn--ghost">
+          {{ settings.age_deny }}
+        </a>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- if settings.cookie_enabled -%}
+  <div class="cookie-bar" id="CookieBar" role="region"
+       aria-label="{{ 'general.cookies.label' | t }}" data-popup="cookie">
+    <div class="cookie-bar__text rte">
+      {{ settings.cookie_text }}
+      {%- if settings.cookie_policy_link != blank -%}
+        <a href="{{ settings.cookie_policy_link }}">{{ 'general.cookies.learn_more' | t }}</a>
+      {%- endif -%}
+    </div>
+    <div class="cookie-bar__actions">
+      <button type="button" class="btn btn--sm btn--ghost" data-cookie-decline>{{ settings.cookie_decline }}</button>
+      <button type="button" class="btn btn--sm btn--primary" data-cookie-accept>{{ settings.cookie_accept }}</button>
+    </div>
+  </div>
+{%- endif -%}

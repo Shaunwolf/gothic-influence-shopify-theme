@@ -1,0 +1,40 @@
+{%- comment -%}
+  Shared section wrapper attributes.
+
+  Every section gets the same padding, width and colour-scheme controls, so a
+  merchant learns the pattern once instead of relearning it per section.
+
+  Usage — this renders the class and style attributes, so it goes INSIDE the
+  opening tag:
+
+    <section {% render 'section-attrs', s: section.settings, id: section.id, extra: 'hero' %}>
+
+  Accepts:
+    s      required, always section.settings
+    id     required, section.id — becomes data-section-id
+    extra  optional, extra class names
+    tight  optional, halves the default padding for dense sections
+{%- endcomment -%}
+
+{%- liquid
+  assign scheme = s.color_scheme | default: 'default'
+  assign width = s.section_width | default: 'page'
+
+  assign base = 64
+  if tight
+    assign base = 32
+  endif
+
+  assign pt = s.padding_top | default: base
+  assign pb = s.padding_bottom | default: base
+
+  assign classes = 'section scheme-' | append: scheme | append: ' width-' | append: width
+  if extra != blank
+    assign classes = classes | append: ' ' | append: extra
+  endif
+  if s.full_bleed
+    assign classes = classes | append: ' is-full-bleed'
+  endif
+-%}
+
+class="{{ classes }}" data-section-id="{{ id }}" style="--pt: {{ pt }}px; --pb: {{ pb }}px;"

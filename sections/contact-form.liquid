@@ -1,0 +1,165 @@
+<section {% render 'section-attrs', s: section.settings, id: section.id %}>
+  <div class="section__inner">
+
+  {%- if section.settings.heading != blank -%}
+    <div class="text-center" style="margin-bottom: var(--sp-7);">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2 style="margin-top: var(--sp-3);">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <div class="rte lede" style="margin: var(--sp-4) auto 0;">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- form 'contact', class: 'contact-form contact-form--center' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="form-success">{{ 'contact.form.success' | t }}</p>
+    {%- elsif form.errors -%}
+      <p class="field__error">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+
+    <div class="contact-form__row contact-form__row--2">
+      <label class="field">
+        <span class="field__label">{{ 'contact.form.name' | t }}</span>
+        <input type="text" name="contact[name]" class="input" autocomplete="name" required>
+      </label>
+      <label class="field">
+        <span class="field__label">{{ 'contact.form.email' | t }}</span>
+        <input type="email" name="contact[email]" class="input" autocomplete="email" required>
+      </label>
+    </div>
+
+    {%- if section.settings.show_phone -%}
+      <label class="field">
+        <span class="field__label">{{ 'contact.form.phone' | t }}</span>
+        <input type="tel" name="contact[phone]" class="input" autocomplete="tel">
+      </label>
+    {%- endif -%}
+
+    <label class="field">
+      <span class="field__label">{{ 'contact.form.message' | t }}</span>
+      <textarea name="contact[body]" class="textarea" required></textarea>
+    </label>
+
+    <div><button type="submit" class="btn btn--primary">{{ 'contact.form.submit' | t }}</button></div>
+  {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Get in touch"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ask us anything"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Questions about a piece, a finish, or delivery. We answer within one business day.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show phone field",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section layout"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Colour scheme",
+      "info": "Follows the active design preset.",
+      "options": [
+        {
+          "value": "default",
+          "label": "Page background"
+        },
+        {
+          "value": "surface",
+          "label": "Raised surface"
+        },
+        {
+          "value": "raised",
+          "label": "Raised (higher)"
+        },
+        {
+          "value": "brand",
+          "label": "Brand"
+        },
+        {
+          "value": "accent",
+          "label": "Accent tint"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page",
+          "label": "Page"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full bleed"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact form"
+    }
+  ]
+}
+{% endschema %}

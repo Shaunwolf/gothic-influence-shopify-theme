@@ -37,7 +37,7 @@
           },
           {
             "value": "porcelain",
-            "label": "Porcelain — light stone, ink, antique gold"
+            "label": "Porcelain — vintage goth: bone, ink, mulberry, antique gold"
           },
           {
             "value": "custom",
@@ -412,6 +412,532 @@
         "type": "checkbox",
         "id": "enable_image_zoom",
         "label": "Zoom product images on hover",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Buttons",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Applies to every button in the theme. The wipe is the fill sweeping up on hover rather than swapping colour — it reads considered instead of abrupt."
+      },
+      {
+        "type": "select",
+        "id": "button_radius",
+        "label": "Corner style",
+        "options": [
+          {
+            "value": "0px",
+            "label": "Square"
+          },
+          {
+            "value": "2px",
+            "label": "Near-sharp (recommended)"
+          },
+          {
+            "value": "6px",
+            "label": "Soft"
+          },
+          {
+            "value": "999px",
+            "label": "Pill"
+          }
+        ],
+        "default": "2px"
+      },
+      {
+        "type": "checkbox",
+        "id": "button_uppercase",
+        "label": "Uppercase labels",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "button_tracking",
+        "label": "Label letter spacing",
+        "min": 0,
+        "max": 30,
+        "step": 2,
+        "unit": "/100em",
+        "default": 18
+      },
+      {
+        "type": "checkbox",
+        "id": "button_wipe",
+        "label": "Wipe fill on hover",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "button_height",
+        "label": "Height",
+        "min": 40,
+        "max": 64,
+        "step": 2,
+        "unit": "px",
+        "default": 48
+      }
+    ]
+  },
+  {
+    "name": "Colour swatches",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Swatches read the option named below. Give each colour a matching swatch image in Files, or name values after real CSS colours so they render without one."
+      },
+      {
+        "type": "text",
+        "id": "swatch_option_names",
+        "label": "Option names",
+        "info": "Comma separated, e.g. Color, Colour, Finish.",
+        "default": "Color, Colour, Finish"
+      },
+      {
+        "type": "select",
+        "id": "swatch_shape",
+        "label": "Shape",
+        "options": [
+          {
+            "value": "circle",
+            "label": "Circle"
+          },
+          {
+            "value": "square",
+            "label": "Square"
+          }
+        ],
+        "default": "circle"
+      },
+      {
+        "type": "range",
+        "id": "swatch_size",
+        "label": "Size",
+        "min": 16,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "swatch_max",
+        "label": "Maximum shown on a card",
+        "min": 3,
+        "max": 10,
+        "step": 1,
+        "default": 5
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "search_enabled",
+        "label": "Show search",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "search_predictive",
+        "label": "Suggest results as you type",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "search_show_products",
+        "label": "Suggest products",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "search_show_collections",
+        "label": "Suggest collections",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "search_show_pages",
+        "label": "Suggest pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "search_show_articles",
+        "label": "Suggest journal posts",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "search_limit",
+        "label": "Suggestions per group",
+        "min": 2,
+        "max": 10,
+        "step": 1,
+        "default": 6
+      }
+    ]
+  },
+  {
+    "name": "Badges",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "badge_sale",
+        "label": "Show sale badge",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "badge_sale_style",
+        "label": "Sale badge shows",
+        "options": [
+          {
+            "value": "percent",
+            "label": "Percentage saved"
+          },
+          {
+            "value": "amount",
+            "label": "Amount saved"
+          },
+          {
+            "value": "word",
+            "label": "The word Sale"
+          }
+        ],
+        "default": "percent"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_sold_out",
+        "label": "Show sold-out badge",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_new",
+        "label": "Show 'new in' badge",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "badge_new_days",
+        "label": "Counts as new for",
+        "min": 7,
+        "max": 90,
+        "step": 7,
+        "unit": "days",
+        "default": 30
+      },
+      {
+        "type": "text",
+        "id": "badge_custom_tag",
+        "label": "Custom badge from tag",
+        "info": "Products carrying this tag show a badge with the tag name. Leave blank to disable.",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "name": "Shipping & delivery",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shown on product pages and in the cart. Keep it concrete — vague promises read as filler, and specifics reduce the questions your inbox gets."
+      },
+      {
+        "type": "checkbox",
+        "id": "ship_show_estimate",
+        "label": "Show delivery estimate on product pages",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "ship_estimate_text",
+        "label": "Estimate",
+        "default": "Dispatched within 2 business days"
+      },
+      {
+        "type": "checkbox",
+        "id": "ship_show_returns",
+        "label": "Show returns note",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "ship_returns_text",
+        "label": "Returns note",
+        "default": "30-day returns on unused pieces"
+      },
+      {
+        "type": "checkbox",
+        "id": "ship_show_stock",
+        "label": "Show low-stock warning",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "ship_low_stock",
+        "label": "Warn at or below",
+        "min": 1,
+        "max": 25,
+        "step": 1,
+        "unit": "left",
+        "default": 8
+      }
+    ]
+  },
+  {
+    "name": "Checkout",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Checkout itself is styled in Shopify admin under Settings, Checkout. These control what the theme shows on the way there."
+      },
+      {
+        "type": "checkbox",
+        "id": "checkout_dynamic_buttons",
+        "label": "Show accelerated checkout buttons",
+        "info": "Shop Pay, PayPal and similar, beneath add to cart.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "checkout_show_payment_icons",
+        "label": "Show payment icons in the cart",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "checkout_terms_required",
+        "label": "Require agreeing to terms before checkout",
+        "default": false
+      },
+      {
+        "type": "url",
+        "id": "checkout_terms_link",
+        "label": "Terms page"
+      }
+    ]
+  },
+  {
+    "name": "Newsletter popup",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Appears once per visitor and is remembered in their browser. It never reappears after a sign-up."
+      },
+      {
+        "type": "checkbox",
+        "id": "popup_enabled",
+        "label": "Enable",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "popup_delay",
+        "label": "Show after",
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "unit": "s",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "popup_dismiss_days",
+        "label": "Stay hidden for",
+        "min": 1,
+        "max": 90,
+        "step": 1,
+        "unit": "days",
+        "default": 30
+      },
+      {
+        "type": "image_picker",
+        "id": "popup_image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "popup_heading",
+        "label": "Heading",
+        "default": "Ten percent, quietly"
+      },
+      {
+        "type": "richtext",
+        "id": "popup_text",
+        "label": "Text",
+        "default": "<p>Join the list for first look at new arrivals and private sales.</p>"
+      },
+      {
+        "type": "text",
+        "id": "popup_button",
+        "label": "Button label",
+        "default": "Subscribe"
+      },
+      {
+        "type": "text",
+        "id": "popup_dismiss",
+        "label": "Dismiss label",
+        "default": "No thanks"
+      }
+    ]
+  },
+  {
+    "name": "Age verification",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Blocks the storefront until the visitor confirms. Only enable this if you genuinely need it — it costs traffic."
+      },
+      {
+        "type": "checkbox",
+        "id": "age_enabled",
+        "label": "Enable",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "age_heading",
+        "label": "Heading",
+        "default": "Are you 18 or over?"
+      },
+      {
+        "type": "richtext",
+        "id": "age_text",
+        "label": "Text",
+        "default": "<p>You must confirm your age to enter this store.</p>"
+      },
+      {
+        "type": "text",
+        "id": "age_confirm",
+        "label": "Confirm label",
+        "default": "Yes, enter"
+      },
+      {
+        "type": "text",
+        "id": "age_deny",
+        "label": "Decline label",
+        "default": "No, leave"
+      },
+      {
+        "type": "url",
+        "id": "age_deny_link",
+        "label": "Send declines to"
+      }
+    ]
+  },
+  {
+    "name": "Cookie banner",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "A notice only. If you need real consent management for GDPR, use Shopify's customer privacy settings or a dedicated app — this does not gate any tracking on its own."
+      },
+      {
+        "type": "checkbox",
+        "id": "cookie_enabled",
+        "label": "Enable",
+        "default": false
+      },
+      {
+        "type": "richtext",
+        "id": "cookie_text",
+        "label": "Text",
+        "default": "<p>We use cookies to improve your experience.</p>"
+      },
+      {
+        "type": "text",
+        "id": "cookie_accept",
+        "label": "Accept label",
+        "default": "Accept"
+      },
+      {
+        "type": "text",
+        "id": "cookie_decline",
+        "label": "Decline label",
+        "default": "Decline"
+      },
+      {
+        "type": "url",
+        "id": "cookie_policy_link",
+        "label": "Policy page"
+      }
+    ]
+  },
+  {
+    "name": "Custom code",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Injected on every page. Anything pasted here runs for every visitor, so only add code you trust and test on an unpublished theme first."
+      },
+      {
+        "type": "liquid",
+        "id": "custom_head",
+        "label": "Before </head>"
+      },
+      {
+        "type": "liquid",
+        "id": "custom_body",
+        "label": "Before </body>"
+      }
+    ]
+  },
+  {
+    "name": "Advanced",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Layering. Raise the header only if a third-party widget sits on top of it; raise the drawer only if a widget covers the cart."
+      },
+      {
+        "type": "range",
+        "id": "z_header",
+        "label": "Header layer",
+        "min": 10,
+        "max": 9000,
+        "step": 10,
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "z_drawer",
+        "label": "Drawer layer",
+        "min": 10,
+        "max": 9000,
+        "step": 10,
+        "default": 200
+      },
+      {
+        "type": "range",
+        "id": "z_modal",
+        "label": "Popup layer",
+        "min": 10,
+        "max": 9000,
+        "step": 10,
+        "default": 300
+      },
+      {
+        "type": "header",
+        "content": "Performance"
+      },
+      {
+        "type": "checkbox",
+        "id": "perf_lazy_sections",
+        "label": "Defer offscreen section images",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "perf_preload_hero",
+        "label": "Preload the first hero image",
+        "info": "Improves Largest Contentful Paint on the homepage.",
         "default": true
       }
     ]

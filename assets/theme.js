@@ -587,6 +587,223 @@
     if (spot) spot.classList.toggle('is-open');
   });
 
+
+  /* ------------------------------------------------------------------------
+     <site-slideshow>
+     ---------------------------------------------------------------------- */
+  class SiteSlideshow extends HTMLElement {
+    connectedCallback() {
+      this.slides = Array.from(this.querySelectorAll('.slideshow__slide'));
+      this.dots = Array.from(this.querySelectorAll('[data-slide-to]'));
+      if (this.slides.length < 2) return;
+      this.index = 0;
+
+      this.querySelector('[data-slide-prev]')?.addEventListener('click', () => this.go(this.index - 1));
+      this.querySelector('[data-slide-next]')?.addEventListener('click', () => this.go(this.index + 1));
+      this.dots.forEach((d) => d.addEventListener('click', () => this.go(Number(d.dataset.slideTo))));
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (this.dataset.autoplay === 'true' && !reduced) {
+        const ms = Number(this.dataset.speed || 6) * 1000;
+        this.timer = setInterval(() => this.go(this.index + 1), ms);
+        /* Pause while someone is reading or tabbing through it. */
+        ['mouseenter', 'focusin'].forEach((e) => this.addEventListener(e, () => this.stop()));
+        ['mouseleave', 'focusout'].forEach((e) => this.addEventListener(e, () => this.start(ms)));
+      }
+    }
+    disconnectedCallback() { this.stop(); }
+    stop() { clearInterval(this.timer); this.timer = null; }
+    start(ms) { if (!this.timer) this.timer = setInterval(() => this.go(this.index + 1), ms); }
+
+    go(next) {
+      const n = (next + this.slides.length) % this.slides.length;
+      this.slides[this.index].classList.remove('is-active');
+      this.slides[n].classList.add('is-active');
+      this.dots[this.index]?.setAttribute('aria-current', 'false');
+      this.dots[n]?.setAttribute('aria-current', 'true');
+      this.index = n;
+    }
+  }
+  customElements.define('site-slideshow', SiteSlideshow);
+
+  /* ------------------------------------------------------------------------
+     <video-banner> — external embeds load only when asked, so nothing is
+     fetched from YouTube or Vimeo until the visitor clicks play.
+     ---------------------------------------------------------------------- */
+  class VideoBanner extends HTMLElement {
+    connectedCallback() {
+      const cover = this.querySelector('[data-video-play]');
+      const tpl = this.querySelector('[data-video-embed]');
+      if (!cover || !tpl) return;
+      cover.addEventListener('click', () => {
+        const frame = tpl.content.cloneNode(true);
+        cover.replaceWith(frame);
+      });
+    }
+  }
+  customElements.define('video-banner', VideoBanner);
+
+  /* ------------------------------------------------------------------------
+     <product-recommendations> — Shopify generates the list server-side, so
+     the section fetches its own rendered markup.
+     ---------------------------------------------------------------------- */
+  class ProductRecommendations extends HTMLElement {
+    connectedCallback() {
+      if (!('IntersectionObserver' in window)) return this.load();
+      const io = new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        this.load();
+      }, { rootMargin: '0px 0px 300px 0px' });
+      io.observe(this);
+    }
+    async load() {
+      try {
+        const res = await fetch(this.dataset.url);
+        const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+        const fresh = doc.querySelector('product-recommendations');
+        if (fresh && fresh.innerHTML.trim()) this.innerHTML = fresh.innerHTML;
+        else this.closest('section')?.setAttribute('hidden', '');
+      } catch (_) {
+        this.closest('section')?.setAttribute('hidden', '');
+      }
+    }
+  }
+  customElements.define('product-recommendations', ProductRecommendations);
+
+  /* ------------------------------------------------------------------------
+     Recently viewed — per-visitor, from localStorage. No app, no account.
+     ---------------------------------------------------------------------- */
+  const RECENT_KEY = 'gothic:recent';
+
+  function readRecent() {
+    try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
+    catch (_) { return []; }
+  }
+  function rememberProduct(handle) {
+    if (!handle) return;
+    try {
+      const list = readRecent().filter((h) => h !== handle);
+      list.unshift(handle);
+      localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 20)));
+    } catch (_) { /* private mode — recently viewed simply stays empty */ }
+  }
+
+  class RecentlyViewed extends HTMLElement {
+    async connectedCallback() {
+      const grid = this.querySelector('[data-recent-grid]');
+      const limit = Number(this.dataset.limit || 4);
+      const here = document.body.dataset.productHandle;
+      const handles = readRecent().filter((h) => h !== here).slice(0, limit);
+      if (!handles.length || !grid) return;
+
+      const cards = await Promise.all(handles.map(async (h) => {
+        try {
+          const res = await fetch(`${window.Shopify.routes.root}products/${h}?section_id=recently-viewed-card`);
+          if (!res.ok) return null;
+          const text = await res.text();
+          return text.trim() || null;
+        } catch (_) { return null; }
+      }));
+
+      const html = cards.filter(Boolean).join('');
+      if (!html) return;
+      grid.innerHTML = html;
+      this.hidden = false;
+    }
+  }
+  customElements.define('recently-viewed', RecentlyViewed);
+
+  /* ------------------------------------------------------------------------
+     Popups — newsletter, age gate, cookie notice.
+     Each remembers its own dismissal so a visitor is asked once.
+     ---------------------------------------------------------------------- */
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+  };
+  const expired = (key) => {
+    const until = Number(store.get(key) || 0);
+    return !until || Date.now() > until;
+  };
+  const hideFor = (key, days) => store.set(key, String(Date.now() + days * 864e5));
+
+  function openPopup(el) {
+    el.classList.add('is-open');
+    el.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('is-locked');
+    const focusable = el.querySelector(FOCUSABLE);
+    if (focusable) focusable.focus();
+  }
+  function closePopup(el) {
+    el.classList.remove('is-open');
+    el.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('is-locked');
+  }
+
+  /* Age gate runs first and blocks everything else — if the visitor has not
+     confirmed, they should not be nagged for their email underneath it. */
+  const ageGate = document.getElementById('AgeGate');
+  const agePassed = store.get('gothic:age') === 'ok';
+  if (ageGate && !agePassed) {
+    openPopup(ageGate);
+    ageGate.querySelector('[data-age-confirm]')?.addEventListener('click', () => {
+      store.set('gothic:age', 'ok');
+      closePopup(ageGate);
+      startNewsletterTimer();
+    });
+  }
+
+  const newsletterPopup = document.getElementById('NewsletterPopup');
+  function startNewsletterTimer() {
+    if (!newsletterPopup) return;
+    if (!expired('gothic:newsletter')) return;
+    if (store.get('gothic:subscribed') === 'yes') return;
+    const delay = Number(newsletterPopup.dataset.delay || 10) * 1000;
+    setTimeout(() => {
+      if (document.querySelector('.popup.is-open')) return;
+      openPopup(newsletterPopup);
+    }, delay);
+  }
+  if (newsletterPopup) {
+    const days = Number(newsletterPopup.dataset.dismissDays || 30);
+    newsletterPopup.querySelectorAll('[data-popup-close]').forEach((b) =>
+      b.addEventListener('click', () => { hideFor('gothic:newsletter', days); closePopup(newsletterPopup); }));
+    newsletterPopup.querySelector('form')?.addEventListener('submit', () => {
+      store.set('gothic:subscribed', 'yes');
+    });
+    if (!ageGate || agePassed) startNewsletterTimer();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = document.querySelector('.popup.is-open:not(.popup--age)');
+    if (open) { closePopup(open); }
+  });
+
+  const cookieBar = document.getElementById('CookieBar');
+  if (cookieBar && !store.get('gothic:cookies')) {
+    setTimeout(() => cookieBar.classList.add('is-open'), 1200);
+    const decide = (answer) => {
+      store.set('gothic:cookies', answer);
+      cookieBar.classList.remove('is-open');
+      /* Hand the answer to Shopify's own consent API when it is present, so
+         this is not merely decorative on stores that use it. */
+      if (window.Shopify && window.Shopify.customerPrivacy) {
+        try {
+          window.Shopify.customerPrivacy.setTrackingConsent(answer === 'accept', () => {});
+        } catch (_) {}
+      }
+    };
+    cookieBar.querySelector('[data-cookie-accept]')?.addEventListener('click', () => decide('accept'));
+    cookieBar.querySelector('[data-cookie-decline]')?.addEventListener('click', () => decide('decline'));
+  }
+
+  /* Record the current product for the recently-viewed rail. */
+  if (document.body.dataset.productHandle) {
+    rememberProduct(document.body.dataset.productHandle);
+  }
+
   /* ------------------------------------------------------------------------
      Boot
      ---------------------------------------------------------------------- */
