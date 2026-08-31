@@ -1,24 +1,125 @@
 <style>
   .hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
     background: linear-gradient(
       135deg,
       var(--color-bg, #0b0c0b) 0%,
       var(--ink-700, #1a1e1b) 50%,
       var(--green-800, #12241a) 100%
     );
-    padding: 100px 20px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
   }
+
+  .hero--small { min-height: 40vh; }
+  .hero--medium { min-height: 60vh; }
+  .hero--large { min-height: 80vh; }
+  .hero--full { min-height: 100vh; }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--color-bg, #0b0c0b);
+    opacity: var(--hero-overlay, 0.5);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--page-max, 1440px);
+    margin: 0 auto;
+    padding: var(--sp-9, 4rem) var(--sp-6, 2rem);
+  }
+
+  .hero--align-left .hero-content { text-align: left; }
+  .hero--align-center .hero-content { text-align: center; }
+  .hero--align-right .hero-content { text-align: right; }
+
+  .hero__eyebrow {
+    display: block;
+    color: var(--color-accent-text, #d9bc7e);
+    font-family: var(--font-body, 'Poppins', sans-serif);
+    font-size: var(--fs-sm, 0.85rem);
+    letter-spacing: var(--track-caps, 0.18em);
+    text-transform: uppercase;
+    margin-bottom: var(--sp-4, 1rem);
+  }
+
+  .hero__title {
+    font-family: var(--font-display, 'Playfair Display', serif);
+    color: var(--color-text, #e8ebe9);
+    margin-bottom: var(--sp-4, 1rem);
+  }
+
+  .hero__subheading {
+    color: var(--color-text-muted, #949c96);
+    max-width: 46ch;
+    margin-bottom: var(--sp-6, 2rem);
+  }
+
+  .hero--align-center .hero__subheading { margin-left: auto; margin-right: auto; }
+  .hero--align-right .hero__subheading { margin-left: auto; }
+
+  .hero__ctas {
+    display: flex;
+    gap: var(--sp-4, 1rem);
+    flex-wrap: wrap;
+  }
+
+  .hero--align-center .hero__ctas { justify-content: center; }
+  .hero--align-right .hero__ctas { justify-content: flex-end; }
 </style>
 
-<section class="hero">
+{%- liquid
+  assign has_ctas = false
+  if section.settings.button_label != blank or section.settings.button_2_label != blank
+    assign has_ctas = true
+  endif
+-%}
+
+<section
+  class="hero hero--{{ section.settings.height }} hero--align-{{ section.settings.alignment }}"
+  style="--hero-overlay: {{ section.settings.overlay_opacity | times: 0.01 }};"
+>
+  {% if section.settings.background_image != blank %}
+    {{ section.settings.background_image | image_url: width: 2400 | image_tag: class: 'hero__media', loading: 'eager', fetchpriority: 'high', alt: section.settings.heading }}
+    <div class="hero__overlay"></div>
+  {% endif %}
+
   <div class="hero-content">
-    <h1>{{ section.settings.heading }}</h1>
-    <p>{{ section.settings.subheading }}</p>
-    {% if section.settings.button_label != blank %}
-      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="btn btn--primary">{{ section.settings.button_label }}</a>
+    {% if section.settings.eyebrow != blank %}
+      <span class="hero__eyebrow">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+    {% if section.settings.heading != blank %}
+      <h1 class="hero__title">{{ section.settings.heading }}</h1>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p class="hero__subheading">{{ section.settings.subheading }}</p>
+    {% endif %}
+
+    {% if has_ctas %}
+      <div class="hero__ctas">
+        {% if section.settings.button_label != blank %}
+          <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="btn btn--{{ section.settings.button_style }}">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+        {% if section.settings.button_2_label != blank %}
+          <a href="{{ section.settings.button_2_link | default: routes.collections_url }}" class="btn btn--{{ section.settings.button_2_style }}">
+            {{ section.settings.button_2_label }}
+          </a>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
 </section>
@@ -28,27 +129,116 @@
   "name": "Hero",
   "settings": [
     {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Falls back to the gradient when empty."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full", "label": "Full screen" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Luxury home decor"
+    },
+    {
       "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Elegance Reimagined"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "subheading",
       "label": "Subheading",
       "default": "Dark, sophisticated, and unmistakably gothic"
     },
     {
+      "type": "select",
+      "id": "alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
       "type": "text",
       "id": "button_label",
-      "label": "Button label",
+      "label": "First button label",
       "default": "Shop Now"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button link"
+      "label": "First button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "First button style",
+      "options": [
+        { "value": "primary", "label": "Solid" },
+        { "value": "ghost", "label": "Outline" },
+        { "value": "gold", "label": "Gold" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Second button label"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Second button link"
+    },
+    {
+      "type": "select",
+      "id": "button_2_style",
+      "label": "Second button style",
+      "options": [
+        { "value": "primary", "label": "Solid" },
+        { "value": "ghost", "label": "Outline" },
+        { "value": "gold", "label": "Gold" }
+      ],
+      "default": "ghost"
     }
   ],
   "presets": [

@@ -1,42 +1,66 @@
 <style>
   .lookbook-section {
-    padding: var(--sp-8, 3rem) var(--sp-6, 2rem);
+    padding-top: var(--pt);
+    padding-bottom: var(--pb);
   }
 
   .lookbook-section .section-title {
     text-align: center;
-    margin-bottom: var(--sp-6, 2rem);
+    margin-bottom: var(--sp-2, 0.5rem);
+  }
+
+  .lookbook-section .section-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin: 0 auto var(--sp-6, 2rem);
+    max-width: 60ch;
   }
 
   .lookbook-container {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 var(--sp-4, 1rem);
+  }
+
+  .lookbook-frame {
+    position: relative;
   }
 
   .lookbook-image {
     width: 100%;
     display: block;
-    border-radius: 8px;
-    border: 1px solid var(--color-line, #262b27);
+    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--color-line);
   }
 
   .hotspot {
     position: absolute;
-    width: 24px;
-    height: 24px;
-    background-color: var(--color-accent, #c6a15b);
-    border: 2px solid var(--color-brand, #2d6a40);
+    width: var(--hotspot-size);
+    height: var(--hotspot-size);
+    background-color: var(--hotspot-fill);
+    border: 2px solid var(--hotspot-ring);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
+  .lookbook-frame--pulse .hotspot {
+    animation: hotspot-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes hotspot-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hotspot-fill) 45%, transparent); }
+    70% { box-shadow: 0 0 0 12px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+
   .hotspot:hover,
   .hotspot:focus-visible {
     transform: translate(-50%, -50%) scale(1.15);
-    box-shadow: 0 0 15px var(--color-accent, #c6a15b);
+    box-shadow: 0 0 15px var(--hotspot-fill);
+    animation: none;
   }
 
   .hotspot .hotspot-label {
@@ -45,17 +69,18 @@
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
-    background: var(--color-surface, #121513);
-    color: var(--color-text, #e8ebe9);
-    border: 1px solid var(--color-brand, #2d6a40);
-    border-radius: 4px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm, 4px);
     padding: 6px 10px;
-    font-family: var(--font-body, 'Poppins', sans-serif);
+    font-family: var(--font-body);
     font-size: 12px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     pointer-events: none;
+    z-index: 3;
   }
 
   .hotspot:hover .hotspot-label,
@@ -65,32 +90,49 @@
   }
 </style>
 
-<section class="lookbook-section">
+<section
+  class="lookbook-section"
+  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --hotspot-size: {{ section.settings.hotspot_size }}px; --hotspot-fill: {{ section.settings.hotspot_color }}; --hotspot-ring: {{ section.settings.hotspot_ring_color }};"
+>
   {% if section.settings.heading != blank %}
     <h2 class="section-title">{{ section.settings.heading }}</h2>
   {% endif %}
+  {% if section.settings.subheading != blank %}
+    <p class="section-subtitle">{{ section.settings.subheading }}</p>
+  {% endif %}
 
   <div class="lookbook-container">
-    {% if section.settings.room_image != blank %}
-      {%- assign lookbook_alt = section.settings.heading | default: 'Shoppable room' -%}
-      {{ section.settings.room_image | image_url: width: 1600 | image_tag: class: 'lookbook-image', loading: 'lazy', alt: lookbook_alt }}
-    {% else %}
-      {{ 'lifestyle-1' | placeholder_svg_tag: 'lookbook-image' }}
-    {% endif %}
-
-    {% for block in section.blocks %}
-      {% if block.settings.product != blank %}
-        <a
-          href="{{ block.settings.product.url }}"
-          class="hotspot"
-          style="top: {{ block.settings.top_position }}%; left: {{ block.settings.left_position }}%;"
-          aria-label="Shop {{ block.settings.product.title }}"
-          {{ block.shopify_attributes }}
-        >
-          <span class="hotspot-label">{{ block.settings.product.title }} &middot; {{ block.settings.product.price | money }}</span>
-        </a>
+    <div class="lookbook-frame{% if section.settings.pulse %} lookbook-frame--pulse{% endif %}">
+      {% if section.settings.room_image != blank %}
+        {%- assign lookbook_alt = section.settings.heading | default: 'Shoppable room' -%}
+        {{ section.settings.room_image | image_url: width: 1600 | image_tag: class: 'lookbook-image', loading: 'lazy', alt: lookbook_alt }}
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'lookbook-image' }}
       {% endif %}
-    {% endfor %}
+
+      {% for block in section.blocks %}
+        {% if block.settings.product != blank %}
+          <a
+            href="{{ block.settings.product.url }}"
+            class="hotspot"
+            style="top: {{ block.settings.top_position }}%; left: {{ block.settings.left_position }}%;"
+            aria-label="Shop {{ block.settings.product.title }}"
+            {{ block.shopify_attributes }}
+          >
+            {% if section.settings.show_labels %}
+              <span class="hotspot-label">
+                {%- if block.settings.label != blank -%}
+                  {{ block.settings.label }}
+                {%- else -%}
+                  {{ block.settings.product.title }}
+                {%- endif -%}
+                {%- if section.settings.show_label_price %} &middot; {{ block.settings.product.price | money }}{% endif -%}
+              </span>
+            {% endif %}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
   </div>
 </section>
 
@@ -99,15 +141,92 @@
   "name": "Shoppable lookbook",
   "settings": [
     {
+      "type": "header",
+      "content": "Content"
+    },
+    {
       "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Shop the Look"
     },
     {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
       "type": "image_picker",
       "id": "room_image",
       "label": "Room lifestyle image"
+    },
+    {
+      "type": "header",
+      "content": "Hotspots"
+    },
+    {
+      "type": "color",
+      "id": "hotspot_color",
+      "label": "Hotspot colour",
+      "default": "#c6a15b"
+    },
+    {
+      "type": "color",
+      "id": "hotspot_ring_color",
+      "label": "Hotspot ring colour",
+      "default": "#2d6a40"
+    },
+    {
+      "type": "range",
+      "id": "hotspot_size",
+      "label": "Hotspot size",
+      "min": 16,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "pulse",
+      "label": "Pulse animation",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_labels",
+      "label": "Show hover labels",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_label_price",
+      "label": "Show price in label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
     }
   ],
   "blocks": [
@@ -120,6 +239,12 @@
           "type": "product",
           "id": "product",
           "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Custom label",
+          "info": "Falls back to the product title."
         },
         {
           "type": "range",
