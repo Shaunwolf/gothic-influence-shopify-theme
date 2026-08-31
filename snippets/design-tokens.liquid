@@ -1,0 +1,164 @@
+{%- comment -%}
+  Design tokens — the single source of the storefront palette.
+
+  Rendered by both layout/theme.liquid and layout/password.liquid so the two
+  can never drift apart.
+
+  A design preset re-tints the whole storefront from one control. Picking
+  "Custom" hands control back to the individual colour settings.
+
+  Colours branch here; fonts do not. Five font pairings cannot be preloaded
+  without a render-blocking cost, so typography stays on the font pickers and
+  a merchant sets it once for whichever preset they land on.
+{%- endcomment -%}
+
+{%- liquid
+  assign preset = settings.design_preset | default: 'gothic'
+
+  case preset
+    when 'onyx'
+      assign c_bg = '#0a0a0a'
+      assign c_surface = '#141414'
+      assign c_line = '#282828'
+      assign c_text = '#ededed'
+      assign c_muted = '#9a9a9a'
+      assign c_brand = '#3a3a3a'
+      assign c_brand_text = '#c0c0c0'
+      assign c_accent = '#b08d57'
+      assign c_accent_text = '#d4b483'
+    when 'conservatory'
+      assign c_bg = '#0a120d'
+      assign c_surface = '#101c14'
+      assign c_line = '#1f3327'
+      assign c_text = '#e6ece8'
+      assign c_muted = '#8fa697'
+      assign c_brand = '#356b47'
+      assign c_brand_text = '#8cc4a1'
+      assign c_accent = '#c9a961'
+      assign c_accent_text = '#dcc38a'
+    when 'cathedral'
+      assign c_bg = '#0d0b12'
+      assign c_surface = '#16131d'
+      assign c_line = '#2a2536'
+      assign c_text = '#e9e7ef'
+      assign c_muted = '#9a95a8'
+      assign c_brand = '#3f3a5c'
+      assign c_brand_text = '#a9a2c4'
+      assign c_accent = '#b8bcc8'
+      assign c_accent_text = '#d3d6de'
+    when 'porcelain'
+      assign c_bg = '#f5f2ec'
+      assign c_surface = '#ffffff'
+      assign c_line = '#e2ddd2'
+      assign c_text = '#1a1a1a'
+      assign c_muted = '#6b6b66'
+      assign c_brand = '#2d6a40'
+      assign c_brand_text = '#235233'
+      assign c_accent = '#8f7130'
+      assign c_accent_text = '#7a6229'
+    when 'custom'
+      assign c_bg = settings.color_bg
+      assign c_surface = settings.color_surface
+      assign c_line = settings.color_line
+      assign c_text = settings.color_text
+      assign c_muted = settings.color_text_muted
+      assign c_brand = settings.color_brand
+      assign c_brand_text = settings.color_brand_text
+      assign c_accent = settings.color_accent
+      assign c_accent_text = settings.color_accent_text
+    else
+      assign c_bg = '#0b0c0b'
+      assign c_surface = '#121513'
+      assign c_line = '#262b27'
+      assign c_text = '#e8ebe9'
+      assign c_muted = '#949c96'
+      assign c_brand = '#2d6a40'
+      assign c_brand_text = '#7fb392'
+      assign c_accent = '#c6a15b'
+      assign c_accent_text = '#d9bc7e'
+  endcase
+
+  comment
+    Anything overlaying the page ground has to know whether that ground is
+    light or dark. Everything below keys off this one measurement rather
+    than assuming a dark theme.
+  endcomment
+  assign bg_brightness = c_bg | color_brightness
+  assign is_light = false
+  if bg_brightness > 128
+    assign is_light = true
+  endif
+
+  if is_light
+    assign on_accent = '#ffffff'
+    assign hover_tint = 'rgb(0 0 0 / 0.05)'
+    assign surface_raised = c_surface | color_darken: 4
+    assign line_strong = c_line | color_darken: 12
+    assign text_subtle = c_muted | color_lighten: 12
+  else
+    assign on_accent = c_bg
+    assign hover_tint = 'rgb(255 255 255 / 0.04)'
+    assign surface_raised = c_surface | color_lighten: 3
+    assign line_strong = c_line | color_lighten: 8
+    assign text_subtle = c_muted | color_darken: 12
+  endif
+
+  assign body_font = settings.font_body
+  assign display_font = settings.font_display
+-%}
+
+{%- comment -%}
+  render 'design-tokens', output: 'bg' returns just the background hex, so
+  <meta name="theme-color"> tracks the preset without a second case statement.
+{%- endcomment -%}
+{%- if output == 'bg' -%}{{ c_bg }}{%- else -%}
+:root {
+  --color-bg: {{ c_bg }};
+  --color-surface: {{ c_surface }};
+  --color-surface-raised: {{ surface_raised }};
+  --color-line: {{ c_line }};
+  --color-line-strong: {{ line_strong }};
+  --color-text: {{ c_text }};
+  --color-text-muted: {{ c_muted }};
+  --color-text-subtle: {{ text_subtle }};
+  --color-brand: {{ c_brand }};
+  --color-brand-text: {{ c_brand_text }};
+  --color-accent: {{ c_accent }};
+  --color-accent-text: {{ c_accent_text }};
+  --color-on-accent: {{ on_accent }};
+  --hover-tint: {{ hover_tint }};
+
+  --bg-rgb: {{ c_bg | color_extract: 'red' }} {{ c_bg | color_extract: 'green' }} {{ c_bg | color_extract: 'blue' }};
+  --surface-rgb: {{ c_surface | color_extract: 'red' }} {{ c_surface | color_extract: 'green' }} {{ c_surface | color_extract: 'blue' }};
+  --accent-rgb: {{ c_accent | color_extract: 'red' }} {{ c_accent | color_extract: 'green' }} {{ c_accent | color_extract: 'blue' }};
+
+  --gold-200: {{ c_accent | color_lighten: 22 }};
+  --gold-300: {{ c_accent_text }};
+  --gold-400: {{ c_accent }};
+  --gold-500: {{ c_accent | color_darken: 8 }};
+  --gold-600: {{ c_accent | color_darken: 16 }};
+
+  --green-200: {{ c_brand_text }};
+  --green-400: {{ c_brand }};
+  --green-500: {{ c_brand | color_darken: 8 }};
+  --green-700: {{ c_brand | color_darken: 20 }};
+  --green-800: {{ c_brand | color_darken: 26 }};
+
+  --ink-700: {{ surface_raised }};
+  --ink-800: {{ c_surface }};
+  --ink-900: {{ c_bg }};
+
+  --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+  --font-display: {{ display_font.family }}, {{ display_font.fallback_families }};
+  --fw-light: {{ body_font.weight }};
+  --fw-normal: {{ body_font.weight }};
+
+  --fs-base: {{ settings.font_body_scale | times: 0.01 | times: 16 | round: 2 }}px;
+  --heading-scale: {{ settings.font_heading_scale | times: 0.01 }};
+  --track-caps: {{ settings.track_caps | times: 0.01 }}em;
+
+  --page-max: {{ settings.page_width }}px;
+  --radius-sm: {{ settings.corner_radius }};
+  --card-ratio: {{ settings.card_ratio }};
+}
+{%- endif -%}

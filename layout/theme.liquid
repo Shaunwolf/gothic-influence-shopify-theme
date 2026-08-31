@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="{{ settings.color_bg }}">
+    <meta name="theme-color" content="{% render 'design-tokens', output: 'bg' %}">
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 
@@ -47,49 +47,7 @@
       {{ display_italic | font_face: font_display: 'swap' }}
       {{ display_bold | font_face: font_display: 'swap' }}
 
-      :root {
-        --color-bg: {{ settings.color_bg }};
-        --color-surface: {{ settings.color_surface }};
-        --color-surface-raised: {{ settings.color_surface | color_lighten: 3 }};
-        --color-line: {{ settings.color_line }};
-        --color-line-strong: {{ settings.color_line | color_lighten: 8 }};
-        --color-text: {{ settings.color_text }};
-        --color-text-muted: {{ settings.color_text_muted }};
-        --color-text-subtle: {{ settings.color_text_muted | color_darken: 12 }};
-        --color-brand: {{ settings.color_brand }};
-        --color-brand-text: {{ settings.color_brand_text }};
-        --color-accent: {{ settings.color_accent }};
-        --color-accent-text: {{ settings.color_accent_text }};
-
-        --gold-200: {{ settings.color_accent | color_lighten: 22 }};
-        --gold-300: {{ settings.color_accent_text }};
-        --gold-400: {{ settings.color_accent }};
-        --gold-500: {{ settings.color_accent | color_darken: 8 }};
-        --gold-600: {{ settings.color_accent | color_darken: 16 }};
-
-        --green-200: {{ settings.color_brand_text }};
-        --green-400: {{ settings.color_brand }};
-        --green-500: {{ settings.color_brand | color_darken: 8 }};
-        --green-700: {{ settings.color_brand | color_darken: 20 }};
-        --green-800: {{ settings.color_brand | color_darken: 26 }};
-
-        --ink-700: {{ settings.color_surface | color_lighten: 3 }};
-        --ink-800: {{ settings.color_surface }};
-        --ink-900: {{ settings.color_bg }};
-
-        --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
-        --font-display: {{ display_font.family }}, {{ display_font.fallback_families }};
-        --fw-light: {% if body_font.weight == 300 %}300{% else %}{{ body_font.weight }}{% endif %};
-        --fw-normal: {{ body_font.weight }};
-
-        --fs-base: {{ settings.font_body_scale | times: 0.01 | times: 16 | round: 2 }}px;
-        --heading-scale: {{ settings.font_heading_scale | times: 0.01 }};
-        --track-caps: {{ settings.track_caps | times: 0.01 }}em;
-
-        --page-max: {{ settings.page_width }}px;
-        --radius-sm: {{ settings.corner_radius }};
-        --card-ratio: {{ settings.card_ratio }};
-      }
+      {% render 'design-tokens' %}
 
       h1, h2, h3, h4, .h1, .h2, .h3, .h4, .display, .hero__title {
         font-size: calc(var(--_fs, 1em) * var(--heading-scale));

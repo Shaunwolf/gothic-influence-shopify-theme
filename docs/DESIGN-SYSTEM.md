@@ -68,7 +68,69 @@ If you change the palette in theme settings, re-check the muted text colour firs
 
 ---
 
-## 3. Type
+## 3. Design presets
+
+One control in theme settings re-tints the whole storefront. `snippets/design-tokens.liquid`
+holds all five palettes and is rendered by both layouts, so the storefront and
+the password page can never drift apart.
+
+| Preset | Ground | Character |
+|---|---|---|
+| Gothic Influence | `#0b0c0b` | Near-black, forest green, gold. The default. |
+| Onyx & Brass | `#0a0a0a` | Neutral black, warm brass, no green. |
+| Conservatory | `#0a120d` | Green-forward, softer gold. |
+| Cathedral | `#0d0b12` | Violet-noir with silver instead of gold. |
+| Porcelain | `#f5f2ec` | Light stone, ink text, antique gold. |
+
+Picking **Custom** hands control back to the individual colour settings.
+
+**Colours branch; fonts do not.** Five font pairings cannot be preloaded
+without a render-blocking cost, so typography stays on the font pickers and
+the merchant sets it once.
+
+### Making a light preset work on a dark-first theme
+
+Porcelain is the reason several things in `base.css` are tokens rather than
+literals. Translucent chrome sitting on the page ground — the header backdrop,
+badges, the gallery badge, the sticky add-to-cart bar — was written as
+`rgb(11 12 11 / 0.72)`, which silently assumes a dark ground. Those now use
+channel triplets:
+
+```css
+background: rgb(var(--bg-rgb) / 0.72);
+```
+
+The snippet measures the background once with `color_brightness` and derives
+everything conditional from that single value:
+
+| Token | Dark preset | Light preset |
+|---|---|---|
+| `--color-on-accent` | the page ground | `#ffffff` |
+| `--hover-tint` | `rgb(255 255 255 / 0.04)` | `rgb(0 0 0 / 0.05)` |
+| `--color-surface-raised` | surface lightened | surface darkened |
+| `--color-line-strong` | line lightened | line darkened |
+
+`--color-on-accent` matters more than it looks. Gold takes dark text at
+6–10:1 on the dark presets, but Porcelain's darker gold needs white — 4.59:1.
+Hardcoding either one breaks half the presets.
+
+**What deliberately stays dark:** the hero scrim, collection-tile gradients,
+the drawer scrim, and lookbook hotspots. Those overlay photography with white
+text on top, and must stay dark regardless of preset. Don't "fix" them.
+
+### Contrast
+
+Every preset is verified to WCAG AA — text, secondary text, prices, links and
+brand text all clear 4.5:1, and the accent clears 3:1 as a UI colour. Custom
+colours are not checked for the merchant, which the settings panel says
+plainly.
+
+Brand colour remains fills-only in every preset; `--color-brand-text` is the
+readable variant.
+
+---
+
+## 4. Type
 
 Two families. A high-contrast serif for display, a clean sans for everything else.
 
@@ -99,7 +161,7 @@ Fluid via `clamp()`, so nothing needs a breakpoint.
 
 ---
 
-## 4. Space, shape, motion
+## 5. Space, shape, motion
 
 **Space** — 4px base: `4 8 12 16 24 32 48 64 96 128 160`. Sections use `--sp-9` (96px), dropping to `--sp-7` (48px) on mobile.
 
@@ -117,7 +179,7 @@ Everything collapses to `0.01ms` under `prefers-reduced-motion: reduce`.
 
 ---
 
-## 5. Component contracts
+## 6. Component contracts
 
 `theme.js` attaches behaviour via custom elements. A section only needs the right markup — no JS per section.
 
@@ -138,7 +200,7 @@ Also required on the product page: `[data-add-button]` with an inner `[data-add-
 
 ---
 
-## 6. Why the cart re-renders from Liquid
+## 7. Why the cart re-renders from Liquid
 
 Every cart mutation refetches `?section_id=cart-drawer` and swaps the HTML rather than rebuilding rows in JavaScript.
 
@@ -146,7 +208,7 @@ It costs one request. It buys correct money formatting in every currency, correc
 
 ---
 
-## 7. Accessibility floor
+## 8. Accessibility floor
 
 Non-negotiable, and all of it is already in place:
 
@@ -161,7 +223,7 @@ The one thing to watch: the product card's full-card click target uses a stretch
 
 ---
 
-## 8. Liquid house rules
+## 9. Liquid house rules
 
 Three separate passes over this theme hit the same four traps. They all pass a
 casual read and fail `shopify theme check`, so they are worth memorising.
@@ -205,7 +267,7 @@ Refer to a `liquid` tag or a `form` tag in prose instead of `{% ... %}`.
 
 ---
 
-## 9. Extending it
+## 10. Extending it
 
 When you add a section:
 

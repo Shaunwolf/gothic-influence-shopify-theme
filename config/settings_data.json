@@ -29,7 +29,8 @@
     "cart_show_note": true,
     "enable_structured_data": true,
     "enable_reveal": true,
-    "enable_image_zoom": true
+    "enable_image_zoom": true,
+    "design_preset": "gothic"
   },
   "presets": {
     "Gothic Influence": {
@@ -42,6 +43,7 @@
       "color_brand_text": "#7fb392",
       "color_accent": "#c6a15b",
       "color_accent_text": "#d9bc7e",
+      "design_preset": "gothic",
       "font_display": "playfair_display_n4",
       "font_body": "poppins_n4"
     },
@@ -55,6 +57,7 @@
       "color_brand_text": "#c0c0c0",
       "color_accent": "#b08d57",
       "color_accent_text": "#d4b483",
+      "design_preset": "onyx",
       "font_display": "playfair_display_n4",
       "font_body": "poppins_n4"
     },
@@ -68,6 +71,35 @@
       "color_brand_text": "#8cc4a1",
       "color_accent": "#c9a961",
       "color_accent_text": "#dcc38a",
+      "design_preset": "conservatory",
+      "font_display": "playfair_display_n4",
+      "font_body": "poppins_n4"
+    },
+    "Cathedral": {
+      "color_bg": "#0d0b12",
+      "color_surface": "#16131d",
+      "color_line": "#2a2536",
+      "color_text": "#e9e7ef",
+      "color_text_muted": "#9a95a8",
+      "color_brand": "#3f3a5c",
+      "color_brand_text": "#a9a2c4",
+      "color_accent": "#b8bcc8",
+      "color_accent_text": "#d3d6de",
+      "design_preset": "cathedral",
+      "font_display": "playfair_display_n4",
+      "font_body": "poppins_n4"
+    },
+    "Porcelain": {
+      "color_bg": "#f5f2ec",
+      "color_surface": "#ffffff",
+      "color_line": "#e2ddd2",
+      "color_text": "#1a1a1a",
+      "color_text_muted": "#6b6b66",
+      "color_brand": "#2d6a40",
+      "color_brand_text": "#235233",
+      "color_accent": "#8f7130",
+      "color_accent_text": "#7a6229",
+      "design_preset": "porcelain",
       "font_display": "playfair_display_n4",
       "font_body": "poppins_n4"
     }

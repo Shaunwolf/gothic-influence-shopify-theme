@@ -8,8 +8,61 @@
     "theme_support_url": "https://github.com/Shaunwolf/gothic-influence-shopify-theme/issues"
   },
   {
+    "name": "Design presets",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "A preset re-tints the entire storefront from one control — background, surfaces, hairlines, text, brand and accent. Pick \"Custom\" to unlock the individual colours in the Colours group below."
+      },
+      {
+        "type": "select",
+        "id": "design_preset",
+        "label": "Preset",
+        "options": [
+          {
+            "value": "gothic",
+            "label": "Gothic Influence — near-black, forest, gold"
+          },
+          {
+            "value": "onyx",
+            "label": "Onyx & Brass — neutral black, warm brass"
+          },
+          {
+            "value": "conservatory",
+            "label": "Conservatory — deep green, soft gold"
+          },
+          {
+            "value": "cathedral",
+            "label": "Cathedral — violet-noir, silver"
+          },
+          {
+            "value": "porcelain",
+            "label": "Porcelain — light stone, ink, antique gold"
+          },
+          {
+            "value": "custom",
+            "label": "Custom — use the Colours group"
+          }
+        ],
+        "default": "gothic"
+      },
+      {
+        "type": "paragraph",
+        "content": "Every preset is checked to WCAG AA: body and secondary text, prices and links all clear 4.5:1 against their background. Custom colours are not checked for you."
+      },
+      {
+        "type": "paragraph",
+        "content": "Typography is not part of a preset. Set the fonts once in the Typography group and they apply whichever preset you choose."
+      }
+    ]
+  },
+  {
     "name": "Colours",
     "settings": [
+      {
+        "type": "paragraph",
+        "content": "These apply only when the Design preset above is set to \"Custom\". Otherwise the preset supplies the palette."
+      },
       {
         "type": "header",
         "content": "Foundation"
@@ -170,9 +223,18 @@
         "label": "Corner style",
         "info": "Sharp corners read expensive. Soft corners read friendly.",
         "options": [
-          { "value": "0px", "label": "Square" },
-          { "value": "2px", "label": "Near-sharp (recommended)" },
-          { "value": "6px", "label": "Soft" }
+          {
+            "value": "0px",
+            "label": "Square"
+          },
+          {
+            "value": "2px",
+            "label": "Near-sharp (recommended)"
+          },
+          {
+            "value": "6px",
+            "label": "Soft"
+          }
         ],
         "default": "2px"
       },
@@ -181,10 +243,22 @@
         "id": "card_ratio",
         "label": "Product image shape",
         "options": [
-          { "value": "1 / 1", "label": "Square" },
-          { "value": "3 / 4", "label": "Portrait (recommended for decor)" },
-          { "value": "4 / 5", "label": "Tall portrait" },
-          { "value": "4 / 3", "label": "Landscape" }
+          {
+            "value": "1 / 1",
+            "label": "Square"
+          },
+          {
+            "value": "3 / 4",
+            "label": "Portrait (recommended for decor)"
+          },
+          {
+            "value": "4 / 5",
+            "label": "Tall portrait"
+          },
+          {
+            "value": "4 / 3",
+            "label": "Landscape"
+          }
         ],
         "default": "3 / 4"
       }
@@ -241,8 +315,14 @@
         "id": "cart_type",
         "label": "Cart behaviour",
         "options": [
-          { "value": "drawer", "label": "Slide-out drawer (recommended)" },
-          { "value": "page", "label": "Go to cart page" }
+          {
+            "value": "drawer",
+            "label": "Slide-out drawer (recommended)"
+          },
+          {
+            "value": "page",
+            "label": "Go to cart page"
+          }
         ],
         "default": "drawer"
       },
@@ -270,11 +350,31 @@
   {
     "name": "Social",
     "settings": [
-      { "type": "text", "id": "social_instagram", "label": "Instagram" },
-      { "type": "text", "id": "social_facebook", "label": "Facebook" },
-      { "type": "text", "id": "social_pinterest", "label": "Pinterest" },
-      { "type": "text", "id": "social_tiktok", "label": "TikTok" },
-      { "type": "text", "id": "social_youtube", "label": "YouTube" }
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube"
+      }
     ]
   },
   {

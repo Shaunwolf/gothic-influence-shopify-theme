@@ -115,7 +115,17 @@
   --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
   --shadow-2: 0 8px 24px -8px rgb(0 0 0 / 0.6);
   --shadow-3: 0 24px 60px -16px rgb(0 0 0 / 0.75);
-  --glow-gold: 0 0 0 1px rgb(198 161 91 / 0.35);
+  --glow-gold: 0 0 0 1px rgb(var(--accent-rgb) / 0.35);
+
+  /* Channel triplets, so translucent chrome tracks the preset instead of
+     assuming a dark ground. Overridden in layout/theme.liquid. */
+  --bg-rgb: 11 12 11;
+  --surface-rgb: 18 21 19;
+  --accent-rgb: 198 161 91;
+  /* What sits ON an accent or brand fill. Dark text reads on gold; on a
+     light preset's darker gold it has to be white. */
+  --color-on-accent: var(--ink-900);
+  --hover-tint: rgb(255 255 255 / 0.04);
 
   --z-header: 100;
   --z-drawer: 200;
@@ -367,7 +377,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   --btn-bd: var(--gold-600);
   --btn-hover-bg: var(--gold-400);
 }
-.btn--gold:hover { color: var(--ink-900); border-color: var(--gold-400); }
+.btn--gold:hover { color: var(--color-on-accent); border-color: var(--gold-400); }
 
 .btn--ghost { --btn-bd: var(--color-line); --btn-hover-bg: var(--ink-700); }
 .btn--ghost:hover { border-color: var(--color-accent); }
@@ -499,7 +509,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   text-transform: uppercase;
   padding: var(--sp-1) var(--sp-3);
   border-radius: var(--radius-pill);
-  background: rgb(11 12 11 / 0.82);
+  background: rgb(var(--bg-rgb) / 0.82);
   backdrop-filter: blur(8px);
   border: 1px solid var(--color-line-strong);
   color: var(--color-text-muted);
@@ -564,7 +574,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
    -------------------------------------------------------------------------- */
 .header {
   position: sticky; top: 0; z-index: var(--z-header);
-  background: rgb(11 12 11 / 0.72);
+  background: rgb(var(--bg-rgb) / 0.72);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   border-bottom: 1px solid transparent;
@@ -573,7 +583,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
               box-shadow var(--dur-3) var(--ease-out);
 }
 .header.is-stuck {
-  background: rgb(11 12 11 / 0.94);
+  background: rgb(var(--bg-rgb) / 0.94);
   border-bottom-color: var(--color-line);
   box-shadow: var(--shadow-2);
 }
@@ -608,12 +618,12 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   position: relative;
   transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
 }
-.icon-btn:hover { color: var(--color-accent-text); background: rgb(255 255 255 / 0.04); }
+.icon-btn:hover { color: var(--color-accent-text); background: var(--hover-tint); }
 .icon-btn__count {
   position: absolute; top: 6px; right: 4px;
   min-width: 17px; height: 17px; padding-inline: 4px;
   display: grid; place-items: center;
-  background: var(--color-accent); color: var(--ink-900);
+  background: var(--color-accent); color: var(--color-on-accent);
   font-size: 0.625rem; font-weight: var(--fw-semibold);
   border-radius: var(--radius-pill);
   font-variant-numeric: tabular-nums;
@@ -804,7 +814,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 .gallery__thumb[aria-current="true"] { border-color: var(--color-accent); opacity: 1; }
 .gallery__badge {
   position: absolute; bottom: var(--sp-3); right: var(--sp-3);
-  background: rgb(11 12 11 / 0.8); border: 1px solid var(--color-line-strong);
+  background: rgb(var(--bg-rgb) / 0.8); border: 1px solid var(--color-line-strong);
   border-radius: var(--radius-pill); padding: var(--sp-1) var(--sp-3);
   font-size: var(--fs-xs); color: var(--color-text-muted);
 }
@@ -829,7 +839,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 }
 .option__label:hover { border-color: var(--color-line-strong); }
 .option__input:checked + .option__label {
-  border-color: var(--color-accent); color: var(--gold-200); background: rgb(198 161 91 / 0.08);
+  border-color: var(--color-accent); color: var(--gold-200); background: rgb(var(--accent-rgb) / 0.08);
 }
 .option__input:focus-visible + .option__label { outline: 2px solid var(--color-accent); outline-offset: 3px; }
 .option__input:disabled + .option__label {
@@ -865,7 +875,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 /* Sticky add-to-cart bar */
 .sticky-atc {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-header);
-  background: rgb(18 21 19 / 0.96);
+  background: rgb(var(--surface-rgb) / 0.96);
   backdrop-filter: blur(16px);
   border-top: 1px solid var(--gold-600);
   padding: var(--sp-3) 0;
