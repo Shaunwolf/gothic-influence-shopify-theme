@@ -36,7 +36,7 @@
     background: var(--color-surface);
     border-radius: var(--radius-sm, 4px);
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-line);
   }
 
   .lantern-grid-container--asymmetric .lantern-card:nth-child(6n + 1) {
@@ -98,15 +98,17 @@
     background: linear-gradient(to top, rgb(0 0 0 / 0.65), transparent 55%);
   }
 
+  /* Captions sit on the dark photo scrim below, so they stay light in every
+     design preset — see docs/DESIGN-SYSTEM.md section 3. */
   .lantern-card .card-content h3 {
     font-family: var(--font-display);
-    color: var(--color-text);
+    color: rgb(255 255 255 / 0.95);
     margin: 0;
     font-size: 1.25rem;
   }
 
   .lantern-card .card-content .card-vendor {
-    color: var(--color-text-muted);
+    color: rgb(255 255 255 / 0.7);
     font-family: var(--font-body);
     font-size: var(--fs-xs, 0.75rem);
     letter-spacing: var(--track-caps, 0.18em);
@@ -115,7 +117,7 @@
   }
 
   .lantern-card .card-content .card-price {
-    color: var(--color-accent-text);
+    color: var(--gold-200, #d9bc7e);
     font-family: var(--font-body);
     font-size: 0.95rem;
     margin: 4px 0 0;
@@ -161,9 +163,18 @@
   endif
 -%}
 
+{%- liquid
+  if section.settings.glow_follow_theme
+    assign glow_1 = 'var(--color-accent)'
+    assign glow_2 = 'var(--color-brand)'
+  else
+    assign glow_1 = section.settings.glow_color_1
+    assign glow_2 = section.settings.glow_color_2
+  endif
+-%}
 <section
   class="lantern-section"
-  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --row-height: {{ section.settings.row_height }}px; --glow-1: {{ section.settings.glow_color_1 }}; --glow-2: {{ section.settings.glow_color_2 }}; --glow-strength: {{ section.settings.glow_strength }}%; --card-img-opacity: {{ section.settings.image_opacity | times: 0.01 }};"
+  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --row-height: {{ section.settings.row_height }}px; --glow-1: {{ glow_1 }}; --glow-2: {{ glow_2 }}; --glow-strength: {{ section.settings.glow_strength }}%; --card-img-opacity: {{ section.settings.image_opacity | times: 0.01 }};"
 >
   {% if section.settings.heading != blank %}
     <h2 class="section-title">{{ section.settings.heading }}</h2>
@@ -328,15 +339,22 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "glow_follow_theme",
+      "label": "Match theme colours",
+      "info": "Uses the accent and brand colours, so the glow re-tints with design presets. Untick to pick custom glow colours below.",
+      "default": true
+    },
+    {
       "type": "color",
       "id": "glow_color_1",
-      "label": "Glow colour (inner)",
+      "label": "Custom glow (inner)",
       "default": "#c6a15b"
     },
     {
       "type": "color",
       "id": "glow_color_2",
-      "label": "Glow colour (outer)",
+      "label": "Custom glow (outer)",
       "default": "#2d6a40"
     },
     {

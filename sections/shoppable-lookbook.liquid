@@ -90,9 +90,18 @@
   }
 </style>
 
+{%- liquid
+  if section.settings.hotspot_follow_theme
+    assign hotspot_fill = 'var(--color-accent)'
+    assign hotspot_ring = 'var(--color-brand)'
+  else
+    assign hotspot_fill = section.settings.hotspot_color
+    assign hotspot_ring = section.settings.hotspot_ring_color
+  endif
+-%}
 <section
   class="lookbook-section"
-  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --hotspot-size: {{ section.settings.hotspot_size }}px; --hotspot-fill: {{ section.settings.hotspot_color }}; --hotspot-ring: {{ section.settings.hotspot_ring_color }};"
+  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px; --hotspot-size: {{ section.settings.hotspot_size }}px; --hotspot-fill: {{ hotspot_fill }}; --hotspot-ring: {{ hotspot_ring }};"
 >
   {% if section.settings.heading != blank %}
     <h2 class="section-title">{{ section.settings.heading }}</h2>
@@ -165,15 +174,22 @@
       "content": "Hotspots"
     },
     {
+      "type": "checkbox",
+      "id": "hotspot_follow_theme",
+      "label": "Match theme colours",
+      "info": "Uses the accent and brand colours, so hotspots re-tint with design presets. Untick to pick custom colours below.",
+      "default": true
+    },
+    {
       "type": "color",
       "id": "hotspot_color",
-      "label": "Hotspot colour",
+      "label": "Custom hotspot colour",
       "default": "#c6a15b"
     },
     {
       "type": "color",
       "id": "hotspot_ring_color",
-      "label": "Hotspot ring colour",
+      "label": "Custom ring colour",
       "default": "#2d6a40"
     },
     {
