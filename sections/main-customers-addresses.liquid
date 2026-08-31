@@ -1,0 +1,66 @@
+<div class="section" data-section-id="{{ section.id }}">
+  <div class="page-width page-width--narrow">
+    <span class="eyebrow">{{ 'customer.account.title' | t }}</span>
+    <h1>{{ 'customer.addresses.title' | t }}</h1>
+    <p><a class="link" href="{{ routes.account_url }}">{{ 'customer.order.back' | t }}</a></p>
+
+    <details class="accordion__item">
+      <summary class="accordion__summary">{{ 'customer.addresses.add' | t }}</summary>
+      <div class="accordion__content">
+        {% form 'customer_address', customer.new_address, class: 'customer-form' %}
+          {% render 'address-fields', form: form %}
+          <button type="submit" class="btn btn--primary">{{ 'customer.addresses.save' | t }}</button>
+        {% endform %}
+      </div>
+    </details>
+
+    {% paginate customer.addresses by 10 %}
+      {% for address in customer.addresses %}
+        <div class="address-card">
+          {% if address == customer.default_address %}
+            <span class="eyebrow">{{ 'customer.addresses.default' | t }}</span>
+          {% endif %}
+          <p>{{ address | format_address }}</p>
+
+          <details class="accordion__item">
+            <summary class="accordion__summary">{{ 'customer.addresses.edit' | t }}</summary>
+            <div class="accordion__content">
+              {% form 'customer_address', address, class: 'customer-form' %}
+                {% render 'address-fields', form: form %}
+                <label class="field" style="display:flex; align-items:center; gap: var(--sp-2);">
+                  <input type="checkbox" name="address[default]" value="1" {% if address == customer.default_address %}checked{% endif %}>
+                  {{ 'customer.addresses.set_default' | t }}
+                </label>
+                <button type="submit" class="btn btn--primary">{{ 'customer.addresses.save' | t }}</button>
+              {% endform %}
+              <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}" onsubmit="return confirm('{{ 'customer.addresses.delete_confirm' | t }}');">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="btn btn--ghost">{{ 'customer.addresses.delete' | t }}</button>
+              </form>
+            </div>
+          </details>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <p>{{ 'customer.addresses.none' | t }}</p>
+        </div>
+      {% endfor %}
+      {% if paginate.pages > 1 %}
+        <nav class="pagination" aria-label="{{ 'general.pagination' | t }}">
+          {% if paginate.previous %}<a class="link" href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{% endif %}
+          {% if paginate.next %}<a class="link" href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{% endif %}
+        </nav>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+</div>
+
+<style>
+  .address-card { border: 1px solid var(--color-line); border-radius: var(--radius-sm); padding: var(--sp-5); margin-top: var(--sp-5); }
+  .customer-form .field { margin-bottom: var(--sp-4); }
+  .customer-form .btn { margin-top: var(--sp-3); }
+</style>
+
+{% schema %}
+{ "name": "Addresses", "settings": [] }
+{% endschema %}

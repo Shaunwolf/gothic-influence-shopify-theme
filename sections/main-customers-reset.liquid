@@ -1,0 +1,30 @@
+<div class="section" data-section-id="{{ section.id }}">
+  <div class="page-width page-width--narrow">
+    <span class="eyebrow">{{ 'customer.account.title' | t }}</span>
+    <h1>{{ 'customer.reset.title' | t }}</h1>
+    <p class="lede">{{ 'customer.reset.subtext' | t }}</p>
+
+    {% form 'reset_customer_password', class: 'customer-form' %}
+      {% if form.errors %}
+        <p class="field__error">{{ form.errors | default_errors }}</p>
+      {% endif %}
+      <div class="field">
+        <label class="field__label" for="ResetPassword">{{ 'customer.login.password' | t }}</label>
+        <input type="password" class="input" id="ResetPassword" name="customer[password]" autocomplete="new-password" required>
+      </div>
+      <div class="field">
+        <label class="field__label" for="ResetPasswordConfirm">{{ 'customer.activate.password_confirm' | t }}</label>
+        <input type="password" class="input" id="ResetPasswordConfirm" name="customer[password_confirmation]" autocomplete="new-password" required>
+      </div>
+      <button type="submit" class="btn btn--primary">{{ 'customer.reset.submit' | t }}</button>
+    {% endform %}
+  </div>
+</div>
+
+<style>
+  .customer-form .field { margin-bottom: var(--sp-5); }
+</style>
+
+{% schema %}
+{ "name": "Reset password", "settings": [] }
+{% endschema %}

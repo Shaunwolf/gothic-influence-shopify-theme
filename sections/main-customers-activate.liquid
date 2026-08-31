@@ -1,0 +1,34 @@
+<div class="section" data-section-id="{{ section.id }}">
+  <div class="page-width page-width--narrow">
+    <span class="eyebrow">{{ 'customer.account.title' | t }}</span>
+    <h1>{{ 'customer.activate.title' | t }}</h1>
+    <p class="lede">{{ 'customer.activate.subtext' | t }}</p>
+
+    {% form 'activate_customer_password', class: 'customer-form' %}
+      {% if form.errors %}
+        <p class="field__error">{{ form.errors | default_errors }}</p>
+      {% endif %}
+      <div class="field">
+        <label class="field__label" for="ActivatePassword">{{ 'customer.login.password' | t }}</label>
+        <input type="password" class="input" id="ActivatePassword" name="customer[password]" autocomplete="new-password" required>
+      </div>
+      <div class="field">
+        <label class="field__label" for="ActivatePasswordConfirm">{{ 'customer.activate.password_confirm' | t }}</label>
+        <input type="password" class="input" id="ActivatePasswordConfirm" name="customer[password_confirmation]" autocomplete="new-password" required>
+      </div>
+      <div class="customer-form__actions">
+        <button type="submit" class="btn btn--primary">{{ 'customer.activate.submit' | t }}</button>
+        <button type="submit" class="btn btn--ghost" name="decline" value="true">{{ 'customer.activate.decline' | t }}</button>
+      </div>
+    {% endform %}
+  </div>
+</div>
+
+<style>
+  .customer-form .field { margin-bottom: var(--sp-5); }
+  .customer-form__actions { display: flex; align-items: center; gap: var(--sp-5); flex-wrap: wrap; margin-top: var(--sp-5); }
+</style>
+
+{% schema %}
+{ "name": "Activate account", "settings": [] }
+{% endschema %}

@@ -1,0 +1,56 @@
+{% doc %}
+  Shared field set for the customer address create and edit forms.
+  @param {object} form - The customer_address form object
+  @example
+  {% render 'address-fields', form: form %}
+{% enddoc %}
+
+<div class="field">
+  <label class="field__label" for="AddrFirst-{{ form.id }}">{{ 'customer.register.first_name' | t }}</label>
+  <input type="text" class="input" id="AddrFirst-{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrLast-{{ form.id }}">{{ 'customer.register.last_name' | t }}</label>
+  <input type="text" class="input" id="AddrLast-{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrCompany-{{ form.id }}">{{ 'customer.addresses.company' | t }}</label>
+  <input type="text" class="input" id="AddrCompany-{{ form.id }}" name="address[company]" value="{{ form.company }}" autocomplete="organization">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrAddress1-{{ form.id }}">{{ 'customer.addresses.address1' | t }}</label>
+  <input type="text" class="input" id="AddrAddress1-{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrAddress2-{{ form.id }}">{{ 'customer.addresses.address2' | t }}</label>
+  <input type="text" class="input" id="AddrAddress2-{{ form.id }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrCity-{{ form.id }}">{{ 'customer.addresses.city' | t }}</label>
+  <input type="text" class="input" id="AddrCity-{{ form.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrCountry-{{ form.id }}">{{ 'customer.addresses.country' | t }}</label>
+  <select class="select" id="AddrCountry-{{ form.id }}" name="address[country]" data-default="{{ form.country }}" autocomplete="country">
+    {{ all_country_option_tags }}
+  </select>
+</div>
+<div class="field">
+  <label class="field__label" for="AddrProvince-{{ form.id }}">{{ 'customer.addresses.province' | t }}</label>
+  <input type="text" class="input" id="AddrProvince-{{ form.id }}" name="address[province]" value="{{ form.province }}" autocomplete="address-level1">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrZip-{{ form.id }}">{{ 'customer.addresses.zip' | t }}</label>
+  <input type="text" class="input" id="AddrZip-{{ form.id }}" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code">
+</div>
+<div class="field">
+  <label class="field__label" for="AddrPhone-{{ form.id }}">{{ 'customer.addresses.phone' | t }}</label>
+  <input type="tel" class="input" id="AddrPhone-{{ form.id }}" name="address[phone]" value="{{ form.phone }}" autocomplete="tel">
+</div>
+<script>
+  /* Preselect the saved country for this form's select. */
+  (function () {
+    var select = document.getElementById('AddrCountry-{{ form.id }}');
+    if (select && select.dataset.default) select.value = select.dataset.default;
+  })();
+</script>

@@ -1,0 +1,41 @@
+<div class="section" data-section-id="{{ section.id }}">
+  <div class="page-width page-width--narrow">
+    <span class="eyebrow">{{ 'customer.account.title' | t }}</span>
+    <h1>{{ 'customer.register.title' | t }}</h1>
+
+    {% form 'create_customer', class: 'customer-form' %}
+      {% if form.errors %}
+        <p class="field__error">{{ form.errors | default_errors }}</p>
+      {% endif %}
+      <div class="field">
+        <label class="field__label" for="RegisterFirstName">{{ 'customer.register.first_name' | t }}</label>
+        <input type="text" class="input" id="RegisterFirstName" name="customer[first_name]" autocomplete="given-name">
+      </div>
+      <div class="field">
+        <label class="field__label" for="RegisterLastName">{{ 'customer.register.last_name' | t }}</label>
+        <input type="text" class="input" id="RegisterLastName" name="customer[last_name]" autocomplete="family-name">
+      </div>
+      <div class="field">
+        <label class="field__label" for="RegisterEmail">{{ 'customer.login.email' | t }}</label>
+        <input type="email" class="input" id="RegisterEmail" name="customer[email]" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label class="field__label" for="RegisterPassword">{{ 'customer.login.password' | t }}</label>
+        <input type="password" class="input" id="RegisterPassword" name="customer[password]" autocomplete="new-password" required>
+      </div>
+      <div class="customer-form__actions">
+        <button type="submit" class="btn btn--primary">{{ 'customer.register.submit' | t }}</button>
+        <a class="link" href="{{ routes.account_login_url }}">{{ 'customer.register.login' | t }}</a>
+      </div>
+    {% endform %}
+  </div>
+</div>
+
+<style>
+  .customer-form .field { margin-bottom: var(--sp-5); }
+  .customer-form__actions { display: flex; align-items: center; gap: var(--sp-5); flex-wrap: wrap; margin-top: var(--sp-5); }
+</style>
+
+{% schema %}
+{ "name": "Register", "settings": [] }
+{% endschema %}

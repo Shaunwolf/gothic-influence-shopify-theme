@@ -1,0 +1,86 @@
+<div class="section" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <span class="eyebrow">{{ 'customer.account.title' | t }}</span>
+    <h1>{{ order.name }}</h1>
+    {%- assign order_date = order.created_at | date: format: 'date' -%}
+    <p class="lede">{{ 'customer.order.placed_on' | t: date: order_date }}</p>
+    <p><a class="link" href="{{ routes.account_url }}">{{ 'customer.order.back' | t }}</a></p>
+
+    <div style="overflow-x: auto;">
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>{{ 'customer.order.product' | t }}</th>
+            <th>{{ 'customer.order.quantity' | t }}</th>
+            <th>{{ 'customer.order.price' | t }}</th>
+            <th>{{ 'customer.order.total' | t }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for line_item in order.line_items %}
+            <tr>
+              <td>
+                {% if line_item.product.url %}
+                  <a class="link" href="{{ line_item.product.url }}">{{ line_item.title }}</a>
+                {% else %}
+                  {{ line_item.title }}
+                {% endif %}
+              </td>
+              <td>{{ line_item.quantity }}</td>
+              <td>{{ line_item.final_price | money }}</td>
+              <td>{{ line_item.final_line_price | money }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">{{ 'customer.order.subtotal' | t }}</td>
+            <td>{{ order.line_items_subtotal_price | money }}</td>
+          </tr>
+          {% for shipping_method in order.shipping_methods %}
+            <tr>
+              <td colspan="3">{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})</td>
+              <td>{{ shipping_method.price | money }}</td>
+            </tr>
+          {% endfor %}
+          {% for tax_line in order.tax_lines %}
+            <tr>
+              <td colspan="3">{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</td>
+              <td>{{ tax_line.price | money }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="3"><strong>{{ 'customer.order.total' | t }}</strong></td>
+            <td><strong>{{ order.total_net_amount | money }}</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="order-addresses">
+      {% if order.billing_address %}
+        <div>
+          <h2>{{ 'customer.order.billing_address' | t }}</h2>
+          <p>{{ order.billing_address | format_address }}</p>
+        </div>
+      {% endif %}
+      {% if order.shipping_address %}
+        <div>
+          <h2>{{ 'customer.order.shipping_address' | t }}</h2>
+          <p>{{ order.shipping_address | format_address }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .order-table { width: 100%; border-collapse: collapse; }
+  .order-table th, .order-table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-line); }
+  .order-table th { font-size: var(--fs-xs); letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--color-text-muted); }
+  .order-addresses { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-6); margin-top: var(--sp-7); }
+</style>
+
+{% schema %}
+{ "name": "Order", "settings": [] }
+{% endschema %}
