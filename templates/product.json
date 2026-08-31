@@ -2,7 +2,59 @@
   "sections": {
     "main": {
       "type": "product-main",
-      "settings": {}
+      "blocks": {
+        "eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "Luxury home decor",
+            "style": "eyebrow"
+          }
+        },
+        "title": {
+          "type": "title"
+        },
+        "price": {
+          "type": "price"
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {
+            "low_stock_threshold": 10
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker"
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true
+          }
+        },
+        "description": {
+          "type": "description"
+        },
+        "care": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Materials & care",
+            "open_default": false
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "price",
+        "inventory",
+        "variant_picker",
+        "buy_buttons",
+        "description",
+        "care"
+      ],
+      "settings": {
+        "sticky_info": true
+      }
     },
     "sticky_atc": {
       "type": "sticky-atc",
