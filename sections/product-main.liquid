@@ -57,6 +57,53 @@
   .product .accordion {
     margin-top: var(--sp-5, 1.5rem);
   }
+
+  .product__specs {
+    margin: var(--sp-5, 1.5rem) 0;
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm, 0.85rem);
+  }
+
+  .specs-table th,
+  .specs-table td {
+    text-align: left;
+    padding: var(--sp-3, 0.75rem) var(--sp-4, 1rem);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .specs-table th {
+    font-weight: var(--fw-medium, 500);
+    color: var(--color-text-muted);
+    width: 40%;
+  }
+
+  .product__reviews {
+    margin: var(--sp-5, 1.5rem) 0;
+  }
+
+  .product__rating {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2, 0.5rem);
+  }
+
+  .product__rating .star {
+    color: var(--color-line);
+    font-size: 1.1rem;
+  }
+
+  .product__rating .star--filled {
+    color: var(--color-accent);
+  }
+
+  .product__rating-count {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm, 0.85rem);
+  }
 </style>
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
@@ -183,10 +230,119 @@
 
         {% when 'custom_liquid' %}
           <div {{ block.shopify_attributes }}>{{ block.settings.custom_liquid }}</div>
+
+        {% when 'variant_gallery' %}
+          <div data-variant-media-filter hidden {{ block.shopify_attributes }}></div>
+
+        {% when 'specifications' %}
+          <div class="product__specs" {{ block.shopify_attributes }}>
+            {% if block.settings.heading != blank %}<h3 class="h4">{{ block.settings.heading }}</h3>{% endif %}
+            <table class="specs-table">
+              <tbody>
+                {% if block.settings.show_vendor and product.vendor != blank %}
+                  <tr><th scope="row">Brand</th><td>{{ product.vendor }}</td></tr>
+                {% endif %}
+                {% if block.settings.show_type and product.type != blank %}
+                  <tr><th scope="row">Type</th><td>{{ product.type }}</td></tr>
+                {% endif %}
+                {% if block.settings.show_sku and current_variant.sku != blank %}
+                  <tr><th scope="row">SKU</th><td>{{ current_variant.sku }}</td></tr>
+                {% endif %}
+                {% if block.settings.show_weight and current_variant.weight > 0 %}
+                  <tr><th scope="row">Weight</th><td>{{ current_variant.weight | weight_with_unit }}</td></tr>
+                {% endif %}
+                {% for i in (1..4) %}
+                  {%- liquid
+                    assign label_key = 'label_' | append: i
+                    assign field_key = 'metafield_' | append: i
+                    assign row_label = block.settings[label_key]
+                    assign row_field = block.settings[field_key]
+                  -%}
+                  {% if row_label != blank and row_field != blank %}
+                    {%- assign parts = row_field | split: '.' -%}
+                    {% if parts.size == 2 %}
+                      {%- assign mf = product.metafields[parts[0]][parts[1]] -%}
+                      {% if mf != blank %}
+                        <tr><th scope="row">{{ row_label }}</th><td>{{ mf | metafield_text }}</td></tr>
+                      {% endif %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        {% when 'reviews' %}
+          <div class="product__reviews" {{ block.shopify_attributes }}>
+            {% if block.settings.heading != blank %}<h3 class="h4">{{ block.settings.heading }}</h3>{% endif %}
+            {%- assign rating_value = product.metafields.reviews.rating.value -%}
+            {%- assign rating_count = product.metafields.reviews.rating_count.value -%}
+            {% if rating_value %}
+              {%- assign rating_rounded = rating_value.rating | times: 1 | round -%}
+              <div class="product__rating" role="img" aria-label="Rated {{ rating_value.rating }} out of {{ rating_value.scale_max }} stars">
+                {% for i in (1..5) %}<span class="star{% if i <= rating_rounded %} star--filled{% endif %}" aria-hidden="true">&#9733;</span>{% endfor %}
+                <span class="product__rating-count">{{ rating_value.rating }}{% if rating_count %} &middot; {{ rating_count }} review{% if rating_count != 1 %}s{% endif %}{% endif %}</span>
+              </div>
+            {% elsif block.settings.show_judgeme != true %}
+              <p class="product__rating-count">No reviews yet.</p>
+            {% endif %}
+            {% if block.settings.show_judgeme %}
+              {%- comment -%}
+                Renders only when the Judge.me app embed is enabled; the star
+                fallback above still works without the app.
+              {%- endcomment -%}
+              <div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}"></div>
+            {% endif %}
+          </div>
       {% endcase %}
     {% endfor %}
   </div>
 </section>
+
+{%- assign variant_filter_block = section.blocks | where: 'type', 'variant_gallery' | first -%}
+{% if variant_filter_block %}
+  <script>
+    /* Variant media filter: gallery entries whose alt text starts with the
+       prefix (default "#") are shown only while the matching option value is
+       selected; untagged media always shows. Runs after theme.js's own
+       variant handling via the bubbled change event. */
+    (function () {
+      var root = document.querySelector('[data-section-id="{{ section.id }}"]');
+      if (!root) return;
+      var picker = root.querySelector('variant-picker');
+      var prefix = {{ variant_filter_block.settings.alt_prefix | default: '#' | json }};
+
+      function selectedValues() {
+        if (!picker) return [];
+        return Array.from(picker.querySelectorAll('input[type="radio"]:checked, select'))
+          .map(function (el) { return el.value.toLowerCase(); });
+      }
+
+      function apply() {
+        var values = selectedValues();
+        var entries = root.querySelectorAll('.gallery__slide, .gallery__thumb');
+        entries.forEach(function (el) {
+          var img = el.querySelector('img');
+          var alt = (img && img.getAttribute('alt')) || el.getAttribute('aria-label') || '';
+          if (alt.indexOf(prefix) !== 0) { el.hidden = false; return; }
+          var tag = alt.slice(prefix.length).trim().toLowerCase();
+          el.hidden = values.indexOf(tag) === -1;
+        });
+        var gallery = root.querySelector('media-gallery');
+        var active = root.querySelector('.gallery__slide.is-active');
+        if (gallery && active && active.hidden) {
+          var firstVisible = root.querySelector('.gallery__slide:not([hidden])');
+          if (firstVisible) gallery.selectByMediaId(firstVisible.dataset.mediaId);
+        }
+      }
+
+      if (picker) {
+        picker.addEventListener('change', function () { setTimeout(apply, 0); });
+      }
+      apply();
+    })();
+  </script>
+{% endif %}
 
 {% schema %}
 {
@@ -303,6 +459,96 @@
           "type": "liquid",
           "id": "custom_liquid",
           "label": "Custom Liquid"
+        }
+      ]
+    },
+    {
+      "type": "variant_gallery",
+      "name": "Variant media filter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows gallery media only for the selected variant. Tag media by starting its alt text with the prefix plus the option value — e.g. \"#Green\". Untagged media always shows."
+        },
+        {
+          "type": "text",
+          "id": "alt_prefix",
+          "label": "Alt text prefix",
+          "default": "#"
+        }
+      ]
+    },
+    {
+      "type": "specifications",
+      "name": "Specifications",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Specifications"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_vendor",
+          "label": "Show brand",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_type",
+          "label": "Show product type",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sku",
+          "label": "Show SKU",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_weight",
+          "label": "Show weight",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Custom rows"
+        },
+        {
+          "type": "paragraph",
+          "content": "Each row shows a product metafield. Enter the metafield as namespace.key — e.g. custom.material. Rows with no value on a product are hidden."
+        },
+        { "type": "text", "id": "label_1", "label": "Row 1 label" },
+        { "type": "text", "id": "metafield_1", "label": "Row 1 metafield", "info": "namespace.key" },
+        { "type": "text", "id": "label_2", "label": "Row 2 label" },
+        { "type": "text", "id": "metafield_2", "label": "Row 2 metafield", "info": "namespace.key" },
+        { "type": "text", "id": "label_3", "label": "Row 3 label" },
+        { "type": "text", "id": "metafield_3", "label": "Row 3 metafield", "info": "namespace.key" },
+        { "type": "text", "id": "label_4", "label": "Row 4 label" },
+        { "type": "text", "id": "metafield_4", "label": "Row 4 metafield", "info": "namespace.key" }
+      ]
+    },
+    {
+      "type": "reviews",
+      "name": "Reviews",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Reviews"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_judgeme",
+          "label": "Show Judge.me widget",
+          "info": "Renders the full review list when the Judge.me app is installed. Without the app, the block falls back to Shopify's native star-rating metafields.",
+          "default": true
         }
       ]
     }
