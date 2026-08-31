@@ -1202,11 +1202,22 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 .scheme-surface  { background: var(--color-surface);        --scheme-bg: var(--color-surface); }
 .scheme-raised   { background: var(--color-surface-raised); --scheme-bg: var(--color-surface-raised); }
 .scheme-brand {
-  background: var(--green-800);
-  --scheme-bg: var(--green-800);
-  --color-line: color-mix(in srgb, var(--color-text) 14%, transparent);
-  --color-surface: color-mix(in srgb, var(--color-text) 6%, transparent);
+  /* The ground is always dark, so text must be the preset's light colour
+     rather than --color-text — under a light preset those are the same thing
+     and the section renders dark-on-dark. */
+  background: var(--scheme-brand-bg);
+  --scheme-bg: var(--scheme-brand-bg);
+  --color-text: var(--on-dark);
+  --color-text-muted: color-mix(in srgb, var(--on-dark) 78%, var(--scheme-brand-bg));
+  --color-text-subtle: color-mix(in srgb, var(--on-dark) 60%, var(--scheme-brand-bg));
+  /* These read --color-text AFTER it is re-pointed above, per section 9 of the
+     design system. That is deliberate here: hairlines derive from the text
+     colour actually in use on this ground. Do not "fix" it. */
+  --color-line: color-mix(in srgb, var(--color-text) 16%, transparent);
+  --color-surface: color-mix(in srgb, var(--color-text) 7%, transparent);
+  color: var(--on-dark);
 }
+.scheme-brand h1, .scheme-brand h2, .scheme-brand h3, .scheme-brand h4 { color: var(--on-dark); }
 .scheme-accent {
   background: color-mix(in srgb, var(--color-accent) 14%, var(--color-bg));
   --scheme-bg: color-mix(in srgb, var(--color-accent) 14%, var(--color-bg));

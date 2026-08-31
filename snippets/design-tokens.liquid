@@ -95,13 +95,26 @@
     assign is_light = true
   endif
 
+  comment
+    --on-dark is the preset's light colour, for text sitting on a dark ground
+    regardless of whether the preset itself is light or dark.
+    --scheme-brand-bg is the Brand scheme's ground. Darkening the brand hue by
+    26 gives dark presets a rich ground, but on a light preset the brand is
+    already dark enough that darkening clamps lightness to zero and the hue is
+    lost — mulberry becomes plain black. There the brand colour itself is the
+    right ground.
+  endcomment
   if is_light
+    assign on_dark = c_bg
+    assign scheme_brand_bg = c_brand
     assign on_accent = '#ffffff'
     assign hover_tint = 'rgb(0 0 0 / 0.05)'
     assign surface_raised = c_surface | color_darken: 4
     assign line_strong = c_line | color_darken: 12
     assign text_subtle = c_muted | color_lighten: 12
   else
+    assign on_dark = c_text
+    assign scheme_brand_bg = c_brand | color_darken: 26
     assign on_accent = c_bg
     assign hover_tint = 'rgb(255 255 255 / 0.04)'
     assign surface_raised = c_surface | color_lighten: 3
@@ -140,6 +153,8 @@
      against the element's computed value, not the pre-override one. */
   --fixed-bg: {{ c_bg }};
   --fixed-text: {{ c_text }};
+  --on-dark: {{ on_dark }};
+  --scheme-brand-bg: {{ scheme_brand_bg }};
 
   --bg-rgb: {{ c_bg | color_extract: 'red' }} {{ c_bg | color_extract: 'green' }} {{ c_bg | color_extract: 'blue' }};
   --surface-rgb: {{ c_surface | color_extract: 'red' }} {{ c_surface | color_extract: 'green' }} {{ c_surface | color_extract: 'blue' }};
