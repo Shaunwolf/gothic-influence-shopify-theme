@@ -32,6 +32,25 @@
     opacity: var(--hero-overlay, 0.5);
   }
 
+  /* Second scrim concentrated behind the text block, so the photography
+     stays open at the edges while the title always clears WCAG AA — even
+     when the photo's tone runs opposite to the preset's scrim. Checked
+     against both a black and a white photo (DESIGN-SYSTEM section 3). */
+  .hero__text-scrim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 70% 85% at var(--scrim-x, 50%) 50%,
+      rgb(var(--bg-rgb) / 0.8),
+      rgb(var(--bg-rgb) / 0.4) 55%,
+      transparent 78%
+    );
+  }
+
+  .hero--align-left .hero__text-scrim { --scrim-x: 22%; }
+  .hero--align-center .hero__text-scrim { --scrim-x: 50%; }
+  .hero--align-right .hero__text-scrim { --scrim-x: 78%; }
+
   .hero-content {
     position: relative;
     z-index: 2;
@@ -62,7 +81,11 @@
   }
 
   .hero__subheading {
-    color: var(--color-text-muted);
+    /* Primary text at reduced opacity, not the muted token: the muted
+       colour lands borderline against a worst-case photo even behind
+       the text scrim. */
+    color: var(--color-text);
+    opacity: 0.85;
     max-width: 46ch;
     margin-bottom: var(--sp-6, 2rem);
   }
@@ -94,6 +117,7 @@
   {% if section.settings.background_image != blank %}
     {{ section.settings.background_image | image_url: width: 2400 | image_tag: class: 'hero__media', loading: 'eager', fetchpriority: 'high', alt: section.settings.heading }}
     <div class="hero__overlay"></div>
+    <div class="hero__text-scrim" aria-hidden="true"></div>
   {% endif %}
 
   <div class="hero-content">
@@ -142,6 +166,7 @@
       "type": "range",
       "id": "overlay_opacity",
       "label": "Image overlay",
+      "info": "Base wash across the whole image. A second scrim automatically strengthens behind the text, so the photo can stay open at the edges.",
       "min": 0,
       "max": 90,
       "step": 5,

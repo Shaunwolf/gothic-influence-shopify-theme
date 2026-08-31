@@ -114,9 +114,22 @@ everything conditional from that single value:
 6–10:1 on the dark presets, but Porcelain's darker gold needs white — 4.59:1.
 Hardcoding either one breaks half the presets.
 
-**What deliberately stays dark:** the hero scrim, collection-tile gradients,
-the drawer scrim, and lookbook hotspots. Those overlay photography with white
-text on top, and must stay dark regardless of preset. Don't "fix" them.
+**What deliberately stays dark:** collection-tile gradients, the drawer
+scrim, lantern-card caption scrims, and lookbook hotspot backgrounds. Those
+overlay photography with white text on top, and must stay dark regardless of
+preset. Don't "fix" them.
+
+**The exception — the hero** flips its scrim with the preset (`--color-bg`)
+because its text uses the preset tokens too; scrim and text move together.
+That only works because a second radial scrim sits behind the text block
+(see `hero.liquid`), which brings the worst case to ~9:1 even at 0% base
+overlay.
+
+**The rule that catches this trap:** any overlay whose colour flips with the
+preset must be contrast-checked against BOTH a black and a white photo, not
+just against its own preset's ground. Each preset fails when the merchant's
+photo runs opposite to its scrim — Gothic with a bright airy hero shot is the
+common real-world case, and it is the default preset.
 
 ### Contrast
 
