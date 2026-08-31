@@ -161,7 +161,51 @@ The one thing to watch: the product card's full-card click target uses a stretch
 
 ---
 
-## 8. Extending it
+## 8. Liquid house rules
+
+Three separate passes over this theme hit the same four traps. They all pass a
+casual read and fail `shopify theme check`, so they are worth memorising.
+
+**Never end a named argument with a filter if another argument follows.**
+The filter chain swallows the comma and everything after it.
+
+```liquid
+{%- comment -%} breaks: "Filter 'escape' has trailing characters" {%- endcomment -%}
+{{ img | image_tag: alt: product.title | escape, class: 'card__img' }}
+
+{%- comment -%} correct — image_tag escapes attribute values itself {%- endcomment -%}
+{{ img | image_tag: alt: product.title, class: 'card__img' }}
+```
+
+The same applies to `t:` named arguments. If a value genuinely needs a filter,
+`assign` it first and pass the variable.
+
+**Inside a `liquid` tag, every line is a separate statement.** A filter chain
+cannot wrap.
+
+```liquid
+{%- comment -%} breaks {%- endcomment -%}
+{%- liquid
+  assign total = a.size
+    | plus: b.size
+-%}
+
+{%- comment -%} correct {%- endcomment -%}
+{%- liquid
+  assign total = a.size | plus: b.size
+-%}
+```
+
+**`form` only exists inside `{% form %}`.** A `form.posted_successfully?` or
+`form.errors` check placed after `{% endform %}` is silently always false, so
+the success message never appears. Put both inside the form.
+
+**Do not write Liquid tag syntax inside a comment.** The parser still reads it.
+Refer to a `liquid` tag or a `form` tag in prose instead of `{% ... %}`.
+
+---
+
+## 9. Extending it
 
 When you add a section:
 
