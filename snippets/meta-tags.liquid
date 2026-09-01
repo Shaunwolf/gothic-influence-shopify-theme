@@ -88,9 +88,15 @@
         "@type": "WebSite",
         "name": {{ shop.name | json }},
         "url": {{ shop.url | json }},
+        {%- comment -%}
+          The literal {search_term_string} braces cannot sit inside an output
+          tag — Shopify's server-side parser fails to find the closing }}.
+          Built via capture instead, where single braces are plain text.
+        {%- endcomment -%}
+        {%- capture search_action_target -%}{{ shop.url }}{{ routes.search_url }}?q={search_term_string}{%- endcapture -%}
         "potentialAction": {
           "@type": "SearchAction",
-          "target": {{ shop.url | append: routes.search_url | append: '?q={search_term_string}' | json }},
+          "target": {{ search_action_target | json }},
           "query-input": "required name=search_term_string"
         }
       }

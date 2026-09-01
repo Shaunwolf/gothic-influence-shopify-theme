@@ -40,7 +40,8 @@
                     {%- endunless -%}
 
                     {%- for property in item.properties -%}
-                      {%- unless property.last == blank or property.first startswith '_' -%}
+                      {%- assign prop_prefix = property.first | slice: 0, 1 -%}
+                      {%- unless property.last == blank or prop_prefix == '_' -%}
                         <p class="cart-item__variant">{{ property.first }}: {{ property.last }}</p>
                       {%- endunless -%}
                     {%- endfor -%}
