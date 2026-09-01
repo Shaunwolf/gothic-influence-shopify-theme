@@ -170,10 +170,35 @@
           </div>
 
           <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm">
+            {%- if settings.checkout_terms_required -%}
+              <label class="facet__option" style="margin-bottom: var(--sp-4);">
+                <input type="checkbox" required data-terms-gate>
+                <span>
+                  {%- if settings.checkout_terms_link != blank -%}
+                    {{ 'sections.cart.terms_agree_linked' | t: url: settings.checkout_terms_link }}
+                  {%- else -%}
+                    {{ 'sections.cart.terms_agree' | t }}
+                  {%- endif -%}
+                </span>
+              </label>
+            {%- endif -%}
             <button type="submit" name="checkout" class="btn btn--primary btn--full btn--lg">
               {{ 'sections.cart.checkout' | t }}
             </button>
+
+            {%- if settings.checkout_dynamic_buttons and additional_checkout_buttons -%}
+              <div style="margin-top: var(--sp-3);">{{ content_for_additional_checkout_buttons }}</div>
+            {%- endif -%}
           </form>
+
+          {%- if settings.checkout_show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+            <div class="payment-icons" style="justify-content: center; margin-top: var(--sp-4);"
+                 role="list" aria-label="{{ 'sections.footer.payment_methods' | t }}">
+              {%- for type in shop.enabled_payment_types -%}
+                <span role="listitem">{{ type | payment_type_svg_tag: class: 'payment-icon' }}</span>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
 
           <p class="cart-note">{{ 'sections.cart.taxes_note' | t }}</p>
         </div>

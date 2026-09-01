@@ -95,12 +95,14 @@
 
     {%- comment -%} Right: search, account, cart {%- endcomment -%}
     <div class="header__actions">
-      <button type="button"
-              class="icon-btn"
-              data-drawer-open="SearchDrawer"
-              aria-label="{{ 'general.search.search' | t }}">
-        {% render 'icon', name: 'search', size: 20 %}
-      </button>
+      {%- if settings.search_enabled -%}
+        <button type="button"
+                class="icon-btn"
+                data-drawer-open="SearchDrawer"
+                aria-label="{{ 'general.search.search' | t }}">
+          {% render 'icon', name: 'search', size: 20 %}
+        </button>
+      {%- endif -%}
 
       {%- if shop.customer_accounts_enabled -%}
         <a href="{{ routes.account_url }}"
@@ -108,6 +110,16 @@
            aria-label="{{ 'customer.account.title' | t }}">
           {% render 'icon', name: 'user', size: 20 %}
         </a>
+      {%- endif -%}
+
+      {%- if settings.grimoire_enable -%}
+        <button type="button"
+                class="icon-btn"
+                data-drawer-open="GrimoireDrawer"
+                aria-label="{{ settings.grimoire_heading | default: 'The Grimoire' }}">
+          {% render 'icon', name: 'heart', size: 20 %}
+          <span class="icon-btn__count" data-grimoire-count hidden>0</span>
+        </button>
       {%- endif -%}
 
       {%- liquid
@@ -176,7 +188,7 @@
       </button>
     </div>
     <div class="drawer__body">
-      <predictive-search class="search-wrap">
+      <predictive-search class="search-wrap"{% unless settings.search_predictive %} data-disabled="true"{% endunless %}>
         <form action="{{ routes.search_url }}" method="get" role="search">
           <label class="visually-hidden" for="SearchInput">{{ 'general.search.search' | t }}</label>
           <input type="search"

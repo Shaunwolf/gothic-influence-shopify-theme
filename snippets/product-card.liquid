@@ -69,6 +69,20 @@
 {%- else -%}
   <div class="card{{ card_class }} {% if reveal %}reveal{% endif %}"
        {% if ratio %}style="--card-ratio: {{ ratio }};"{% endif %}>
+    {%- comment -%}
+      Heart sits on .card, not inside .card__media — the masked silhouettes
+      (gothic, lancet, keyhole, trefoil, scallop) clip media children.
+    {%- endcomment -%}
+    {%- if settings.grimoire_enable -%}
+      <button type="button"
+              class="grimoire-toggle"
+              data-grimoire-toggle
+              data-handle="{{ p.handle }}"
+              aria-pressed="false"
+              aria-label="{{ 'grimoire.save' | t }}">
+        {% render 'icon', name: 'heart', size: 16 %}
+      </button>
+    {%- endif -%}
     <div class="card__media card__media--{{ shape }}">
       {%- if p.featured_media -%}
         {{
@@ -97,14 +111,59 @@
         {{ 'product-1' | placeholder_svg_tag: 'card__img' }}
       {%- endif -%}
 
-      <div class="card__badges">
-        {%- if sold_out -%}
-          <span class="badge badge--out">{{ 'products.product.sold_out' | t }}</span>
-        {%- elsif on_sale and settings.card_show_sale_badge -%}
-          {%- assign pct = p.compare_at_price | minus: p.price | times: 100.0 | divided_by: p.compare_at_price | round -%}
-          <span class="badge badge--sale">{{ 'products.product.save_percent' | t: percent: pct }}</span>
-        {%- endif -%}
-      </div>
+      {%- liquid
+        comment
+          Badge rules live here rather than in the markup so the conditions
+          stay readable. Order matters: sold out outranks everything, then a
+          merchant's custom tag, then sale, then new.
+        endcomment
+        assign show_badge = ''
+        assign badge_text = ''
+        assign badge_kind = 'plain'
+
+        if settings.badge_sold_out and sold_out
+          assign show_badge = 'yes'
+          assign badge_text = 'products.product.sold_out' | t
+          assign badge_kind = 'out'
+        elsif settings.badge_custom_tag != blank and p.tags contains settings.badge_custom_tag
+          assign show_badge = 'yes'
+          assign badge_text = settings.badge_custom_tag
+          assign badge_kind = 'sale'
+        elsif settings.badge_sale and on_sale
+          assign show_badge = 'yes'
+          assign badge_kind = 'sale'
+          case settings.badge_sale_style
+            when 'amount'
+              assign saved = p.compare_at_price | minus: p.price | money
+              assign badge_text = 'products.product.save_amount' | t: amount: saved
+            when 'word'
+              assign badge_text = 'products.product.on_sale' | t
+            else
+              assign pct = p.compare_at_price | minus: p.price | times: 100.0 | divided_by: p.compare_at_price | round
+              assign badge_text = 'products.product.save_percent' | t: percent: pct
+          endcase
+        elsif settings.badge_new
+          comment
+            Both sides have to be integers before minus. Chaining
+            `| minus: p.created_at` hands minus a datetime, which coerces to 0,
+            so age came out as the current epoch and the badge never showed.
+          endcomment
+          assign cutoff = settings.badge_new_days | times: 86400
+          assign created_at_s = p.created_at | date: '%s' | plus: 0
+          assign now_s = 'now' | date: '%s' | plus: 0
+          assign age = now_s | minus: created_at_s
+          if age < cutoff
+            assign show_badge = 'yes'
+            assign badge_text = 'products.product.new_in' | t
+          endif
+        endif
+      -%}
+
+      {%- if show_badge != blank -%}
+        <div class="card__badges">
+          <span class="badge badge--{{ badge_kind }}">{{ badge_text }}</span>
+        </div>
+      {%- endif -%}
 
       {%- if settings.card_quick_add and p.available -%}
         <div class="card__quick">
@@ -135,17 +194,28 @@
       {% render 'price', target: p, show_unit: true %}
 
       {%- if settings.card_show_swatches -%}
+        {%- assign swatch_names = settings.swatch_option_names | default: 'Color' | split: ',' -%}
         {%- for option in p.options_with_values -%}
-          {%- if option.name == settings.swatch_option_name -%}
+          {%- liquid
+            assign is_swatch = false
+            for name in swatch_names
+              assign trimmed = name | strip
+              if option.name == trimmed
+                assign is_swatch = true
+              endif
+            endfor
+          -%}
+          {%- if is_swatch -%}
+            {%- assign cap = settings.swatch_max | default: 5 -%}
             <div class="swatches" role="list" aria-label="{{ option.name }}">
-              {%- for value in option.values limit: 5 -%}
+              {%- for value in option.values limit: cap -%}
                 <span class="swatch"
                       role="listitem"
                       title="{{ value | escape }}"
                       style="background-color: {{ value | downcase | replace: ' ', '' }};"></span>
               {%- endfor -%}
-              {%- if option.values.size > 5 -%}
-                <span class="swatch--more">+{{ option.values.size | minus: 5 }}</span>
+              {%- if option.values.size > cap -%}
+                <span class="swatch--more">+{{ option.values.size | minus: cap }}</span>
               {%- endif -%}
             </div>
           {%- endif -%}

@@ -1542,3 +1542,11 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   color: rgb(255 255 255 / 0.45); pointer-events: none;
 }
 zoom-image { display: block; cursor: zoom-in; }
+
+/* Cart assurances — the shipping and returns notes beside checkout. */
+.cart-assurances { list-style: none; padding: 0; margin-bottom: var(--sp-4); display: grid; gap: var(--sp-2); }
+.cart-assurances li {
+  display: flex; align-items: center; gap: var(--sp-2);
+  font-size: var(--fs-sm); color: var(--color-text-muted);
+}
+.cart-assurances svg { color: var(--color-accent); flex: 0 0 auto; }

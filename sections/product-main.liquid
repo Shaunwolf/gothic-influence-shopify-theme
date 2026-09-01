@@ -55,6 +55,28 @@
     margin-top: var(--sp-5, 1.5rem);
   }
 
+  .product__assurances {
+    list-style: none;
+    margin: var(--sp-5, 1.5rem) 0 0;
+    padding: var(--sp-4, 1rem) 0 0;
+    border-top: 1px solid var(--color-line);
+    display: grid;
+    gap: var(--sp-2, 0.5rem);
+  }
+
+  .product__assurances li {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2, 0.5rem);
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm, 0.85rem);
+  }
+
+  .product__assurances svg {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
   .product__specs {
     margin: var(--sp-5, 1.5rem) 0;
   }
@@ -133,9 +155,17 @@
           </div>
 
         {% when 'inventory' %}
+          {%- comment -%}
+            Low-stock messaging follows the global Shipping & delivery
+            settings (ship_show_stock / ship_low_stock); the block's own
+            threshold acts as a per-template override when changed.
+          {%- endcomment -%}
+          {%- liquid
+            assign low_threshold = block.settings.low_stock_threshold | default: settings.ship_low_stock | default: 10
+          -%}
           <div class="product__inventory" data-inventory-block {{ block.shopify_attributes }}>
             {%- if current_variant.available -%}
-              {%- if current_variant.inventory_management != blank and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= block.settings.low_stock_threshold -%}
+              {%- if settings.ship_show_stock and current_variant.inventory_management != blank and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= low_threshold -%}
                 <span class="eyebrow">Only {{ current_variant.inventory_quantity }} left</span>
               {%- endif -%}
             {%- else -%}
@@ -295,6 +325,22 @@
           </div>
       {% endcase %}
     {% endfor %}
+
+    {%- comment -%}
+      Shipping & returns assurances from the global Shipping & delivery
+      settings — same wiring as the cart page, so the promise a customer
+      sees at the cart matches the one on the product.
+    {%- endcomment -%}
+    {%- if settings.ship_show_estimate or settings.ship_show_returns -%}
+      <ul class="product__assurances" role="list">
+        {%- if settings.ship_show_estimate and settings.ship_estimate_text != blank -%}
+          <li>{% render 'icon', name: 'truck', size: 15 %}{{ settings.ship_estimate_text }}</li>
+        {%- endif -%}
+        {%- if settings.ship_show_returns and settings.ship_returns_text != blank -%}
+          <li>{% render 'icon', name: 'shield', size: 15 %}{{ settings.ship_returns_text }}</li>
+        {%- endif -%}
+      </ul>
+    {%- endif -%}
   </div>
   </div>
   </div>

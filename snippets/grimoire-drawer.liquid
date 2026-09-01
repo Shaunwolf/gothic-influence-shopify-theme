@@ -1,0 +1,140 @@
+{% doc %}
+  The Grimoire — wishlist drawer. Saved product handles live in the
+  browser (localStorage key gi:grimoire); the drawer fetches each
+  /products/<handle>.js when opened and renders the list client-side.
+  Open/close is handled by theme.js's generic [data-drawer-open] wiring;
+  assets/grimoire.js owns state, rendering and the heart toggles.
+  @example
+  {% render 'grimoire-drawer' %}
+{% enddoc %}
+
+<grimoire-drawer id="GrimoireDrawer" class="drawer" aria-hidden="true">
+  <div class="drawer__scrim" data-drawer-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="{{ settings.grimoire_heading | default: 'The Grimoire' }}">
+    <div class="drawer__head">
+      <span class="drawer__title">{{ settings.grimoire_heading | default: 'The Grimoire' }}</span>
+      <button type="button" class="icon-btn" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon', name: 'close', size: 20 %}
+      </button>
+    </div>
+    <div class="drawer__body" data-grimoire-list aria-live="polite">
+      <div class="empty-state" data-grimoire-empty>
+        <p>{{ 'grimoire.empty' | t }}</p>
+        <p class="grimoire__hint">{{ 'grimoire.empty_hint' | t }}</p>
+      </div>
+    </div>
+  </div>
+</grimoire-drawer>
+
+<style>
+  .grimoire__hint {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm, 0.85rem);
+  }
+
+  .grimoire-item {
+    display: flex;
+    gap: var(--sp-4, 1rem);
+    align-items: center;
+    padding: var(--sp-4, 1rem) 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .grimoire-item__img {
+    width: 72px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: var(--radius-sm, 2px);
+    border: 1px solid var(--color-line);
+    flex-shrink: 0;
+  }
+
+  .grimoire-item__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .grimoire-item__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-md, 1rem);
+    color: var(--color-text);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .grimoire-item__title:hover {
+    color: var(--color-accent-text);
+  }
+
+  .grimoire-item__price {
+    color: var(--color-accent-text);
+    font-size: var(--fs-sm, 0.85rem);
+  }
+
+  .grimoire-item__sold-out {
+    color: var(--color-text-muted);
+    font-size: var(--fs-xs, 0.75rem);
+    letter-spacing: var(--track-caps, 0.18em);
+    text-transform: uppercase;
+  }
+
+  .grimoire-item__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2, 0.5rem);
+    align-items: flex-end;
+  }
+
+  .grimoire-item__remove {
+    background: none;
+    border: none;
+    color: var(--color-text-subtle);
+    font-size: var(--fs-xs, 0.75rem);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+  }
+
+  .grimoire-item__remove:hover {
+    color: var(--color-text);
+  }
+
+  /* Heart toggle on product cards: quiet until saved. */
+  .grimoire-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    background: rgb(var(--bg-rgb) / 0.55);
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+    color: var(--color-text);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--dur-2, 0.2s) var(--ease-out, ease), color var(--dur-2, 0.2s);
+  }
+
+  .card:hover .grimoire-toggle,
+  .grimoire-toggle.is-saved,
+  .grimoire-toggle:focus-visible {
+    opacity: 1;
+  }
+
+  .grimoire-toggle.is-saved {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .grimoire-toggle.is-saved svg {
+    fill: currentColor;
+  }
+
+  @media (hover: none) {
+    .grimoire-toggle { opacity: 1; }
+  }
+</style>

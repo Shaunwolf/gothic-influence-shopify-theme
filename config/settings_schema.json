@@ -369,18 +369,6 @@
         "default": true
       },
       {
-        "type": "text",
-        "id": "swatch_option_name",
-        "label": "Colour option name",
-        "default": "Color"
-      },
-      {
-        "type": "checkbox",
-        "id": "card_show_sale_badge",
-        "label": "Show sale badge",
-        "default": true
-      },
-      {
         "type": "header",
         "content": "Image zoom"
       },
@@ -447,6 +435,27 @@
           }
         ],
         "default": "both"
+      }
+    ]
+  },
+  {
+    "name": "Grimoire (wishlist)",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "A save-for-later list kept in the visitor's browser — no account or app needed. Hearts appear on product cards; saved pieces live in a drawer opened from the header."
+      },
+      {
+        "type": "checkbox",
+        "id": "grimoire_enable",
+        "label": "Enable the Grimoire",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "grimoire_heading",
+        "label": "Drawer heading",
+        "default": "The Grimoire"
       }
     ]
   },
@@ -1096,13 +1105,6 @@
         "type": "checkbox",
         "id": "perf_lazy_sections",
         "label": "Defer offscreen section images",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "perf_preload_hero",
-        "label": "Preload the first hero image",
-        "info": "Improves Largest Contentful Paint on the homepage.",
         "default": true
       }
     ]

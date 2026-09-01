@@ -89,6 +89,10 @@
         border-radius: {% if settings.swatch_shape == 'square' %}var(--radius-sm){% else %}50%{% endif %};
       }
 
+      {%- unless settings.perf_lazy_sections -%}
+        /* Merchant opted out of deferring offscreen imagery. */
+        .card__img, .tile img, .col__media img { content-visibility: visible; }
+      {%- endunless -%}
       {%- unless settings.enable_image_zoom -%}
         .card:hover .card__img { transform: none; }
       {%- endunless -%}
@@ -116,7 +120,17 @@
       window.themeConfig = {
         smoothScroll: {{ settings.smooth_scroll | json }},
         smoothScrollStrength: {{ settings.smooth_scroll_strength | json }},
-        enableZoom: {{ settings.enable_zoom | json }}
+        enableZoom: {{ settings.enable_zoom | json }},
+        search: {
+          predictive: {{ settings.search_predictive | json }},
+          limit: {{ settings.search_limit | json }},
+          types: [
+            {%- if settings.search_show_products -%}'product',{%- endif -%}
+            {%- if settings.search_show_collections -%}'collection',{%- endif -%}
+            {%- if settings.search_show_pages -%}'page',{%- endif -%}
+            {%- if settings.search_show_articles -%}'article'{%- endif -%}
+          ].filter(Boolean)
+        }
       };
     </script>
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
@@ -153,6 +167,21 @@
 
     {%- if settings.cart_type == 'drawer' -%}
       {% section 'cart-drawer' %}
+    {%- endif -%}
+
+    {%- if settings.grimoire_enable -%}
+      {% render 'grimoire-drawer' %}
+      <script>
+        window.grimoireStrings = {
+          empty: {{ 'grimoire.empty' | t | json }},
+          emptyHint: {{ 'grimoire.empty_hint' | t | json }},
+          loading: {{ 'grimoire.loading' | t | json }},
+          remove: {{ 'grimoire.remove' | t | json }},
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }}
+        };
+      </script>
+      <script src="{{ 'grimoire.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {% render 'popups' %}

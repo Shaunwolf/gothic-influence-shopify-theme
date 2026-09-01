@@ -385,6 +385,8 @@
       this.input = this.querySelector('input[type="search"]');
       this.panel = this.querySelector('[data-search-results]');
       if (!this.input || !this.panel) return;
+      /* Suggestions off: the form still submits to the search page. */
+      if (this.dataset.disabled === 'true') return;
 
       this.input.setAttribute('role', 'combobox');
       this.input.setAttribute('aria-expanded', 'false');
@@ -416,10 +418,12 @@
     async search() {
       const q = this.input.value.trim();
       if (q.length < 2) return this.hide();
+      const cfg = (window.themeConfig && window.themeConfig.search) || {};
+      const types = (cfg.types && cfg.types.length ? cfg.types : ['product']).join(',');
       const params = new URLSearchParams({
         q,
-        'resources[type]': 'product,collection,page,article',
-        'resources[limit]': '6',
+        'resources[type]': types,
+        'resources[limit]': String(cfg.limit || 6),
         section_id: 'predictive-search'
       });
       try {

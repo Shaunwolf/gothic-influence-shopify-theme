@@ -1,5 +1,11 @@
 {
   "general": {
+    "404": {
+      "code": "Error 404",
+      "title": "This page has gone dark",
+      "subtext": "The page you were looking for no longer exists, or never did.",
+      "home": "Back to home"
+    },
     "home": "Home",
     "continue_shopping": "Continue shopping",
     "breadcrumb": "Breadcrumb",
@@ -31,12 +37,6 @@
       "placeholder": "Your email address",
       "submit": "Subscribe",
       "success": "Thank you. Check your inbox to confirm."
-    },
-    "404": {
-      "code": "Error 404",
-      "title": "This page has gone dark",
-      "subtext": "The page you were looking for no longer exists, or never did.",
-      "home": "Back to home"
     },
     "password_page": {
       "title": "Opening soon",
@@ -87,7 +87,9 @@
       "taxes_note": "Taxes and shipping calculated at checkout.",
       "error": "Something went wrong. Please try again.",
       "free_shipping_progress": "You are {{ amount }} away from free shipping.",
-      "free_shipping_reached": "Your order ships free."
+      "free_shipping_reached": "Your order ships free.",
+      "terms_agree": "I agree to the terms and conditions",
+      "terms_agree_linked": "I agree to the <a href=\"{{ url }}\">terms and conditions</a>"
     },
     "collection": {
       "view_all": "View all",
@@ -121,7 +123,9 @@
       "save_percent": "Save {{ percent }}%",
       "view_details": "View details",
       "zoom_label": "Zoomed product image",
-      "zoom_hint": "Scroll, double-click or pinch to zoom"
+      "zoom_hint": "Scroll, double-click or pinch to zoom",
+      "save_amount": "Save {{ amount }}",
+      "new_in": "New in"
     }
   },
   "blogs": {
@@ -244,5 +248,13 @@
       "submit": "Send message",
       "success": "Thank you. We'll be in touch within one business day."
     }
+  },
+  "grimoire": {
+    "title": "The Grimoire",
+    "save": "Save to the Grimoire",
+    "remove": "Remove",
+    "loading": "Opening the Grimoire…",
+    "empty": "Your Grimoire is empty",
+    "empty_hint": "Save pieces you are considering and they will wait for you here."
   }
 }
