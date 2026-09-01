@@ -390,19 +390,20 @@
         "label": "Zoom product images",
         "info": "Click to open full screen; scroll, double-click or pinch to magnify. Decor sells on texture, so this matters more here than on most stores.",
         "default": true
-      },
-      {
-        "type": "header",
-        "content": "Image treatment"
-      },
+      }
+    ]
+  },
+  {
+    "name": "Image treatments",
+    "settings": [
       {
         "type": "paragraph",
-        "content": "Frames every product-card photo at render time — no photo editing needed, and it re-tints with the design preset."
+        "content": "One global look for product imagery, applied at render time — no photo editing, and the framing re-tints with the design preset."
       },
       {
         "type": "select",
         "id": "image_treatment",
-        "label": "Product image treatment",
+        "label": "Treatment",
         "options": [
           {
             "value": "none",
@@ -419,9 +420,33 @@
           {
             "value": "plate",
             "label": "Plate — engraved catalogue frame"
+          },
+          {
+            "value": "gaslight",
+            "label": "Gaslight — hanging lantern"
           }
         ],
         "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "image_treatment_scope",
+        "label": "Apply to",
+        "options": [
+          {
+            "value": "cards",
+            "label": "Product cards only"
+          },
+          {
+            "value": "gallery",
+            "label": "Product page gallery only"
+          },
+          {
+            "value": "both",
+            "label": "Cards and product gallery"
+          }
+        ],
+        "default": "both"
       }
     ]
   },

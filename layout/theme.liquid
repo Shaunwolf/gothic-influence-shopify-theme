@@ -126,7 +126,19 @@
     {{ settings.custom_head }}
   </head>
 
-  <body class="template-{{ template.name | handle }}{% if settings.image_treatment != 'none' and settings.image_treatment != blank %} treat-{{ settings.image_treatment }}{% endif %}"
+  {%- liquid
+    assign treat_classes = ''
+    if settings.image_treatment != 'none' and settings.image_treatment != blank
+      assign treat_classes = ' treat-' | append: settings.image_treatment
+      if settings.image_treatment_scope == 'cards' or settings.image_treatment_scope == 'both'
+        assign treat_classes = treat_classes | append: ' tscope-cards'
+      endif
+      if settings.image_treatment_scope == 'gallery' or settings.image_treatment_scope == 'both'
+        assign treat_classes = treat_classes | append: ' tscope-gallery'
+      endif
+    endif
+  -%}
+  <body class="template-{{ template.name | handle }}{{ treat_classes }}"
         {%- if template.name == "product" %} data-product-handle="{{ product.handle }}"{% endif -%}>
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
     {% render 'image-treatment-defs' %}

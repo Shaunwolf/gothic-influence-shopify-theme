@@ -1,22 +1,35 @@
 /* ==========================================================================
    GOTHIC INFLUENCE — Product image treatments
-   Render-time framing presets for product-card media, selected by the
-   "Product image treatment" setting (Product cards group). Applied via a
-   treat-* class on <body>, so no photos need editing and the look follows
-   the active design preset's tokens.
+   One global look for product imagery, chosen in Theme settings > Image
+   treatments. Applied at render time via classes on <body>:
+     treat-<look>      which treatment (candlelight / cathedral / plate / gaslight)
+     tscope-cards      apply to product cards
+     tscope-gallery    apply to the product page gallery
+   No photos are edited, and every line follows the design-preset tokens.
+
+   Ornament colour: a data URI cannot read a CSS custom property, so the
+   SVGs are applied as MASKS and painted with background-color — only the
+   SVG's alpha matters, and the ornament follows --color-accent through
+   every preset. (See the note at the bottom; do not switch these back to
+   background-image.)
+
    The Cathedral arch clip lives in snippets/image-treatment-defs.liquid
-   (an SVG clipPath in objectBoundingBox units, so it scales with the card).
+   (an SVG clipPath in objectBoundingBox units, so it scales anywhere).
    ========================================================================== */
 
-/* --- Candlelight: one shared grade over every card photo ---------------- */
-.treat-candlelight .card__media {
+/* =========================================================================
+   1. CANDLELIGHT — one shared dark grade
+   ========================================================================= */
+
+.tscope-cards.treat-candlelight .card__media {
   position: relative;
   background: var(--color-surface);
 }
-.treat-candlelight .card__media .card__img {
+.tscope-cards.treat-candlelight .card__media .card__img {
   filter: brightness(0.94) saturate(0.78) contrast(1.06);
 }
-.treat-candlelight .card__media::after {
+.tscope-cards.treat-candlelight .card__media::after,
+.tscope-gallery.treat-candlelight .gallery__main::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -30,21 +43,48 @@
       transparent 70%);
 }
 
-/* --- Cathedral: every card photo inside a pointed gothic arch ----------- */
-.treat-cathedral .card__media {
+.tscope-gallery.treat-candlelight .gallery__main {
+  position: relative;
+  background: var(--color-surface);
+}
+.tscope-gallery.treat-candlelight .gallery__slide img {
+  filter: brightness(0.94) saturate(0.78) contrast(1.06);
+}
+
+/* =========================================================================
+   2. CATHEDRAL — pointed arch window
+   ========================================================================= */
+
+.tscope-cards.treat-cathedral .card__media {
   position: relative;
   background: transparent;
   padding: 4% 6% 0;
 }
-.treat-cathedral .card__media .card__img,
-.treat-cathedral .card__media > svg {
+.tscope-cards.treat-cathedral .card__media .card__img,
+.tscope-cards.treat-cathedral .card__media > svg {
   clip-path: url(#gi-arch-clip);
   filter: brightness(0.96) saturate(0.85);
 }
-.treat-cathedral .card__media::after {
+.tscope-cards.treat-cathedral .card__media::after {
+  inset: 4% 6% 0;
+}
+
+.tscope-gallery.treat-cathedral .gallery__main {
+  position: relative;
+  padding: 3% 4% 0;
+}
+.tscope-gallery.treat-cathedral .gallery__slide img {
+  clip-path: url(#gi-arch-clip);
+  filter: brightness(0.96) saturate(0.85);
+}
+.tscope-gallery.treat-cathedral .gallery__main::after {
+  inset: 3% 4% 0;
+}
+
+.tscope-cards.treat-cathedral .card__media::after,
+.tscope-gallery.treat-cathedral .gallery__main::after {
   content: "";
   position: absolute;
-  inset: 4% 6% 0;
   pointer-events: none;
   background-color: var(--color-accent);
   -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 130' preserveAspectRatio='none'><path d='M1 40 Q1 12 50 1 Q99 12 99 40 L99 129 L1 129 Z' fill='none' stroke='black' stroke-width='1.6' vector-effect='non-scaling-stroke'/></svg>");
@@ -55,8 +95,12 @@
           mask-repeat: no-repeat;
 }
 
-/* --- Plate: engraved-catalogue framing ---------------------------------- */
-.treat-plate .card__media {
+/* =========================================================================
+   3. PLATE — engraved catalogue frame
+   ========================================================================= */
+
+.tscope-cards.treat-plate .card__media,
+.tscope-gallery.treat-plate .gallery__main {
   position: relative;
   background: var(--color-surface);
   border: 1px solid var(--color-accent);
@@ -66,10 +110,12 @@
     0 0 0 6px color-mix(in srgb, var(--color-accent) 55%, transparent);
   margin: 6px;
 }
-.treat-plate .card__media .card__img {
+.tscope-cards.treat-plate .card__media .card__img,
+.tscope-gallery.treat-plate .gallery__slide img {
   filter: brightness(0.95) saturate(0.82) contrast(1.05);
 }
-.treat-plate .card__media::after {
+.tscope-cards.treat-plate .card__media::after,
+.tscope-gallery.treat-plate .gallery__main::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -94,20 +140,97 @@
   opacity: 0.85;
 }
 
-/* The treatments frame the photo; the hover zoom would spill past the
-   frames, so soften it to an opacity lift instead. */
-.treat-cathedral .card:hover .card__img,
-.treat-plate .card:hover .card__img {
+/* =========================================================================
+   4. GASLIGHT — hanging lantern silhouette
+   The photo becomes the tapered glass pane; a brass cap sits above and the
+   frame, ribs and base are one accent-painted mask.
+   ========================================================================= */
+
+.tscope-cards.treat-gaslight .card__media {
+  position: relative;
+  background: transparent;
+  padding: 10% 7% 5%;
+}
+.tscope-cards.treat-gaslight .card__media .card__img,
+.tscope-cards.treat-gaslight .card__media > svg {
+  clip-path: polygon(13% 0, 87% 0, 100% 100%, 0 100%);
+  filter: brightness(0.95) saturate(0.8) contrast(1.05);
+}
+.tscope-cards.treat-gaslight .card__media::before {
+  content: "";
+  position: absolute;
+  top: 2%;
+  left: 26%;
+  right: 26%;
+  height: 8%;
+  pointer-events: none;
+  background: linear-gradient(var(--color-accent-text), var(--color-accent));
+  clip-path: polygon(50% 0, 100% 70%, 94% 100%, 6% 100%, 0 70%);
+}
+.tscope-cards.treat-gaslight .card__media::after {
+  inset: 10% 7% 5%;
+}
+
+.tscope-gallery.treat-gaslight .gallery__main {
+  position: relative;
+  padding: 8% 6% 4%;
+}
+.tscope-gallery.treat-gaslight .gallery__slide img {
+  clip-path: polygon(13% 0, 87% 0, 100% 100%, 0 100%);
+  filter: brightness(0.95) saturate(0.8) contrast(1.05);
+}
+.tscope-gallery.treat-gaslight .gallery__main::before {
+  content: "";
+  position: absolute;
+  top: 1.5%;
+  left: 28%;
+  right: 28%;
+  height: 6%;
+  pointer-events: none;
+  background: linear-gradient(var(--color-accent-text), var(--color-accent));
+  clip-path: polygon(50% 0, 100% 70%, 94% 100%, 6% 100%, 0 70%);
+}
+.tscope-gallery.treat-gaslight .gallery__main::after {
+  inset: 8% 6% 4%;
+}
+
+.tscope-cards.treat-gaslight .card__media::after,
+.tscope-gallery.treat-gaslight .gallery__main::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background-color: var(--color-accent);
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g fill='none' stroke='black' vector-effect='non-scaling-stroke'><path d='M13 0.5 L87 0.5 L99.5 99.5 L0.5 99.5 Z' stroke-width='1.8'/><line x1='37.7' y1='0.5' x2='33.3' y2='99.5' stroke-width='0.9' opacity='0.55'/><line x1='62.3' y1='0.5' x2='66.7' y2='99.5' stroke-width='0.9' opacity='0.55'/><line x1='0.5' y1='97' x2='99.5' y2='97' stroke-width='1.2' opacity='0.7'/></g></svg>");
+          mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><g fill='none' stroke='black' vector-effect='non-scaling-stroke'><path d='M13 0.5 L87 0.5 L99.5 99.5 L0.5 99.5 Z' stroke-width='1.8'/><line x1='37.7' y1='0.5' x2='33.3' y2='99.5' stroke-width='0.9' opacity='0.55'/><line x1='62.3' y1='0.5' x2='66.7' y2='99.5' stroke-width='0.9' opacity='0.55'/><line x1='0.5' y1='97' x2='99.5' y2='97' stroke-width='1.2' opacity='0.7'/></g></svg>");
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+
+/* =========================================================================
+   Shared behaviour
+   ========================================================================= */
+
+/* The framed looks would let the hover zoom spill past their frames, so it
+   softens to an opacity lift instead. */
+.tscope-cards.treat-cathedral .card:hover .card__img,
+.tscope-cards.treat-plate .card:hover .card__img,
+.tscope-cards.treat-gaslight .card:hover .card__img {
   transform: none;
   opacity: 0.92;
 }
 
+/* Video, external video and 3D models in the gallery stay unframed — a
+   clipped model-viewer misleads about the interactive canvas edge. Only
+   plain images take the clip, which these selectors already ensure by
+   targeting img. */
+
 /* Ornament colour note
    ---------------------
-   A data URI cannot read a CSS custom property, so a stroke colour baked into
-   one is frozen — under Porcelain's darker gold or Cathedral's silver these
-   hairlines would stay Gothic gold and clash.
-
-   They are therefore applied as masks and painted with background-color, so
-   the stroke colour in the SVG is irrelevant (only its alpha is used) and the
-   ornament follows --color-accent through every preset. */
+   A data URI cannot read a CSS custom property, so a stroke colour baked
+   into one is frozen — under Porcelain's darker gold or Cathedral's silver
+   such hairlines would stay Gothic gold and clash. They are therefore
+   applied as masks and painted with background-color, so the stroke colour
+   in the SVG is irrelevant (only its alpha is used) and every ornament
+   follows --color-accent through all presets. */
