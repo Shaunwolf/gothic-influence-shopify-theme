@@ -390,6 +390,38 @@
         "label": "Zoom product images",
         "info": "Click to open full screen; scroll, double-click or pinch to magnify. Decor sells on texture, so this matters more here than on most stores.",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "Image treatment"
+      },
+      {
+        "type": "paragraph",
+        "content": "Frames every product-card photo at render time — no photo editing needed, and it re-tints with the design preset."
+      },
+      {
+        "type": "select",
+        "id": "image_treatment",
+        "label": "Product image treatment",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "candlelight",
+            "label": "Candlelight — unified dark grade"
+          },
+          {
+            "value": "cathedral",
+            "label": "Cathedral — pointed arch window"
+          },
+          {
+            "value": "plate",
+            "label": "Plate — engraved catalogue frame"
+          }
+        ],
+        "default": "none"
       }
     ]
   },

@@ -39,6 +39,9 @@
       assign display_bold = display_font | font_modify: 'weight', '600'
     -%}
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {%- if settings.image_treatment != 'none' and settings.image_treatment != blank -%}
+      {{ 'image-treatments.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
 
     <style>
       {{ body_font | font_face: font_display: 'swap' }}
@@ -123,9 +126,10 @@
     {{ settings.custom_head }}
   </head>
 
-  <body class="template-{{ template.name | handle }}"
+  <body class="template-{{ template.name | handle }}{% if settings.image_treatment != 'none' and settings.image_treatment != blank %} treat-{{ settings.image_treatment }}{% endif %}"
         {%- if template.name == "product" %} data-product-handle="{{ product.handle }}"{% endif -%}>
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+    {% render 'image-treatment-defs' %}
 
     {% sections 'header-group' %}
 
