@@ -1,5 +1,15 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
+    "design_preset": "porcelain",
     "color_bg": "#0b0c0b",
     "color_surface": "#121513",
     "color_line": "#262b27",
@@ -30,7 +40,13 @@
     "enable_structured_data": true,
     "enable_reveal": true,
     "enable_image_zoom": true,
-    "design_preset": "gothic"
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      }
+    },
+    "content_for_index": []
   },
   "presets": {
     "Gothic Influence": {
