@@ -1,6 +1,15 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
-    "design_preset": "porcelain",
+    "design_preset": "conservatory",
     "color_bg": "#f3efe7",
     "color_surface": "#fbf9f4",
     "color_line": "#d8d0c2",
@@ -18,12 +27,11 @@
     "page_width": 1440,
     "corner_radius": "auto",
     "card_ratio": "3 / 4",
+    "card_shape": "auto",
     "card_show_vendor": false,
     "card_hover_image": true,
     "card_quick_add": true,
     "card_show_swatches": true,
-    "swatch_option_name": "Color",
-    "card_show_sale_badge": true,
     "cart_type": "drawer",
     "cart_free_shipping_bar": true,
     "cart_free_shipping_threshold": 150,
@@ -31,15 +39,16 @@
     "enable_structured_data": true,
     "enable_reveal": true,
     "enable_image_zoom": true,
+    "button_radius": "auto",
+    "button_tracking": 0,
+    "swatch_option_name": "Color",
+    "card_show_sale_badge": true,
     "sections": {
       "cart-drawer": {
         "type": "cart-drawer",
         "settings": {}
       }
     },
-    "content_for_index": [],
-    "card_shape": "auto",
-    "button_radius": "auto",
-    "button_tracking": 0
+    "content_for_index": []
   }
 }
