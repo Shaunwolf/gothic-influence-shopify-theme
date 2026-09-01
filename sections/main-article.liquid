@@ -26,7 +26,7 @@
     <div class="rte">{{ article.content }}</div>
 
     {%- if blog.comments_enabled? -%}
-      <hr class="rule" style="margin-block: var(--sp-8);">
+      <hr class="rule{% unless settings.rule_ornament == 'none' %} rule--{{ settings.rule_ornament }}{% endunless %}" style="margin-block: var(--sp-8);">
       <h2 class="h3">{{ 'blogs.comments.title' | t: count: article.comments_count }}</h2>
 
       {%- for comment in article.comments -%}

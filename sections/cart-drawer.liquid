@@ -6,7 +6,7 @@
   locale instead of being rebuilt in JS.
 {%- endcomment -%}
 
-<cart-drawer id="CartDrawer" class="drawer" aria-hidden="true">
+<cart-drawer id="CartDrawer" class="drawer{% if settings.drawer_arch %} drawer--arched{% endif %}" aria-hidden="true">
   <div class="drawer__scrim" data-drawer-close></div>
   <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.cart.title' | t }}">
 

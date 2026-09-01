@@ -14,7 +14,7 @@
         {% render 'icon', name: 'menu', size: 22 %}
       </button>
 
-      <nav class="nav header__nav-desktop" aria-label="{{ 'sections.header.primary_navigation' | t }}">
+      <nav class="nav header__nav-desktop{% if settings.nav_finial %} nav--finial{% endif %}" aria-label="{{ 'sections.header.primary_navigation' | t }}">
         {%- for link in linklists[menu].links -%}
           <div class="nav__item">
             <a href="{{ link.url }}"
@@ -142,7 +142,7 @@
 </header>
 
 {%- comment -%} Mobile navigation drawer {%- endcomment -%}
-<site-drawer id="MobileNav" class="drawer drawer--left" aria-hidden="true">
+<site-drawer id="MobileNav" class="drawer drawer--left{% if settings.drawer_arch %} drawer--arched{% endif %}" aria-hidden="true">
   <div class="drawer__scrim" data-drawer-close></div>
   <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}">
     <div class="drawer__head">
@@ -178,7 +178,7 @@
 </site-drawer>
 
 {%- comment -%} Search drawer with predictive results {%- endcomment -%}
-<site-drawer id="SearchDrawer" class="drawer" aria-hidden="true">
+<site-drawer id="SearchDrawer" class="drawer{% if settings.drawer_arch %} drawer--arched{% endif %}" aria-hidden="true">
   <div class="drawer__scrim" data-drawer-close></div>
   <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t }}">
     <div class="drawer__head">

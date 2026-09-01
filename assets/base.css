@@ -1550,3 +1550,143 @@ zoom-image { display: block; cursor: zoom-in; }
   font-size: var(--fs-sm); color: var(--color-text-muted);
 }
 .cart-assurances svg { color: var(--color-accent); flex: 0 0 auto; }
+
+/* ==========================================================================
+   21. BUTTON SILHOUETTES, NAV FINIALS, DIVIDER ORNAMENTS
+   The card-shape idea carried through to the interface chrome.
+
+   Everything animates on transform and opacity only, so it stays on the
+   compositor. Clipped shapes lose their border — a clip cuts the box, not the
+   stroke — so those variants carry a fill instead of an outline, which is why
+   the ghost variant gains a faint surface under them.
+   ========================================================================== */
+
+/* --- button silhouettes -------------------------------------------------- */
+body.btn-arch .btn { border-radius: var(--radius-pill); }
+
+body.btn-lancet .btn,
+body.btn-notched .btn { border-color: transparent; }
+
+/* Pointed caps, like a lancet window laid on its side. */
+body.btn-lancet .btn {
+  clip-path: polygon(
+    0 50%, 14px 0,
+    calc(100% - 14px) 0, 100% 50%,
+    calc(100% - 14px) 100%, 14px 100%
+  );
+  padding-inline: calc(var(--sp-6) + 10px);
+}
+
+/* Cut corners — the shape of an engraved plate. */
+body.btn-notched .btn {
+  clip-path: polygon(
+    9px 0, calc(100% - 9px) 0,
+    100% 9px, 100% calc(100% - 9px),
+    calc(100% - 9px) 100%, 9px 100%,
+    0 calc(100% - 9px), 0 9px
+  );
+}
+
+/* A clipped ghost button has no outline left to read, so give it a ground. */
+body.btn-lancet .btn--ghost,
+body.btn-notched .btn--ghost {
+  background: color-mix(in srgb, var(--color-text) 9%, transparent);
+}
+body.btn-lancet .btn--gold,
+body.btn-notched .btn--gold {
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+/* --- nav underline with a diamond finial --------------------------------- */
+.nav--finial .nav__link::after {
+  /* Drawn from the centre outward rather than from the left. */
+  transform-origin: center;
+}
+.nav--finial .nav__link::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 7px;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  background: var(--color-accent);
+  transform: rotate(45deg) scale(0);
+  transform-origin: center;
+  transition: transform var(--dur-3) var(--ease-out);
+  pointer-events: none;
+}
+.nav--finial .nav__link:hover::before,
+.nav--finial .nav__item:focus-within > .nav__link::before,
+.nav--finial .nav__link[aria-current="page"]::before {
+  transform: rotate(45deg) scale(1);
+}
+/* The rule pauses either side of the finial so they do not collide. */
+.nav--finial .nav__link::after {
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) 0 42%,
+    transparent 42% 58%,
+    var(--color-accent) 58% 100%
+  );
+}
+
+/* --- divider ornaments --------------------------------------------------- */
+.rule { position: relative; overflow: visible; }
+.rule--diamond::after,
+.rule--moon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.rule--moon::after {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  /* A crescent, cut by a second circle offset to the right. */
+  -webkit-mask-image: radial-gradient(circle at 72% 50%, transparent 46%, #000 47%);
+          mask-image: radial-gradient(circle at 72% 50%, transparent 46%, #000 47%);
+}
+/* With an ornament the line clears the centre so nothing overlaps. */
+.rule--diamond,
+.rule--moon {
+  background: linear-gradient(
+    90deg,
+    transparent, var(--color-line-strong) 18%,
+    var(--gold-600) 44%, transparent 46% 54%,
+    var(--gold-600) 56%, var(--color-line-strong) 82%, transparent
+  );
+}
+
+/* --- drawer head arch ---------------------------------------------------- */
+.drawer--arched .drawer__head {
+  border-bottom: 0;
+  position: relative;
+  padding-bottom: var(--sp-6);
+}
+.drawer--arched .drawer__head::after {
+  content: "";
+  position: absolute;
+  left: var(--sp-5);
+  right: var(--sp-5);
+  bottom: 0;
+  height: 14px;
+  background: var(--color-accent);
+  opacity: 0.55;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M0 13 Q100 -6 200 13' fill='none' stroke='black' stroke-width='1.4' vector-effect='non-scaling-stroke'/></svg>");
+          mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'><path d='M0 13 Q100 -6 200 13' fill='none' stroke='black' stroke-width='1.4' vector-effect='non-scaling-stroke'/></svg>");
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav--finial .nav__link::before { transition: none; }
+}

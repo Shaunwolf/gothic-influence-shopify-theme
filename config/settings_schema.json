@@ -264,6 +264,43 @@
           }
         ],
         "default": "3 / 4"
+      },
+      {
+        "type": "header",
+        "content": "Ornament"
+      },
+      {
+        "type": "checkbox",
+        "id": "nav_finial",
+        "label": "Diamond finial on menu hover",
+        "info": "The underline draws outward from the centre and a small diamond sets into the gap.",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "rule_ornament",
+        "label": "Divider ornament",
+        "options": [
+          {
+            "value": "none",
+            "label": "Plain hairline"
+          },
+          {
+            "value": "diamond",
+            "label": "Diamond"
+          },
+          {
+            "value": "moon",
+            "label": "Crescent"
+          }
+        ],
+        "default": "diamond"
+      },
+      {
+        "type": "checkbox",
+        "id": "drawer_arch",
+        "label": "Arched rule under drawer titles",
+        "default": true
       }
     ]
   },
@@ -736,6 +773,31 @@
       {
         "type": "paragraph",
         "content": "Applies to every button in the theme. The wipe is the fill sweeping up on hover rather than swapping colour — it reads considered instead of abrupt."
+      },
+      {
+        "type": "select",
+        "id": "button_shape",
+        "label": "Button silhouette",
+        "info": "Lancet and notched are clipped shapes, so they carry a fill instead of an outline — a clip cuts the box, not the border.",
+        "options": [
+          {
+            "value": "rect",
+            "label": "Rectangle"
+          },
+          {
+            "value": "arch",
+            "label": "Arch — rounded caps"
+          },
+          {
+            "value": "lancet",
+            "label": "Lancet — pointed caps"
+          },
+          {
+            "value": "notched",
+            "label": "Notched — cut corners"
+          }
+        ],
+        "default": "rect"
       },
       {
         "type": "select",

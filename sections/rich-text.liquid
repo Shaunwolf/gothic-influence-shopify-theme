@@ -11,7 +11,7 @@
         {%- when 'text' -%}
           <div class="rte lede" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
         {%- when 'rule' -%}
-          <hr class="rule" {{ block.shopify_attributes }}>
+          <hr class="rule{% unless settings.rule_ornament == 'none' %} rule--{{ settings.rule_ornament }}{% endunless %}" {{ block.shopify_attributes }}>
         {%- when 'button' -%}
           <div {{ block.shopify_attributes }}>
             <a href="{{ block.settings.link | default: '#' }}" class="btn btn--{{ block.settings.style }}">{{ block.settings.label }}</a>

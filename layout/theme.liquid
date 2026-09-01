@@ -174,7 +174,18 @@
         assign orn_color = 'var(--color-accent)'
     endcase
   -%}
-  <body class="template-{{ template.name | handle }}{{ treat_classes }}"
+  {%- comment -%}
+    Chrome shapes ride on the body rather than on every call site — there are
+    far too many buttons to class individually, and a merchant setting should
+    never require touching markup.
+  {%- endcomment -%}
+  {%- liquid
+    assign chrome = ''
+    unless settings.button_shape == 'rect' or settings.button_shape == blank
+      assign chrome = ' btn-' | append: settings.button_shape
+    endunless
+  -%}
+  <body class="template-{{ template.name | handle }}{{ treat_classes }}{{ chrome }}"
         style="--treat-orn-opacity: {{ settings.treatment_ornament_opacity | default: 85 | times: 0.01 }}; --treat-orn-color: {{ orn_color }};"
         {%- if template.name == "product" %} data-product-handle="{{ product.handle }}"{% endif -%}>
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
