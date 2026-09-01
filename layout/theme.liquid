@@ -38,6 +38,8 @@
       assign display_italic = display_font | font_modify: 'style', 'italic'
       assign display_bold = display_font | font_modify: 'weight', '600'
     -%}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
     <style>
       {{ body_font | font_face: font_display: 'swap' }}
       {{ body_bold | font_face: font_display: 'swap' }}
@@ -87,7 +89,6 @@
       {%- endunless -%}
     </style>
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
 
     <script>
       document.documentElement.className = document.documentElement.className.replace('no-js', 'js');

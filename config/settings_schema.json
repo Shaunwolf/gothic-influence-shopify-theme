@@ -189,11 +189,11 @@
         "type": "range",
         "id": "track_caps",
         "label": "Small-caps letter spacing",
-        "info": "The open tracking on uppercase labels is a large part of the luxury feel.",
+        "info": "Set to 0 to follow the design preset.",
         "min": 0,
         "max": 30,
         "step": 2,
-        "default": 18
+        "default": 0
       }
     ]
   },
@@ -223,6 +223,10 @@
         "info": "Sharp corners read expensive. Soft corners read friendly.",
         "options": [
           {
+            "value": "auto",
+            "label": "Auto — follow the design preset"
+          },
+          {
             "value": "0px",
             "label": "Square"
           },
@@ -235,7 +239,7 @@
             "label": "Soft"
           }
         ],
-        "default": "2px"
+        "default": "auto"
       },
       {
         "type": "select",
@@ -266,6 +270,78 @@
   {
     "name": "Product cards",
     "settings": [
+      {
+        "type": "header",
+        "content": "Image shape"
+      },
+      {
+        "type": "select",
+        "id": "card_shape",
+        "label": "Product image shape",
+        "info": "Shaped cards move badges and the quick-add button below the image, since the corners are cut away.",
+        "options": [
+          {
+            "value": "auto",
+            "label": "Auto — follow the design preset"
+          },
+          {
+            "value": "rect",
+            "label": "Rectangle"
+          },
+          {
+            "value": "arch",
+            "label": "Arch — rounded top"
+          },
+          {
+            "value": "dome",
+            "label": "Dome — deep fanlight arch"
+          },
+          {
+            "value": "gothic",
+            "label": "Gothic arch — pointed"
+          },
+          {
+            "value": "lancet",
+            "label": "Lancet — narrow pointed arch"
+          },
+          {
+            "value": "mirror",
+            "label": "Victorian mirror — arched top, bowed foot"
+          },
+          {
+            "value": "oval",
+            "label": "Oval"
+          },
+          {
+            "value": "circle",
+            "label": "Circle"
+          },
+          {
+            "value": "lozenge",
+            "label": "Lozenge — leaded pane"
+          },
+          {
+            "value": "keyhole",
+            "label": "Keyhole"
+          },
+          {
+            "value": "trefoil",
+            "label": "Trefoil — church tracery"
+          },
+          {
+            "value": "scallop",
+            "label": "Scalloped top"
+          }
+        ],
+        "default": "auto"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_shape_on_collection",
+        "label": "Use the shape on collection pages too",
+        "info": "Turn this off to keep shaped images for the homepage only.",
+        "default": true
+      },
       {
         "type": "checkbox",
         "id": "card_show_vendor",

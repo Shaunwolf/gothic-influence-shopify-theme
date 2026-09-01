@@ -23,6 +23,39 @@
   if p.compare_at_price > p.price
     assign on_sale = true
   endif
+
+  comment
+    Shape. Masked silhouettes clip any child, so badges and quick-add move
+    below the image; card--shaped drives that, card--masked additionally
+    suppresses the hairline outline, which a mask would cut mid-curve.
+  endcomment
+  assign shape = settings.card_shape | default: 'auto'
+  if shape == 'auto'
+    case settings.design_preset
+      when 'onyx'
+        assign shape = 'rect'
+      when 'conservatory'
+        assign shape = 'dome'
+      when 'cathedral'
+        assign shape = 'lancet'
+      when 'porcelain'
+        assign shape = 'oval'
+      else
+        assign shape = 'gothic'
+    endcase
+  endif
+  if template.name == 'collection' and settings.card_shape_on_collection == false
+    assign shape = 'rect'
+  endif
+
+  assign masked_shapes = 'gothic,lancet,keyhole,trefoil,scallop' | split: ','
+  assign card_class = ''
+  unless shape == 'rect'
+    assign card_class = ' card--shaped'
+    if masked_shapes contains shape
+      assign card_class = card_class | append: ' card--masked'
+    endif
+  endunless
 -%}
 
 {%- if p == blank -%}
@@ -34,9 +67,9 @@
     </div>
   </div>
 {%- else -%}
-  <div class="card {% if reveal %}reveal{% endif %}"
+  <div class="card{{ card_class }} {% if reveal %}reveal{% endif %}"
        {% if ratio %}style="--card-ratio: {{ ratio }};"{% endif %}>
-    <div class="card__media">
+    <div class="card__media card__media--{{ shape }}">
       {%- if p.featured_media -%}
         {{
           p.featured_media

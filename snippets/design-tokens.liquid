@@ -122,6 +122,38 @@
     assign text_subtle = c_muted | color_darken: 12
   endif
 
+  comment
+    Each preset carries a geometry, not just a palette — a signature card
+    silhouette, corner radius and small-caps tracking. Merchants can override
+    any of it; these are what "Auto" resolves to.
+  endcomment
+  case preset
+    when 'onyx'
+      assign preset_radius = '0px'
+      assign preset_track = 0.22
+    when 'conservatory'
+      assign preset_radius = '4px'
+      assign preset_track = 0.16
+    when 'cathedral'
+      assign preset_radius = '0px'
+      assign preset_track = 0.24
+    when 'porcelain'
+      assign preset_radius = '3px'
+      assign preset_track = 0.14
+    else
+      assign preset_radius = '2px'
+      assign preset_track = 0.18
+  endcase
+
+  assign radius = settings.corner_radius
+  if radius == 'auto' or radius == blank
+    assign radius = preset_radius
+  endif
+  assign track = settings.track_caps | times: 0.01
+  if settings.track_caps == 0
+    assign track = preset_track
+  endif
+
   assign body_font = settings.font_body
   assign display_font = settings.font_display
 -%}
@@ -183,10 +215,10 @@
 
   --fs-base: {{ settings.font_body_scale | times: 0.01 | times: 16 | round: 2 }}px;
   --heading-scale: {{ settings.font_heading_scale | times: 0.01 }};
-  --track-caps: {{ settings.track_caps | times: 0.01 }}em;
+  --track-caps: {{ track }}em;
 
   --page-max: {{ settings.page_width }}px;
-  --radius-sm: {{ settings.corner_radius }};
+  --radius-sm: {{ radius }};
   --card-ratio: {{ settings.card_ratio }};
 }
 {%- endif -%}
