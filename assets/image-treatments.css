@@ -46,9 +46,13 @@
   position: absolute;
   inset: 4% 6% 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 130' preserveAspectRatio='none'><path d='M1 40 Q1 12 50 1 Q99 12 99 40 L99 129 L1 129 Z' fill='none' stroke='%23c6a15b' stroke-width='1.6' vector-effect='non-scaling-stroke'/></svg>");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background-color: var(--color-accent);
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 130' preserveAspectRatio='none'><path d='M1 40 Q1 12 50 1 Q99 12 99 40 L99 129 L1 129 Z' fill='none' stroke='black' stroke-width='1.6' vector-effect='non-scaling-stroke'/></svg>");
+          mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 130' preserveAspectRatio='none'><path d='M1 40 Q1 12 50 1 Q99 12 99 40 L99 129 L1 129 Z' fill='none' stroke='black' stroke-width='1.6' vector-effect='non-scaling-stroke'/></svg>");
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
 }
 
 /* --- Plate: engraved-catalogue framing ---------------------------------- */
@@ -70,14 +74,23 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='%23c6a15b' stroke-width='1.4'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='%23c6a15b'/></g></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='%23c6a15b' stroke-width='1.4' transform='translate(40,0) scale(-1,1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='%23c6a15b'/></g></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='%23c6a15b' stroke-width='1.4' transform='translate(0,40) scale(1,-1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='%23c6a15b'/></g></svg>"),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='%23c6a15b' stroke-width='1.4' transform='translate(40,40) scale(-1,-1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='%23c6a15b'/></g></svg>");
-  background-position: top left, top right, bottom left, bottom right;
-  background-size: 22px 22px;
-  background-repeat: no-repeat;
+  background-color: var(--color-accent);
+  -webkit-mask-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4' transform='translate(40,0) scale(-1,1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4' transform='translate(0,40) scale(1,-1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4' transform='translate(40,40) scale(-1,-1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>");
+          mask-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4' transform='translate(40,0) scale(-1,1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4' transform='translate(0,40) scale(1,-1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><g fill='none' stroke='black' stroke-width='1.4' transform='translate(40,40) scale(-1,-1)'><path d='M4 36 C6 18 18 6 36 4'/><path d='M4 22 C12 20 20 12 22 4'/><circle cx='14' cy='14' r='1.6' fill='black'/></g></svg>");
+  -webkit-mask-position: top left, top right, bottom left, bottom right;
+          mask-position: top left, top right, bottom left, bottom right;
+  -webkit-mask-size: 22px 22px;
+          mask-size: 22px 22px;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
   opacity: 0.85;
 }
 
@@ -88,3 +101,13 @@
   transform: none;
   opacity: 0.92;
 }
+
+/* Ornament colour note
+   ---------------------
+   A data URI cannot read a CSS custom property, so a stroke colour baked into
+   one is frozen — under Porcelain's darker gold or Cathedral's silver these
+   hairlines would stay Gothic gold and clash.
+
+   They are therefore applied as masks and painted with background-color, so
+   the stroke colour in the SVG is irrelevant (only its alpha is used) and the
+   ornament follows --color-accent through every preset. */
