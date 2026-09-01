@@ -12,7 +12,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "A preset re-tints the entire storefront from one control — background, surfaces, hairlines, text, brand and accent. Pick \"Custom\" to unlock the individual colours in the Colours group below."
+        "content": "This is the only palette control. Choosing a preset re-tints the whole storefront and also sets the product image silhouette, corner radius and letter spacing. Choose \"Custom\" to unlock the individual colours below."
       },
       {
         "type": "select",
@@ -535,6 +535,10 @@
         "label": "Corner style",
         "options": [
           {
+            "value": "auto",
+            "label": "Auto — follow the design preset"
+          },
+          {
             "value": "0px",
             "label": "Square"
           },
@@ -551,7 +555,7 @@
             "label": "Pill"
           }
         ],
-        "default": "2px"
+        "default": "auto"
       },
       {
         "type": "checkbox",
@@ -566,7 +570,8 @@
         "min": 0,
         "max": 30,
         "step": 2,
-        "default": 18
+        "default": 0,
+        "info": "Set to 0 to follow the design preset."
       },
       {
         "type": "checkbox",

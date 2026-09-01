@@ -13,9 +13,9 @@
     "font_body": "poppins_n4",
     "font_body_scale": 100,
     "font_heading_scale": 100,
-    "track_caps": 18,
+    "track_caps": 0,
     "page_width": 1440,
-    "corner_radius": "2px",
+    "corner_radius": "auto",
     "card_ratio": "3 / 4",
     "card_show_vendor": false,
     "card_hover_image": true,
@@ -30,78 +30,7 @@
     "enable_structured_data": true,
     "enable_reveal": true,
     "enable_image_zoom": true,
-    "design_preset": "gothic"
-  },
-  "presets": {
-    "Gothic Influence": {
-      "color_bg": "#0b0c0b",
-      "color_surface": "#121513",
-      "color_line": "#262b27",
-      "color_text": "#e8ebe9",
-      "color_text_muted": "#949c96",
-      "color_brand": "#2d6a40",
-      "color_brand_text": "#7fb392",
-      "color_accent": "#c6a15b",
-      "color_accent_text": "#d9bc7e",
-      "design_preset": "gothic",
-      "font_display": "playfair_display_n4",
-      "font_body": "poppins_n4"
-    },
-    "Onyx & Brass": {
-      "color_bg": "#0a0a0a",
-      "color_surface": "#141414",
-      "color_line": "#282828",
-      "color_text": "#ededed",
-      "color_text_muted": "#9a9a9a",
-      "color_brand": "#3a3a3a",
-      "color_brand_text": "#c0c0c0",
-      "color_accent": "#b08d57",
-      "color_accent_text": "#d4b483",
-      "design_preset": "onyx",
-      "font_display": "playfair_display_n4",
-      "font_body": "poppins_n4"
-    },
-    "Conservatory": {
-      "color_bg": "#0a120d",
-      "color_surface": "#101c14",
-      "color_line": "#1f3327",
-      "color_text": "#e6ece8",
-      "color_text_muted": "#8fa697",
-      "color_brand": "#356b47",
-      "color_brand_text": "#8cc4a1",
-      "color_accent": "#c9a961",
-      "color_accent_text": "#dcc38a",
-      "design_preset": "conservatory",
-      "font_display": "playfair_display_n4",
-      "font_body": "poppins_n4"
-    },
-    "Cathedral": {
-      "color_bg": "#0d0b12",
-      "color_surface": "#16131d",
-      "color_line": "#2a2536",
-      "color_text": "#e9e7ef",
-      "color_text_muted": "#9a95a8",
-      "color_brand": "#3f3a5c",
-      "color_brand_text": "#a9a2c4",
-      "color_accent": "#b8bcc8",
-      "color_accent_text": "#d3d6de",
-      "design_preset": "cathedral",
-      "font_display": "playfair_display_n4",
-      "font_body": "poppins_n4"
-    },
-    "Porcelain": {
-      "color_bg": "#f3efe7",
-      "color_surface": "#fbf9f4",
-      "color_line": "#d8d0c2",
-      "color_text": "#17141a",
-      "color_text_muted": "#5d5561",
-      "color_brand": "#4a2b3d",
-      "color_brand_text": "#6d3f55",
-      "color_accent": "#8f7130",
-      "color_accent_text": "#7a5f26",
-      "design_preset": "porcelain",
-      "font_display": "playfair_display_n4",
-      "font_body": "poppins_n4"
-    }
+    "design_preset": "gothic",
+    "card_shape": "auto"
   }
 }
