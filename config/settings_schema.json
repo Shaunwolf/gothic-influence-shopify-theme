@@ -386,12 +386,13 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "One global look for product imagery, applied at render time — no photo editing, and the framing re-tints with the design preset."
+        "content": "One global look for product imagery, applied at render time — no photo editing needed. Combine a photographic grade with a frame, tune the ornament strength and colour, and choose where it applies."
       },
       {
         "type": "select",
-        "id": "image_treatment",
-        "label": "Treatment",
+        "id": "image_grade",
+        "label": "Photo grade",
+        "info": "Tints every product photo with one shared mood. Combines with any frame.",
         "options": [
           {
             "value": "none",
@@ -399,19 +400,95 @@
           },
           {
             "value": "candlelight",
-            "label": "Candlelight — unified dark grade"
+            "label": "Candlelight — warm and dim"
+          },
+          {
+            "value": "moonlit",
+            "label": "Moonlit — cool and pale"
+          },
+          {
+            "value": "relic",
+            "label": "Relic — faded antique"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "image_treatment",
+        "label": "Frame",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
           },
           {
             "value": "cathedral",
-            "label": "Cathedral — pointed arch window"
+            "label": "Cathedral — pointed arch"
           },
           {
-            "value": "plate",
-            "label": "Plate — engraved catalogue frame"
+            "value": "mirror",
+            "label": "Mirror — round-top bevel"
+          },
+          {
+            "value": "keyhole",
+            "label": "Keyhole — escutcheon silhouette"
           },
           {
             "value": "gaslight",
             "label": "Gaslight — hanging lantern"
+          },
+          {
+            "value": "plate",
+            "label": "Plate — engraved catalogue"
+          },
+          {
+            "value": "tarot",
+            "label": "Tarot — arcana card"
+          },
+          {
+            "value": "zodiac",
+            "label": "Zodiac — astrological chart"
+          },
+          {
+            "value": "specimen",
+            "label": "Specimen — museum brackets"
+          },
+          {
+            "value": "seal",
+            "label": "Seal — wax medallion"
+          },
+          {
+            "value": "rose",
+            "label": "Rose window — leaded tracery"
+          },
+          {
+            "value": "lattice",
+            "label": "Lattice — diamond glazing"
+          },
+          {
+            "value": "halo",
+            "label": "Halo — moon ring"
+          },
+          {
+            "value": "wreath",
+            "label": "Wreath — dashed laurel"
+          },
+          {
+            "value": "locket",
+            "label": "Locket — oval keepsake"
+          },
+          {
+            "value": "eclipse",
+            "label": "Eclipse — sliding shadow"
+          },
+          {
+            "value": "banner",
+            "label": "Pennant — swallowtail banner"
+          },
+          {
+            "value": "sail",
+            "label": "Sail — billowed lateen"
           }
         ],
         "default": "none"
@@ -435,6 +512,36 @@
           }
         ],
         "default": "both"
+      },
+      {
+        "type": "range",
+        "id": "treatment_ornament_opacity",
+        "label": "Ornament strength",
+        "min": 20,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "default": 85
+      },
+      {
+        "type": "select",
+        "id": "treatment_ornament_color",
+        "label": "Ornament colour",
+        "options": [
+          {
+            "value": "accent",
+            "label": "Gold accent"
+          },
+          {
+            "value": "brand",
+            "label": "Brand tint"
+          },
+          {
+            "value": "text",
+            "label": "Primary text"
+          }
+        ],
+        "default": "accent"
       }
     ]
   },
@@ -456,6 +563,41 @@
         "id": "grimoire_heading",
         "label": "Drawer heading",
         "default": "The Grimoire"
+      }
+    ]
+  },
+  {
+    "name": "Cursor & hover",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "A soft lantern glow follows the cursor across the page, brightening gently over links and buttons. GPU-composited (transform and opacity only), and it disables itself on touch screens and for visitors who prefer reduced motion."
+      },
+      {
+        "type": "checkbox",
+        "id": "cursor_glow_enable",
+        "label": "Lantern cursor glow",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "cursor_glow_size",
+        "label": "Glow size",
+        "min": 200,
+        "max": 700,
+        "step": 25,
+        "unit": "px",
+        "default": 425
+      },
+      {
+        "type": "range",
+        "id": "cursor_glow_strength",
+        "label": "Glow strength",
+        "min": 4,
+        "max": 24,
+        "step": 2,
+        "unit": "%",
+        "default": 10
       }
     ]
   },

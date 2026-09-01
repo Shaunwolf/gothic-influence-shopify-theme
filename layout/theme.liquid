@@ -39,7 +39,16 @@
       assign display_bold = display_font | font_modify: 'weight', '600'
     -%}
     {{ 'base.css' | asset_url | stylesheet_tag }}
-    {%- if settings.image_treatment != 'none' and settings.image_treatment != blank -%}
+    {%- liquid
+      assign has_treatment = false
+      if settings.image_treatment != 'none' and settings.image_treatment != blank
+        assign has_treatment = true
+      endif
+      if settings.image_grade != 'none' and settings.image_grade != blank
+        assign has_treatment = true
+      endif
+    -%}
+    {%- if has_treatment -%}
       {{ 'image-treatments.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
 
@@ -142,8 +151,13 @@
 
   {%- liquid
     assign treat_classes = ''
+    if settings.image_grade != 'none' and settings.image_grade != blank
+      assign treat_classes = ' grade-' | append: settings.image_grade
+    endif
     if settings.image_treatment != 'none' and settings.image_treatment != blank
-      assign treat_classes = ' treat-' | append: settings.image_treatment
+      assign treat_classes = treat_classes | append: ' treat-' | append: settings.image_treatment
+    endif
+    if treat_classes != ''
       if settings.image_treatment_scope == 'cards' or settings.image_treatment_scope == 'both'
         assign treat_classes = treat_classes | append: ' tscope-cards'
       endif
@@ -151,8 +165,17 @@
         assign treat_classes = treat_classes | append: ' tscope-gallery'
       endif
     endif
+    case settings.treatment_ornament_color
+      when 'brand'
+        assign orn_color = 'var(--color-brand-text)'
+      when 'text'
+        assign orn_color = 'var(--color-text)'
+      else
+        assign orn_color = 'var(--color-accent)'
+    endcase
   -%}
   <body class="template-{{ template.name | handle }}{{ treat_classes }}"
+        style="--treat-orn-opacity: {{ settings.treatment_ornament_opacity | default: 85 | times: 0.01 }}; --treat-orn-color: {{ orn_color }};"
         {%- if template.name == "product" %} data-product-handle="{{ product.handle }}"{% endif -%}>
     <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
     {% render 'image-treatment-defs' %}
@@ -182,6 +205,16 @@
         };
       </script>
       <script src="{{ 'grimoire.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+
+    {%- if settings.cursor_glow_enable -%}
+      <script>
+        window.cursorGlowConfig = {
+          size: {{ settings.cursor_glow_size | default: 420 }},
+          strength: {{ settings.cursor_glow_strength | default: 10 }}
+        };
+      </script>
+      <script src="{{ 'cursor-glow.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {% render 'popups' %}
