@@ -100,7 +100,15 @@
         soldOut: {{ 'products.product.sold_out' | t | json }},
         unavailable: {{ 'products.product.unavailable' | t | json }},
         cartError: {{ 'sections.cart.error' | t | json }},
-        moneyFormat: {{ shop.money_format | json }}
+        moneyFormat: {{ shop.money_format | json }},
+        close: {{ 'accessibility.close' | t | json }},
+        zoomLabel: {{ 'products.product.zoom_label' | t | json }},
+        zoomHint: {{ 'products.product.zoom_hint' | t | json }}
+      };
+      window.themeConfig = {
+        smoothScroll: {{ settings.smooth_scroll | json }},
+        smoothScrollStrength: {{ settings.smooth_scroll_strength | json }},
+        enableZoom: {{ settings.enable_zoom | json }}
       };
     </script>
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>

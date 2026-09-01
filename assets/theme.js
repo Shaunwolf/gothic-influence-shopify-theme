@@ -804,9 +804,203 @@
     rememberProduct(document.body.dataset.productHandle);
   }
 
+
+  /* ------------------------------------------------------------------------
+     Momentum scrolling.
+
+     The behaviour Lenis provides, written against this theme directly rather
+     than vendored — roughly 40 lines against 4KB plus a dependency, and it
+     keeps the theme free of third-party runtime code.
+
+     Native scroll stays the source of truth: we let the browser scroll, then
+     ease the page toward that position with a transform. Scroll position,
+     anchors, find-in-page and accessibility tooling all keep working, which
+     is what breaks in scroll-hijacking implementations.
+     ---------------------------------------------------------------------- */
+  class SmoothScroll {
+    constructor(strength) {
+      this.target = window.scrollY;
+      this.current = window.scrollY;
+      this.ease = 0.5 - (strength * 0.04);   // 1 = off, 10 = very loose
+      this.running = false;
+      this.frame = null;
+      window.addEventListener('scroll', () => this.onScroll(), { passive: true });
+      this.onScroll();
+    }
+    onScroll() {
+      this.target = window.scrollY;
+      if (!this.running) { this.running = true; this.tick(); }
+    }
+    tick() {
+      this.current += (this.target - this.current) * this.ease;
+      const drift = this.target - this.current;
+      if (Math.abs(drift) < 0.08) {
+        this.current = this.target;
+        this.running = false;
+        document.documentElement.style.setProperty('--scroll-drift', '0px');
+        return;
+      }
+      /* Published as a custom property so sections can lean on it — parallax
+         and lag effects read it rather than each attaching a scroll listener. */
+      document.documentElement.style.setProperty('--scroll-drift', drift.toFixed(2) + 'px');
+      this.frame = requestAnimationFrame(() => this.tick());
+    }
+  }
+
+  if (window.themeConfig && window.themeConfig.smoothScroll) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let instance = null;
+    const sync = () => {
+      if (reduced.matches) {
+        document.documentElement.style.setProperty('--scroll-drift', '0px');
+        instance = null;
+      } else if (!instance) {
+        instance = new SmoothScroll(window.themeConfig.smoothScrollStrength || 5);
+      }
+    };
+    sync();
+    reduced.addEventListener('change', sync);
+  }
+
+  /* ------------------------------------------------------------------------
+     <zoom-image> — pinch, wheel and drag zoom for product media.
+
+     Home decor is bought on texture: the grain, the patina, the weight of a
+     glaze. A gallery that cannot be inspected closely loses those sales.
+     ---------------------------------------------------------------------- */
+  class ZoomImage extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('click', (e) => {
+        const img = e.target.closest('img');
+        if (img) this.open(img.currentSrc || img.src, img.alt);
+      });
+    }
+
+    open(src, alt) {
+      const dialog = document.createElement('div');
+      dialog.className = 'zoom';
+      dialog.setAttribute('role', 'dialog');
+      dialog.setAttribute('aria-modal', 'true');
+      dialog.setAttribute('aria-label', window.themeStrings.zoomLabel || 'Zoomed image');
+      dialog.innerHTML =
+        '<button type="button" class="zoom__close icon-btn" aria-label="' +
+        (window.themeStrings.close || 'Close') + '">&times;</button>' +
+        '<img class="zoom__img" src="' + src + '" alt="' + (alt || '') + '">' +
+        '<p class="zoom__hint">' + (window.themeStrings.zoomHint || '') + '</p>';
+      document.body.appendChild(dialog);
+      document.body.classList.add('is-locked');
+      requestAnimationFrame(() => dialog.classList.add('is-open'));
+
+      const img = dialog.querySelector('.zoom__img');
+      let scale = 1, x = 0, y = 0, dragging = false, lastX = 0, lastY = 0, pinch = 0;
+
+      const apply = () => {
+        img.style.transform =
+          'translate(' + x + 'px,' + y + 'px) scale(' + scale + ')';
+        img.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+      };
+      const clampScale = (v) => Math.min(5, Math.max(1, v));
+
+      dialog.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        scale = clampScale(scale - e.deltaY * 0.002);
+        if (scale === 1) { x = 0; y = 0; }
+        apply();
+      }, { passive: false });
+
+      img.addEventListener('dblclick', () => {
+        scale = scale > 1 ? 1 : 2.5;
+        if (scale === 1) { x = 0; y = 0; }
+        apply();
+      });
+
+      img.addEventListener('pointerdown', (e) => {
+        if (scale <= 1) return;
+        dragging = true; lastX = e.clientX; lastY = e.clientY;
+        img.setPointerCapture(e.pointerId);
+      });
+      img.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        x += e.clientX - lastX; y += e.clientY - lastY;
+        lastX = e.clientX; lastY = e.clientY;
+        apply();
+      });
+      ['pointerup', 'pointercancel'].forEach((ev) =>
+        img.addEventListener(ev, () => { dragging = false; }));
+
+      /* Two-finger pinch. */
+      dialog.addEventListener('touchmove', (e) => {
+        if (e.touches.length !== 2) return;
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.hypot(dx, dy);
+        if (pinch) { scale = clampScale(scale * (dist / pinch)); apply(); }
+        pinch = dist;
+      }, { passive: false });
+      dialog.addEventListener('touchend', () => { pinch = 0; });
+
+      const close = () => {
+        dialog.classList.remove('is-open');
+        document.body.classList.remove('is-locked');
+        setTimeout(() => dialog.remove(), 250);
+        document.removeEventListener('keydown', onKey);
+      };
+      const onKey = (e) => { if (e.key === 'Escape') close(); };
+      document.addEventListener('keydown', onKey);
+      dialog.querySelector('.zoom__close').addEventListener('click', close);
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
+      dialog.querySelector('.zoom__close').focus();
+      apply();
+    }
+  }
+  customElements.define('zoom-image', ZoomImage);
+
+  /* ------------------------------------------------------------------------
+     Swipe support for the slideshow.
+
+     Added here rather than by vendoring a carousel: the slideshow markup and
+     dots already exist, and this is the one capability they were missing.
+     Horizontal intent only, so vertical page scrolling is never captured.
+     ---------------------------------------------------------------------- */
+  document.querySelectorAll('site-slideshow').forEach((show) => {
+    let startX = 0, startY = 0, tracking = false;
+    show.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      tracking = true;
+    }, { passive: true });
+    show.addEventListener('touchend', (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
+      show.stop();
+      show.go(show.index + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+  });
+
   /* ------------------------------------------------------------------------
      Boot
      ---------------------------------------------------------------------- */
+  /* Product gallery zoom is bound by delegation rather than by adding a
+     wrapper element, so snippets/product-media.liquid stays untouched. */
+  if (window.themeConfig && window.themeConfig.enableZoom) {
+    const zoomer = new ZoomImage();
+    document.addEventListener('click', (e) => {
+      const slide = e.target.closest('.gallery__main .gallery__slide.is-active img, .gallery__main > img');
+      if (!slide) return;
+      if (e.target.closest('a, button')) return;
+      e.preventDefault();
+      zoomer.open(slide.currentSrc || slide.src, slide.alt);
+    });
+    document.querySelectorAll('.gallery__main').forEach((el) => {
+      el.style.cursor = 'zoom-in';
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     /* Prime the cart so the header bubble is correct on first paint. */
     if (document.querySelector('[data-cart-count]')) refreshCart().catch(() => {});

@@ -1511,3 +1511,34 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 @media (prefers-reduced-motion: reduce) {
   .card--shaped .card__media::before { transition: none; }
 }
+
+/* ==========================================================================
+   20. IMAGE ZOOM
+   ========================================================================== */
+.zoom {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  display: grid; place-items: center;
+  background: rgb(0 0 0 / 0.94);
+  opacity: 0; transition: opacity var(--dur-3) var(--ease-out);
+  overflow: hidden; touch-action: none;
+}
+.zoom.is-open { opacity: 1; }
+.zoom__img {
+  max-width: 92vw; max-height: 88vh;
+  transform-origin: center;
+  transition: transform 90ms linear;
+  cursor: zoom-in; user-select: none; -webkit-user-drag: none;
+}
+.zoom__close {
+  position: absolute; top: var(--sp-4); right: var(--sp-4); z-index: 1;
+  color: #fff; font-size: 2rem; line-height: 1;
+  background: rgb(255 255 255 / 0.08);
+}
+.zoom__close:hover { background: rgb(255 255 255 / 0.16); color: var(--gold-300); }
+.zoom__hint {
+  position: absolute; bottom: var(--sp-5); left: 0; right: 0;
+  text-align: center; font-size: var(--fs-xs);
+  letter-spacing: var(--track-caps); text-transform: uppercase;
+  color: rgb(255 255 255 / 0.45); pointer-events: none;
+}
+zoom-image { display: block; cursor: zoom-in; }

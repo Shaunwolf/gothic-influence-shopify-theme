@@ -379,6 +379,17 @@
         "id": "card_show_sale_badge",
         "label": "Show sale badge",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "Image zoom"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_zoom",
+        "label": "Zoom product images",
+        "info": "Click to open full screen; scroll, double-click or pinch to magnify. Decor sells on texture, so this matters more here than on most stores.",
+        "default": true
       }
     ]
   },
@@ -488,6 +499,26 @@
         "id": "enable_image_zoom",
         "label": "Zoom product images on hover",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "Scrolling"
+      },
+      {
+        "type": "checkbox",
+        "id": "smooth_scroll",
+        "label": "Momentum scrolling",
+        "info": "Eases the page toward the scroll position instead of snapping. Native scrolling still drives it, so anchors and find-in-page keep working. Off automatically under reduced motion.",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "smooth_scroll_strength",
+        "label": "Momentum",
+        "min": 1,
+        "max": 9,
+        "step": 1,
+        "default": 5
       }
     ]
   },
