@@ -65,19 +65,25 @@
         "c1": {
           "type": "item",
           "settings": {
-            "show_count": true
+            "show_count": true,
+            "collection": "lighting",
+            "heading": "Lighting"
           }
         },
         "c2": {
           "type": "item",
           "settings": {
-            "show_count": true
+            "show_count": true,
+            "collection": "artwork",
+            "heading": "Artwork"
           }
         },
         "c3": {
           "type": "item",
           "settings": {
-            "show_count": true
+            "show_count": true,
+            "collection": "home-decor",
+            "heading": "Home Decor"
           }
         }
       },
@@ -88,7 +94,7 @@
       ],
       "settings": {
         "eyebrow": "Browse",
-        "heading": "Shop by room",
+        "heading": "Shop by Category",
         "columns": "3"
       }
     },
@@ -111,8 +117,21 @@
     "featured": {
       "type": "featured-collection",
       "settings": {
-        "eyebrow": "The Collection",
-        "heading": "Quiet statements",
+        "collection": "lighting",
+        "eyebrow": "Lighting",
+        "heading": "Illuminate the Dark",
+        "products_to_show": 8,
+        "columns": "4",
+        "show_view_all": true
+      }
+    },
+    "featured_artwork": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "artwork",
+        "eyebrow": "Artwork",
+        "heading": "Unique Canvas Pieces",
+        "subheading": "No two alike.",
         "products_to_show": 8,
         "columns": "4",
         "show_view_all": true
@@ -172,6 +191,7 @@
     "rooms",
     "lookbook",
     "featured",
+    "featured_artwork",
     "story",
     "testimonials"
   ]
