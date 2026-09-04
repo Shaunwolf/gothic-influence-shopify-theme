@@ -10,6 +10,8 @@
 {
   "current": {
     "design_preset": "conservatory",
+    "favicon": "shopify://shop_images/gothic-favicon.png",
+    "share_image": "shopify://shop_images/gothic-share-image.png",
     "color_bg": "#f3efe7",
     "color_surface": "#fbf9f4",
     "color_line": "#d8d0c2",
